@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.hostReview.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,4 +54,23 @@ public class HostReview extends Review {
                 ", author=" + author +
                 '}';
     }
+
+    public HostReviewDTO toDTO() {
+        return new HostReviewDTO(rating, comment, author.getAccount().getEmail(),
+                host.getAccount().getEmail(), id, timestamp, reported);
+    }
+
+    public HostReviewProfileDTO toProfileDTO() {
+        return new HostReviewProfileDTO(id, rating, comment, timestamp, author.getAccount().getEmail());
+    }
+
+    public HostReviewForHostDTO toForHostDTO() {
+        return new HostReviewForHostDTO(id, rating, comment, timestamp, author.getAccount().getEmail(), reported);
+    }
+
+    public ReportedHostReviewDTO toReportedDTO() {
+        return new ReportedHostReviewDTO(id, rating, comment, timestamp, author.getAccount().getEmail(),
+                host.getAccount().getEmail());
+    }
+
 }

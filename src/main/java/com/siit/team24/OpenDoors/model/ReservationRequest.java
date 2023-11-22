@@ -1,8 +1,8 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 
 import java.sql.Timestamp;
@@ -117,5 +117,10 @@ public class ReservationRequest {
                 ", status=" + status +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public ReservationRequestDTO toDTO() {
+        return new ReservationRequestDTO(id, guest.getAccount().getEmail(), accommodation.getUniqueName(),
+                dateRange, guestNumber, totalPrice, status, timestamp);
     }
 }
