@@ -121,4 +121,8 @@ public class Accommodation {
                 ", maxGuests=" + maxGuests +
                 '}';
     }
+
+    public String getUniqueName() {
+        return this.name + " #" + this.id;
+    }
 }
