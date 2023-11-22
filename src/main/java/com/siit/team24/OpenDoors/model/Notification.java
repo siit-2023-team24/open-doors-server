@@ -1,11 +1,14 @@
-package com.siit.team24.OpenDoors.Domain;
+package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.Domain.Enums.NotificationType;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
+
+import java.sql.Time;
+import java.sql.Timestamp;
 
 @Entity
 public class Notification {
@@ -13,7 +16,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long timestamp;
+    private Timestamp timestamp;
     @Email
     private String user;
     private String message;
@@ -22,7 +25,7 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(Long id, Long timestamp, String user, String message, NotificationType type) {
+    public Notification(Long id, Timestamp timestamp, String user, String message, NotificationType type) {
         this.id = id;
         this.timestamp = timestamp;
         this.user = user;
@@ -38,11 +41,11 @@ public class Notification {
         this.id = id;
     }
 
-    public Long getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

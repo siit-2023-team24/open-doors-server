@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.Domain.Enums;
+package com.siit.team24.OpenDoors.model.enums;
 
 public enum Country {
     AFGHANISTAN("Afghanistan"),
