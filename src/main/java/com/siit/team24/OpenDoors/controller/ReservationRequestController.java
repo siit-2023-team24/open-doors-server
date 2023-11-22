@@ -12,6 +12,8 @@ public class ReservationRequestController {
 
     //service
 
+    //TODO get
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ReservationRequestDTO> createReservationRequest(@RequestBody ReservationRequestDTO requestDTO) {
         return new ResponseEntity<>(new ReservationRequestDTO(), HttpStatus.CREATED);
