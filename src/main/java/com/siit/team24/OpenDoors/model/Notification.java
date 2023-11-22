@@ -1,8 +1,12 @@
 package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.model.enums.NotificationType;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 
 import java.sql.Timestamp;
 
