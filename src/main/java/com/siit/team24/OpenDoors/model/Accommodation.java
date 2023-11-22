@@ -208,4 +208,8 @@ public class Accommodation {
                 ", host=" + host +
                 '}';
     }
+
+    public String getUniqueName() {
+        return this.name + " #" + this.id;
+    }
 }
