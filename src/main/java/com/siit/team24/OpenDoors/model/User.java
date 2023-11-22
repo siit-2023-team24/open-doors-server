@@ -12,6 +12,8 @@ public abstract class User {
     private String phone;
     @Embedded
     private Address address;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Account account;
 
     public Long getId() {
         return id;
@@ -51,6 +53,14 @@ public abstract class User {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

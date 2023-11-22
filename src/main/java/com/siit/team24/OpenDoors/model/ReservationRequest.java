@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 
+import java.sql.Timestamp;
+
 @Entity
 public class ReservationRequest {
 
@@ -22,11 +24,13 @@ public class ReservationRequest {
     @Min(0)
     private double totalPrice;
     private ReservationRequestStatus status;
+    private Timestamp timestamp;
 
     public ReservationRequest() {
     }
 
-    public ReservationRequest(Long id, Guest guest, Accommodation accommodation, DateRange dateRange, int guestNumber, double totalPrice, ReservationRequestStatus status) {
+    public ReservationRequest(Long id, Guest guest, Accommodation accommodation, DateRange dateRange,
+                              int guestNumber, double totalPrice, ReservationRequestStatus status, Timestamp timestamp) {
         this.id = id;
         this.guest = guest;
         this.accommodation = accommodation;
@@ -34,6 +38,7 @@ public class ReservationRequest {
         this.guestNumber = guestNumber;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -92,6 +97,14 @@ public class ReservationRequest {
         this.status = status;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "ReservationRequest{" +
@@ -102,6 +115,7 @@ public class ReservationRequest {
                 ", guestNumber=" + guestNumber +
                 ", totalPrice=" + totalPrice +
                 ", status=" + status +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

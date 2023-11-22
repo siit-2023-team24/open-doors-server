@@ -12,8 +12,9 @@ public class Account {
     private boolean isBlocked;
     @Enumerated
     private UserRole role;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
+
     public Account() {
     }
 
