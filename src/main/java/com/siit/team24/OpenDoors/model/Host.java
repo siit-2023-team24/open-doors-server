@@ -5,5 +5,8 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Host extends User{
+    public Host(){
+
+    }
 
 }
