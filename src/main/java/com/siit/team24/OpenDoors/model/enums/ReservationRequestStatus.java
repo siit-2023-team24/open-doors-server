@@ -4,7 +4,7 @@ public enum ReservationRequestStatus {
     PENDING("pending"),
     CONFIRMED("confirmed"),
     DENIED("denied"),
-    CANCELED("canceled");
+    CANCELLED("cancelled");
 
     private final String status;
 
