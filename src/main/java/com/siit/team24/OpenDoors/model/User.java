@@ -3,13 +3,14 @@ package com.siit.team24.OpenDoors.model;
 import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
     private String phone;
+    private String image;
     @Embedded
     private Address address;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -63,6 +64,17 @@ public abstract class User {
         this.account = account;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public User(){
+
+    }
     @Override
     public String toString() {
         return "User{" +
@@ -70,7 +82,9 @@ public abstract class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", image='" + image + '\'' +
                 ", address=" + address +
+                ", account=" + account +
                 '}';
     }
 }

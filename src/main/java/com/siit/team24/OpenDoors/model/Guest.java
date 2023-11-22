@@ -12,6 +12,9 @@ import java.util.Set;
 public class Guest extends User{
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<Accommodation> favorites;
+    public Guest(){
+
+    }
 
     public Set<Accommodation> getFavorites() {
         return favorites;
