@@ -1,6 +1,6 @@
-package com.siit.team24.OpenDoors.Domain;
+package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.Domain.Enums.NotificationType;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

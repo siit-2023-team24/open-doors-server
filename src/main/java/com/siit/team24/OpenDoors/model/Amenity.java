@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.Domain;
+package com.siit.team24.OpenDoors.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.GeneratedValue;

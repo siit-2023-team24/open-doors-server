@@ -1,6 +1,6 @@
-package com.siit.team24.OpenDoors.Domain;
+package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.Domain.Enums.ReservationRequestStatus;
+import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
