@@ -11,9 +11,10 @@ public class ReservationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Email
-    private String guest;
-    private Long accommodationId;
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    private Guest guest;
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    private Accommodation accommodation;
     @Embedded
     private DateRange dateRange;
     @Min(1)
@@ -25,11 +26,10 @@ public class ReservationRequest {
     public ReservationRequest() {
     }
 
-    public ReservationRequest(Long id, String guest, Long accommodationId, DateRange dateRange,
-                              int guestNumber, int totalPrice, ReservationRequestStatus status) {
+    public ReservationRequest(Long id, Guest guest, Accommodation accommodation, DateRange dateRange, int guestNumber, double totalPrice, ReservationRequestStatus status) {
         this.id = id;
         this.guest = guest;
-        this.accommodationId = accommodationId;
+        this.accommodation = accommodation;
         this.dateRange = dateRange;
         this.guestNumber = guestNumber;
         this.totalPrice = totalPrice;
@@ -44,20 +44,20 @@ public class ReservationRequest {
         this.id = id;
     }
 
-    public String getGuest() {
+    public Guest getGuest() {
         return guest;
     }
 
-    public void setGuest(String guest) {
+    public void setGuest(Guest guest) {
         this.guest = guest;
     }
 
-    public Long getAccommodationId() {
-        return accommodationId;
+    public Accommodation getAccommodation() {
+        return accommodation;
     }
 
-    public void setAccommodationId(Long accommodationId) {
-        this.accommodationId = accommodationId;
+    public void setAccommodation(Accommodation accommodation) {
+        this.accommodation = accommodation;
     }
 
     public DateRange getDateRange() {
@@ -96,8 +96,8 @@ public class ReservationRequest {
     public String toString() {
         return "ReservationRequest{" +
                 "id=" + id +
-                ", guest='" + guest + '\'' +
-                ", accommodationId=" + accommodationId +
+                ", guest=" + guest +
+                ", accommodation=" + accommodation +
                 ", dateRange=" + dateRange +
                 ", guestNumber=" + guestNumber +
                 ", totalPrice=" + totalPrice +

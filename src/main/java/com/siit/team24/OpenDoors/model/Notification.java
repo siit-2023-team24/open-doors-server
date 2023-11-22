@@ -1,11 +1,10 @@
 package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.model.enums.NotificationType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+
+import java.sql.Timestamp;
 
 @Entity
 public class Notification {
@@ -13,16 +12,17 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long timestamp;
-    @Email
-    private String user;
+    private Timestamp timestamp;
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    private User user;
     private String message;
+    @Enumerated
     private NotificationType type;
 
     public Notification() {
     }
 
-    public Notification(Long id, Long timestamp, String user, String message, NotificationType type) {
+    public Notification(Long id, Timestamp timestamp, User user, String message, NotificationType type) {
         this.id = id;
         this.timestamp = timestamp;
         this.user = user;
@@ -38,19 +38,19 @@ public class Notification {
         this.id = id;
     }
 
-    public Long getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
