@@ -1,6 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.review.*;
+import com.siit.team24.OpenDoors.dto.hostReview.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "opendoors/hostreview")
+@RequestMapping(value = "open-doors/host-review")
 public class HostReviewController {
 
     //service
 
     @GetMapping(value = "/my/{hostId}")
-    public ResponseEntity<List<HostReviewForHostDTO>> getHostReviewsForHost(@PathVariable String hostId) {
+    public ResponseEntity<List<HostReviewForHostDTO>> getHostReviewsForHost(@PathVariable Long hostId) {
         List<HostReviewForHostDTO> reviews = new ArrayList<>();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{hostId}")
-    public ResponseEntity<List<HostReviewProfileDTO>> getHostReviewsForProfile(@PathVariable String hostId) {
+    public ResponseEntity<List<HostReviewProfileDTO>> getHostReviewsForProfile(@PathVariable Long hostId) {
         List<HostReviewProfileDTO> reviews = new ArrayList<>();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
