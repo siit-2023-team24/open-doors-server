@@ -1,7 +1,7 @@
 package com.siit.team24.OpenDoors.dto;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 

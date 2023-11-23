@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,22 +16,21 @@ public class Accommodation {
     private String name;
     private String description;
     private String location;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Amenity> amenities;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ElementCollection
     private List<String> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
-
     private int maxGuests;
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType accommodationType;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerNight;
     private double averageRating;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Host host;
 
     public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, List<String> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host) {

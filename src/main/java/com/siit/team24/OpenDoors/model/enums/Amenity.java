@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.model;
+package com.siit.team24.OpenDoors.model.enums;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.GeneratedValue;
