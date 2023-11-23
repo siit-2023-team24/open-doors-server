@@ -3,10 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.accommodationReview.AccommodationReviewDTO;
 import com.siit.team24.OpenDoors.dto.accommodationReview.AccommodationReviewDetailsDTO;
-import com.siit.team24.OpenDoors.dto.hostReview.HostReviewDTO;
 import com.siit.team24.OpenDoors.dto.hostReview.HostReviewForHostDTO;
-import com.siit.team24.OpenDoors.dto.hostReview.HostReviewProfileDTO;
-import com.siit.team24.OpenDoors.dto.hostReview.NewHostReviewDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +17,7 @@ public class AccommodationReviewController {
 
     //service
 
-    @GetMapping(value = "/{accommodationId}")
+    @GetMapping(value = "/accommodation/{accommodationId}")
     public ResponseEntity<List<AccommodationReviewDetailsDTO>> getAccommodationReviewsForDetails(@PathVariable Long accommodationId) {
         List<AccommodationReviewDetailsDTO> reviews = new ArrayList<>();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
