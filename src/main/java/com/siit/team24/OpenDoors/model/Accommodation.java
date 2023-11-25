@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Accommodation {
@@ -17,8 +18,8 @@ public class Accommodation {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    @ElementCollection
-    private List<String> images;
+    @OneToMany(cascade = CascadeType.REFRESH)
+    private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
@@ -30,10 +31,10 @@ public class Accommodation {
     private double price;
     private boolean isPricePerNight;
     private double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, List<String> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host) {
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -95,15 +96,15 @@ public class Accommodation {
         this.amenities.remove(amenity);
     }
 
-    public List<String> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void addImage(String image) {
+    public void addImage(Image image) {
         this.images.add(image);
     }
 
-    public void removeImage(String image) {
+    public void removeImage(Image image) {
         this.images.remove(image);
     }
 

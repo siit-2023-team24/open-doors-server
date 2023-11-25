@@ -11,7 +11,8 @@ public class UserDTO {
     private int number;
     private String city;
     private String country;
-    private String image;
+//    private String image;
+
     public UserDTO(User user){
         this.id = user.getId();
         this.firstName = user.getFirstName();
@@ -21,7 +22,7 @@ public class UserDTO {
         this.number = user.getAddress().getNumber();
         this.city = user.getAddress().getCity();
         this.country = user.getAddress().getCountry().getCountryName();
-        this.image = user.getImage();
+//        this.image = user.getImage();
     }
 
     public UserDTO() {
@@ -88,13 +89,13 @@ public class UserDTO {
         this.country = country;
     }
 
-    public String getImage() {
-        return image;
-    }
+//    public String getImage() {
+//        return image;
+//    }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+//    public void setImage(String image) {
+//        this.image = image;
+//    }
 
     @Override
     public String toString() {
@@ -106,7 +107,7 @@ public class UserDTO {
                 ", number=" + number +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
-                ", image='" + image + '\'' +
+//                ", image='" + image + '\'' +
                 '}';
     }
 }

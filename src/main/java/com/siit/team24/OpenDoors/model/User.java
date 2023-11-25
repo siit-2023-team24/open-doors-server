@@ -10,7 +10,8 @@ public abstract class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private String image;
+    @OneToOne
+    private Image image;
     @Embedded
     private Address address;
     @OneToOne(cascade = {CascadeType.ALL})
@@ -64,11 +65,11 @@ public abstract class User {
         this.account = account;
     }
 
-    public String getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

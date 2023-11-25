@@ -1,9 +1,10 @@
 package com.siit.team24.OpenDoors.dto;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
+import com.siit.team24.OpenDoors.model.Image;
 
 public class AccommodationSearchDTO {
-    private String image;
+    private Image image;
     private String name;
     private double averageRating;
     private double price;
@@ -12,10 +13,10 @@ public class AccommodationSearchDTO {
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation) {
-        this(accommodation.getImages().get(0), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight());
+        this((Image) accommodation.getImages().toArray()[0], accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight());
     }
 
-    public AccommodationSearchDTO(String image, String name, double averageRating, double price, boolean isPricePerNight) {
+    public AccommodationSearchDTO(Image image, String name, double averageRating, double price, boolean isPricePerNight) {
         this.image = image;
         this.name = name;
         this.averageRating = averageRating;
@@ -23,11 +24,11 @@ public class AccommodationSearchDTO {
         this.isPricePerNight = isPricePerNight;
     }
 
-    public String getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

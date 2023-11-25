@@ -1,27 +1,28 @@
 package com.siit.team24.OpenDoors.dto;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
+import com.siit.team24.OpenDoors.model.Image;
 
 public class AccommodationHostDTO {
-    private String image;
+    private Image image;
     private String name;
 
     public AccommodationHostDTO() {}
 
     public AccommodationHostDTO(Accommodation accommodation) {
-        this(accommodation.getImages().get(0), accommodation.getName());
+        this((Image) accommodation.getImages().toArray()[0], accommodation.getName());
     }
 
-    public AccommodationHostDTO(String image, String name) {
+    public AccommodationHostDTO(Image image, String name) {
         this.image = image;
         this.name = name;
     }
 
-    public String getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

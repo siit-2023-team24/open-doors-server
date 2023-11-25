@@ -1,11 +1,13 @@
 package com.siit.team24.OpenDoors.dto;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
+import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 
 import java.util.List;
+import java.util.Set;
 
 public class AccommodationWholeDTO {
     private Long id;
@@ -13,7 +15,7 @@ public class AccommodationWholeDTO {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    private List<String> images;
+    private List<Image> images;
     private int minGuests;
     private int maxGuests;
     private AccommodationType accommodationType;
@@ -26,13 +28,13 @@ public class AccommodationWholeDTO {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, List<String> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price) {
+    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.amenities = amenities;
-        this.images = images;
+        this.images = images.stream().toList();
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.accommodationType = accommodationType;
@@ -80,11 +82,11 @@ public class AccommodationWholeDTO {
         this.amenities = amenities;
     }
 
-    public List<String> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 
