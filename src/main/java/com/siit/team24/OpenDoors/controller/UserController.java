@@ -28,7 +28,7 @@ public class UserController {
 
     @PutMapping(consumes = "application/json", value = "/updateUser")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(new UserDTO(new User()), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDTO(), HttpStatus.OK);
     }
     @PutMapping(consumes = "application/json", value = "/updateAccount")
     public ResponseEntity<AccountDTO> updateAccount(@RequestBody AccountDTO accountDTO){
@@ -54,6 +54,6 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountDTO> getUser(
             @PathVariable Long id) {
-        return new ResponseEntity<>(new UserAccountDTO(new User()), HttpStatus.OK);
+        return new ResponseEntity<>(new UserAccountDTO(), HttpStatus.OK);
     }
 }

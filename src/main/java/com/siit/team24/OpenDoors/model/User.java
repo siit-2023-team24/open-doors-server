@@ -3,9 +3,9 @@ package com.siit.team24.OpenDoors.model;
 import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User {
+public abstract class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     private String firstName;
     private String lastName;
@@ -13,7 +13,7 @@ public class User {
     private String image;
     @Embedded
     private Address address;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.ALL})
     private Account account;
 
     public Long getId() {

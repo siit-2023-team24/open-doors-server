@@ -12,8 +12,8 @@ public class Account {
     private boolean isBlocked;
     @Enumerated
     private UserRole role;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User user;
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private User user;
 
     public Account() {
     }
@@ -50,13 +50,13 @@ public class Account {
         this.role = role;
     }
 
-    public User getUser() {
-        return user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     @Override
     public String toString() {
@@ -65,7 +65,7 @@ public class Account {
                 ", password='" + password + '\'' +
                 ", isBlocked=" + isBlocked +
                 ", role=" + role +
-                ", user=" + user +
+//                ", user=" + user +
                 '}';
     }
 }

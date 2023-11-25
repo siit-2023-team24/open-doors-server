@@ -5,18 +5,22 @@ import com.siit.team24.OpenDoors.model.User;
 
 public class UserAccountDTO {
     private AccountDTO account;
-    private UserDTO user;
+//    private UserDTO user;
     private String role;
     public UserAccountDTO(User user){
         this.account = new AccountDTO(user.getAccount());
         this.role = user.getAccount().getRole().name();
-        this.user = new UserDTO(user);
+//        this.user = new UserDTO(user);
     }
 
     public UserAccountDTO(Account account){
         this.account = new AccountDTO(account);
         this.role = account.getRole().name();
-        this.user = new UserDTO(account.getUser());
+//        this.user = new UserDTO(account.getUser());
+    }
+
+    public UserAccountDTO() {
+
     }
 
     public AccountDTO getAccount() {
@@ -27,13 +31,13 @@ public class UserAccountDTO {
         this.account = account;
     }
 
-    public UserDTO getUser() {
-        return user;
-    }
+//    public UserDTO getUser() {
+//        return user;
+//    }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
-    }
+//    public void setUser(UserDTO user) {
+//        this.user = user;
+//    }
 
     public String getRole() {
         return role;
@@ -47,7 +51,7 @@ public class UserAccountDTO {
     public String toString() {
         return "RegisterDTO{" +
                 "account=" + account +
-                ", user=" + user +
+//                ", user=" + user +
                 ", role='" + role + '\'' +
                 '}';
     }

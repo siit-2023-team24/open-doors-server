@@ -3,7 +3,7 @@ package com.siit.team24.OpenDoors.dto;
 import com.siit.team24.OpenDoors.model.User;
 
 public class UserDTO {
-    private final Long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String phone;
@@ -22,6 +22,10 @@ public class UserDTO {
         this.city = user.getAddress().getCity();
         this.country = user.getAddress().getCountry().getCountryName();
         this.image = user.getImage();
+    }
+
+    public UserDTO() {
+
     }
 
     public Long getId() {
