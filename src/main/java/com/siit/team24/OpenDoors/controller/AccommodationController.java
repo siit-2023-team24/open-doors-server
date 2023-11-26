@@ -2,6 +2,7 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,16 @@ public class AccommodationController {
         Accommodation accommodation = new Accommodation();
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+    //TODO check if this filter changes the following
+
+    @PostMapping(value = "/search")
+    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations    (@RequestBody SearchAndFilterDTO dto) {
+        List<AccommodationSearchDTO> accommodations = new ArrayList<>();
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
     @GetMapping(value = "/findName")
@@ -163,6 +174,7 @@ public class AccommodationController {
         return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
     }
 
+    //TODO check how this behaves now
     @GetMapping(value = "/{accommodationId}/images")
     public ResponseEntity<List<String>> getAccommodationImages(@PathVariable Long accommodationId) {
         List<String> images = new ArrayList<>();
