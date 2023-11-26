@@ -1,10 +1,8 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.userManagement.AccountDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.UserDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.UserSummaryDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.Account;
+import com.siit.team24.OpenDoors.model.Notification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +53,11 @@ public class UserController {
     public ResponseEntity<UserAccountDTO> getUser(
             @PathVariable Long id) {
         return new ResponseEntity<>(new UserAccountDTO(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{userId}/notifications")
+    public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
+        List<NotificationDTO> notifications = new ArrayList<>();
+        return new ResponseEntity<List<NotificationDTO>>(notifications, HttpStatus.OK);
     }
 }

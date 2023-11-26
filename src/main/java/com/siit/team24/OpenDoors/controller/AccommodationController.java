@@ -59,125 +59,15 @@ public class AccommodationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
-    //TODO check if this filter changes the following
-
     @PostMapping(value = "/search")
     public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations    (@RequestBody SearchAndFilterDTO dto) {
         List<AccommodationSearchDTO> accommodations = new ArrayList<>();
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/findName")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByName(@RequestParam String name) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findStartDate")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByStartDate(@RequestParam LocalDate startDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findEndDate")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByEndDate(@RequestParam LocalDate endDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByGuestNumber(@RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameStartDate")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndStartDate(@RequestParam String name, @RequestParam LocalDate startDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameEndDate")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndEndDate(@RequestParam String name, @RequestParam LocalDate endDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndGuestNumber(@RequestParam String name, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findDates")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByDates(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findStartDateGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByStartDateAndGuestNumber(@RequestParam LocalDate startDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findEndDateGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByEndDateAndGuestNumber(@RequestParam LocalDate endDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameDates")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndDates(@RequestParam String name, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameStartDateGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndStartDateAndGuestNumber(@RequestParam String name, @RequestParam LocalDate startDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameEndDateGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndEndDateAndGuestNumber(@RequestParam String name, @RequestParam LocalDate endDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findDatesGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByDatesAndGuestNumber(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/findNameDatesGuest")
-    public ResponseEntity<AccommodationSearchDTO> getAccommodationByNameAndDatesAndGuestNumber(@RequestParam String name, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @RequestParam Integer guestNumber) {
-        Accommodation accommodation = new Accommodation();
-
-        return new ResponseEntity<>(new AccommodationSearchDTO(accommodation), HttpStatus.OK);
-    }
-
-    //TODO check how this behaves now
     @GetMapping(value = "/{accommodationId}/images")
-    public ResponseEntity<List<String>> getAccommodationImages(@PathVariable Long accommodationId) {
-        List<String> images = new ArrayList<>();
+    public ResponseEntity<List<byte[]>> getAccommodationImages(@PathVariable Long accommodationId) {
+        List<byte[]> images = new ArrayList<>();
 
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
