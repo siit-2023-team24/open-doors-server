@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.dto;
+package com.siit.team24.OpenDoors.dto.userManagement;
 
 import com.siit.team24.OpenDoors.model.Account;
 import com.siit.team24.OpenDoors.model.User;

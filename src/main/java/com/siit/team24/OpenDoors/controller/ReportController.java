@@ -1,7 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.UserReportDTO;
-import com.siit.team24.OpenDoors.dto.UserSummaryDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserReportDTO;
 import com.siit.team24.OpenDoors.model.UserReport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

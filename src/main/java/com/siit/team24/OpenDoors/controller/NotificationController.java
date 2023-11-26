@@ -1,6 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.NotificationDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.NotificationDTO;
 import com.siit.team24.OpenDoors.model.Notification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

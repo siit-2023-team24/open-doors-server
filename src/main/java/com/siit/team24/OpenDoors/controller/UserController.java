@@ -1,10 +1,10 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.*;
+import com.siit.team24.OpenDoors.dto.userManagement.AccountDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserSummaryDTO;
 import com.siit.team24.OpenDoors.model.Account;
-import com.siit.team24.OpenDoors.model.Guest;
-import com.siit.team24.OpenDoors.model.Host;
-import com.siit.team24.OpenDoors.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

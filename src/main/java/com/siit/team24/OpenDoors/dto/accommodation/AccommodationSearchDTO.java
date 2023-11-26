@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.dto;
+package com.siit.team24.OpenDoors.dto.accommodation;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Image;

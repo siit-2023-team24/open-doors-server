@@ -1,7 +1,7 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.AccommodationSearchDTO;
-import com.siit.team24.OpenDoors.dto.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
