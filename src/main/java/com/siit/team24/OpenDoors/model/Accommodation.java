@@ -33,8 +33,10 @@ public class Accommodation {
     private double averageRating;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
+    @ElementCollection
+    private List<Price> seasonalRates;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host) {
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,6 +51,7 @@ public class Accommodation {
         this.isPricePerNight = isPricePerNight;
         this.averageRating = averageRating;
         this.host = host;
+        this.seasonalRates = seasonalRates;
     }
     public Accommodation() {}
 
@@ -176,6 +179,14 @@ public class Accommodation {
         this.host = host;
     }
 
+    public List<Price> getSeasonalRates() {
+        return seasonalRates;
+    }
+
+    public void setSeasonalRates(List<Price> seasonalRates) {
+        this.seasonalRates = seasonalRates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -207,6 +218,7 @@ public class Accommodation {
                 ", isPricePerNight=" + isPricePerNight +
                 ", averageRating=" + averageRating +
                 ", host=" + host +
+                ", seasonRates=" + seasonalRates +
                 '}';
     }
 
