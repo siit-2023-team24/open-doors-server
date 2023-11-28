@@ -18,10 +18,10 @@ import java.util.List;
 public class AccommodationController {
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<AccommodationWholeDTO>> getAllAccommodations() {
-        List<AccommodationWholeDTO> accommodationWholeDTOS = new ArrayList<>();
+    public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
+        List<AccommodationSearchDTO> accommodations = new ArrayList<>();
 
-        return new ResponseEntity<>(accommodationWholeDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
     @GetMapping
@@ -54,13 +54,12 @@ public class AccommodationController {
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
-        Accommodation accommodation = new Accommodation();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/search")
-    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations    (@RequestBody SearchAndFilterDTO dto) {
+    @PostMapping(consumes="application/json", value = "/search")
+    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@RequestBody SearchAndFilterDTO dto) {
         List<AccommodationSearchDTO> accommodations = new ArrayList<>();
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }

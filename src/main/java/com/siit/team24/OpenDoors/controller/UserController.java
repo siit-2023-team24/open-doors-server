@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.Account;
 import com.siit.team24.OpenDoors.model.Notification;
@@ -15,22 +16,22 @@ import java.util.List;
 @RequestMapping("open-doors/users")
 public class UserController {
     @PostMapping(consumes="application/json", value = "/login")
-    public ResponseEntity<AccountDTO> login(@RequestBody AccountDTO accountDTO) {
-        return new ResponseEntity<>(new AccountDTO(new Account()),HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> login(@RequestBody AccountDTO accountDTO) {
+        return new ResponseEntity<>(new UserDTO(),HttpStatus.CREATED);
     }
 
-    @PostMapping(consumes="application/json", value = "/register")
+    @PostMapping(consumes="application/json")
     public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccountDTO registerDTO) {
         return new ResponseEntity<>(new UserAccountDTO(new Account()), HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes = "application/json", value = "/updateUser")
+    @PutMapping(consumes = "application/json")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
         return new ResponseEntity<>(new UserDTO(), HttpStatus.OK);
     }
-    @PutMapping(consumes = "application/json", value = "/updateAccount")
-    public ResponseEntity<AccountDTO> updateAccount(@RequestBody AccountDTO accountDTO){
-        return new ResponseEntity<>(new AccountDTO(new Account()),HttpStatus.OK);
+    @PutMapping(consumes = "application/json", value = "/newPassword")
+    public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -58,6 +59,19 @@ public class UserController {
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         List<NotificationDTO> notifications = new ArrayList<>();
-        return new ResponseEntity<List<NotificationDTO>>(notifications, HttpStatus.OK);
+        return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
+
+    @GetMapping(value="/{userId}/favorites")
+    public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
+        List<AccommodationSearchDTO> favorites = new ArrayList<>();
+        return new ResponseEntity<>(favorites, HttpStatus.OK);
+    }
+ 
+    @PutMapping(value = "/{userId}/status")
+    public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
+                                                  @RequestBody boolean isBlocked){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

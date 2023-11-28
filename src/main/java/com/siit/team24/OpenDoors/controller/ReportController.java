@@ -17,9 +17,12 @@ public class ReportController {
         return new ResponseEntity<>(new ArrayList<UserReportDTO>(), HttpStatus.OK);
     }
 
-    //TODO post
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<UserReportDTO> createUserReport() {
+        return new ResponseEntity<>(new UserReportDTO(new UserReport()), HttpStatus.CREATED);
+    }
 
-    @PutMapping
+    @PutMapping(consumes = "application/json")
     public ResponseEntity<UserReportDTO> updateReport(@RequestBody UserReportDTO userReportDTO){
         return new ResponseEntity<>(new UserReportDTO(new UserReport()), HttpStatus.OK);
     }

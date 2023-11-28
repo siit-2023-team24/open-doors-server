@@ -37,7 +37,7 @@ public class HostReviewController {
         return new ResponseEntity<>(new HostReviewDTO(), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "application/json")
+    @PutMapping(consumes = "application/json")
     public ResponseEntity<HostReviewDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
         return new ResponseEntity<>(new HostReviewDTO(), HttpStatus.OK);
     }
@@ -47,4 +47,9 @@ public class HostReviewController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping(value = "/{reviewId}/status")
+    public ResponseEntity<Void> changeReviewStatus(@PathVariable Long reviewId,
+                                                  @RequestBody boolean isReported){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

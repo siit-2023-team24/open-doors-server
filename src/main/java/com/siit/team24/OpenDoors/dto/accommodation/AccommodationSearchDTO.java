@@ -4,7 +4,8 @@ import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Image;
 
 public class AccommodationSearchDTO {
-    private Image image;
+    private Long id;
+    private Long image;
     private String name;
     private double averageRating;
     private double price;
@@ -13,10 +14,11 @@ public class AccommodationSearchDTO {
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation) {
-        this((Image) accommodation.getImages().toArray()[0], accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight());
+        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight());
     }
 
-    public AccommodationSearchDTO(Image image, String name, double averageRating, double price, boolean isPricePerNight) {
+    public AccommodationSearchDTO(Long id, Long image, String name, double averageRating, double price, boolean isPricePerNight) {
+        this.id = id;
         this.image = image;
         this.name = name;
         this.averageRating = averageRating;
@@ -24,11 +26,15 @@ public class AccommodationSearchDTO {
         this.isPricePerNight = isPricePerNight;
     }
 
-    public Image getImage() {
+    public Long getId() {
+        return id;
+    }
+
+    public Long getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(Long image) {
         this.image = image;
     }
 

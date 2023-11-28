@@ -22,5 +22,4 @@ public class ImageController {
         return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
     }
 
-    //TODO post, delete
 }

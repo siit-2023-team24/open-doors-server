@@ -17,7 +17,7 @@ public class AccommodationWholeDTO {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    private List<Image> images;
+    private List<Long> images;
     private int minGuests;
     private int maxGuests;
     private AccommodationType accommodationType;
@@ -38,7 +38,10 @@ public class AccommodationWholeDTO {
         this.description = description;
         this.location = location;
         this.amenities = amenities;
-        this.images = new ArrayList<>(images);
+        this.images = new ArrayList<Long>();
+        for (Image image : images){
+            this.images.add(image.getId());
+        }
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.accommodationType = accommodationType;
@@ -87,11 +90,11 @@ public class AccommodationWholeDTO {
         this.amenities = amenities;
     }
 
-    public List<Image> getImages() {
+    public List<Long> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<Long> images) {
         this.images = images;
     }
 

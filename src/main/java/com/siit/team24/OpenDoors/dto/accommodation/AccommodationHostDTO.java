@@ -4,25 +4,31 @@ import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Image;
 
 public class AccommodationHostDTO {
-    private Image image;
+    private Long id;
+    private Long image;
     private String name;
 
     public AccommodationHostDTO() {}
 
     public AccommodationHostDTO(Accommodation accommodation) {
-        this((Image) accommodation.getImages().toArray()[0], accommodation.getName());
+        this(accommodation.getId(), ((Image) accommodation.getImages().toArray()[0]).getId(), accommodation.getName());
     }
 
-    public AccommodationHostDTO(Image image, String name) {
+    public AccommodationHostDTO(Long id, Long image, String name) {
+        this.id = id;
         this.image = image;
         this.name = name;
     }
 
-    public Image getImage() {
+    public Long getId() {
+        return id;
+    }
+
+    public Long getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(Long image) {
         this.image = image;
     }
 
@@ -32,5 +38,14 @@ public class AccommodationHostDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "AccommodationHostDTO{" +
+                "id=" + id +
+                ", image=" + image +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
