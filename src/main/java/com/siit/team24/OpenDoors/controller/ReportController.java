@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "open-doors/user-reports")
 public class ReportController {
     @GetMapping
     public ResponseEntity<List<UserReportDTO>> getAllUserReports() {
         return new ResponseEntity<>(new ArrayList<UserReportDTO>(), HttpStatus.OK);
     }
+
+    //TODO post
 
     @PutMapping
     public ResponseEntity<UserReportDTO> updateReport(@RequestBody UserReportDTO userReportDTO){

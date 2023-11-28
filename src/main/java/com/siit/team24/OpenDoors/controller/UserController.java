@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("open-doors/users")
 public class UserController {
     @PostMapping(consumes="application/json", value = "/login")
     public ResponseEntity<AccountDTO> login(@RequestBody AccountDTO accountDTO) {

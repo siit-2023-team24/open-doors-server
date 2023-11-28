@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 
 @RestController
-@RequestMapping(value = "api/image")
+@RequestMapping(value = "open-doors/image")
 public class ImageController {
 
     @GetMapping(value = "/{id}")
@@ -21,4 +21,6 @@ public class ImageController {
         InputStream in = getClass().getResourceAsStream("/static/logo.png");
         return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
     }
+
+    //TODO post, delete
 }
