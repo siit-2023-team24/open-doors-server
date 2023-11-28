@@ -1,9 +1,15 @@
 package com.siit.team24.OpenDoors.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Price {
     private double value;
     private DateRange period;
 
+    public Price() {
+
+    }
     public Price(double value, DateRange period) {
         this.value = value;
         this.period = period;

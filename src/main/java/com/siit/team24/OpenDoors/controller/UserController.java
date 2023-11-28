@@ -3,12 +3,11 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.Account;
-import com.siit.team24.OpenDoors.model.Notification;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class UserController {
 
     @PostMapping(consumes="application/json")
     public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccountDTO registerDTO) {
-        return new ResponseEntity<>(new UserAccountDTO(new Account()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new UserAccountDTO(), HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")
