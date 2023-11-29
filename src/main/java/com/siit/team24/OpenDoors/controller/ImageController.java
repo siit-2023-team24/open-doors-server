@@ -22,4 +22,13 @@ public class ImageController {
         return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
     }
 
+    @PostMapping()
+    public ResponseEntity<Void> getImage() {
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> getImage(@PathVariable Long id) {
+        return new ResponseEntity<>(HttpStatus.OK);    }
+
 }
