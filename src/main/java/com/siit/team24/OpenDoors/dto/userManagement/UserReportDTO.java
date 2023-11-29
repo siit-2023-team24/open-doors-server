@@ -11,6 +11,16 @@ public class UserReportDTO {
     private Timestamp timestamp;
     private String reason;
     private String status;
+
+    public UserReportDTO(Long id, String reportedEmail, String complainantEmail, Timestamp timestamp, String reason, String status) {
+        this.id = id;
+        this.reportedEmail = reportedEmail;
+        this.complainantEmail = complainantEmail;
+        this.timestamp = timestamp;
+        this.reason = reason;
+        this.status = status;
+    }
+
     public UserReportDTO(UserReport userReport) {
         this.id = userReport.getId();
         this.reportedEmail = userReport.getReportedUser().getAccount().getEmail();

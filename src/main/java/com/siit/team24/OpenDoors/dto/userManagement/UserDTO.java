@@ -13,6 +13,18 @@ public class UserDTO {
     private String country;
     private Long imageId;
 
+    public UserDTO(Long id, String firstName, String lastName, String phone, String street, int number, String city, String country, Long imageId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.imageId = imageId;
+    }
+
     public UserDTO(User user){
         this.id = user.getId();
         this.firstName = user.getFirstName();

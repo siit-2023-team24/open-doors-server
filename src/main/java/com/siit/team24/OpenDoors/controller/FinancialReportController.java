@@ -14,6 +14,14 @@ import java.util.List;
 @RequestMapping(value = "open-doors/financial-report")
 public class FinancialReportController {
 
+    FinancialReportDateRangeItemDTO testFinancialReportDateRangeItemDTO = new FinancialReportDateRangeItemDTO(
+            "Hotel Plaza", (long)348734384, 5, 52200.5
+    );
+
+    AccommodationFinancialReportItemDTO testAccommodationFinancialReportItemDTO = new AccommodationFinancialReportItemDTO(
+            3, 64600.0, 11
+    );
+
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<List<FinancialReportDateRangeItemDTO>> getDateRangeReport(
             @PathVariable Long hostId,
@@ -21,6 +29,7 @@ public class FinancialReportController {
             @RequestParam(name = "end", required = true)LocalDate end) {
 
         List<FinancialReportDateRangeItemDTO> items = new ArrayList<>();
+        items.add(testFinancialReportDateRangeItemDTO);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
@@ -30,6 +39,7 @@ public class FinancialReportController {
             @RequestParam(name = "year", required = true) int year) {
 
         List<AccommodationFinancialReportItemDTO> items = new ArrayList<>();
+        items.add(testAccommodationFinancialReportItemDTO);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 }

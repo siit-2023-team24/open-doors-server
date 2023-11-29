@@ -7,6 +7,13 @@ public class UserAccountDTO {
     private AccountDTO account;
     private UserDTO user;
     private String role;
+
+    public UserAccountDTO(AccountDTO account, UserDTO user, String role) {
+        this.account = account;
+        this.user = user;
+        this.role = role;
+    }
+
     public UserAccountDTO(User user) {
         this.account = new AccountDTO(user.getAccount());
         this.role = user.getAccount().getRole().name();

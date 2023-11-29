@@ -8,6 +8,13 @@ public class NotificationDTO {
     private String type;
     private String message;
     private Timestamp timestamp;
+
+    public NotificationDTO(String type, String message, Timestamp timestamp) {
+        this.type = type;
+        this.message = message;
+        this.timestamp = timestamp;
+    }
+
     public NotificationDTO(Notification notification){
         this.type = notification.getType().getTypeMessage();
         this.message = notification.getMessage();

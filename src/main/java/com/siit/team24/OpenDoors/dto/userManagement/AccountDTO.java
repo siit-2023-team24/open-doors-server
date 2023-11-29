@@ -3,11 +3,20 @@ package com.siit.team24.OpenDoors.dto.userManagement;
 import com.siit.team24.OpenDoors.model.Account;
 
 public class AccountDTO {
-    private final String email;
+    private String email;
     private String password;
     public AccountDTO(Account account){
         this.email=account.getEmail();
         this.password=account.getPassword();
+    }
+
+    public AccountDTO(){
+
+    }
+
+    public AccountDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {

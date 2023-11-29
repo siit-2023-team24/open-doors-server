@@ -8,25 +8,51 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("open-doors/users")
 public class UserController {
+    UserDTO testUserDTO = new UserDTO(
+            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)2398423
+    );
+
+    AccountDTO testAccountDTO = new AccountDTO(
+            "steve@testnmail.me", "St3v3St3v3ns"
+    );
+
+    UserAccountDTO testUserAccountDTO = new UserAccountDTO(
+            testAccountDTO, testUserDTO, "guest"
+    );
+
+    UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
+            "bob@testmail.me", "Bob", "Roberts", "host"
+    );
+
+    NotificationDTO testNotificationDTO = new NotificationDTO(
+            "You have a new review.", "Excellent", new Timestamp(98423)
+    );
+
+    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
+            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true
+    );
+
     @PostMapping(consumes="application/json", value = "/login")
     public ResponseEntity<UserDTO> login(@RequestBody AccountDTO accountDTO) {
-        return new ResponseEntity<>(new UserDTO(),HttpStatus.CREATED);
+        return new ResponseEntity<>(testUserDTO, HttpStatus.CREATED);
     }
 
     @PostMapping(consumes="application/json")
     public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccountDTO registerDTO) {
-        return new ResponseEntity<>(new UserAccountDTO(), HttpStatus.CREATED);
+        return new ResponseEntity<>(testUserAccountDTO, HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(new UserDTO(), HttpStatus.OK);
+        return new ResponseEntity<>(testUserDTO, HttpStatus.OK);
     }
     @PutMapping(consumes = "application/json", value = "/newPassword")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
@@ -40,30 +66,36 @@ public class UserController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
-        return new ResponseEntity<>(new ArrayList<UserSummaryDTO>(), HttpStatus.OK);
+        List<UserSummaryDTO> users = new ArrayList<>();
+        users.add(testUserSummaryDTO);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
             Pageable pageable) {
-        return new ResponseEntity<>(new ArrayList<UserSummaryDTO>(), HttpStatus.OK);
+        List<UserSummaryDTO> users = new ArrayList<>();
+        users.add(testUserSummaryDTO);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountDTO> getUser(
             @PathVariable Long id) {
-        return new ResponseEntity<>(new UserAccountDTO(), HttpStatus.OK);
+        return new ResponseEntity<>(testUserAccountDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         List<NotificationDTO> notifications = new ArrayList<>();
+        notifications.add(testNotificationDTO);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         List<AccommodationSearchDTO> favorites = new ArrayList<>();
+        favorites.add(testAccommodationSearchDTO);
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
  
