@@ -35,7 +35,7 @@ public class UserController {
 
     UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
             (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)2398423, "steve@testnmail.me"
+            "Washington", "United States", (long)2398423, "steve@testnmail.me", "guest"
     );
 
     NotificationDTO testNotificationDTO = new NotificationDTO(
