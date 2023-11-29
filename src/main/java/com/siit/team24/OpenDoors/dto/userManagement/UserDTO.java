@@ -1,9 +1,9 @@
-package com.siit.team24.OpenDoors.dto;
+package com.siit.team24.OpenDoors.dto.userManagement;
 
 import com.siit.team24.OpenDoors.model.User;
 
 public class UserDTO {
-    private final Long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String phone;
@@ -11,7 +11,20 @@ public class UserDTO {
     private int number;
     private String city;
     private String country;
-    private String image;
+    private Long imageId;
+
+    public UserDTO(Long id, String firstName, String lastName, String phone, String street, int number, String city, String country, Long imageId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.imageId = imageId;
+    }
+
     public UserDTO(User user){
         this.id = user.getId();
         this.firstName = user.getFirstName();
@@ -21,7 +34,11 @@ public class UserDTO {
         this.number = user.getAddress().getNumber();
         this.city = user.getAddress().getCity();
         this.country = user.getAddress().getCountry().getCountryName();
-        this.image = user.getImage();
+        this.imageId = user.getImage().getId();
+    }
+
+    public UserDTO() {
+
     }
 
     public Long getId() {
@@ -84,12 +101,12 @@ public class UserDTO {
         this.country = country;
     }
 
-    public String getImage() {
-        return image;
+    public Long getImage() {
+        return imageId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(Long image) {
+        this.imageId = image;
     }
 
     @Override
@@ -102,7 +119,7 @@ public class UserDTO {
                 ", number=" + number +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + imageId + '\'' +
                 '}';
     }
 }

@@ -1,33 +1,44 @@
-package com.siit.team24.OpenDoors.dto;
+package com.siit.team24.OpenDoors.dto.accommodation;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
+import com.siit.team24.OpenDoors.model.Image;
 
 public class AccommodationSearchDTO {
-    private String image;
+    private Long id;
+    private Long image;
     private String name;
     private double averageRating;
     private double price;
     private boolean isPricePerNight;
+    private String city;
+    private String country;
 
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation) {
-        this(accommodation.getImages().get(0), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight());
+        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight(), accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
     }
 
-    public AccommodationSearchDTO(String image, String name, double averageRating, double price, boolean isPricePerNight) {
+    public AccommodationSearchDTO(Long id, Long image, String name, double averageRating, double price, boolean isPricePerNight, String city, String country) {
+        this.id = id;
         this.image = image;
         this.name = name;
         this.averageRating = averageRating;
         this.price = price;
         this.isPricePerNight = isPricePerNight;
+        this.city = city;
+        this.country = country;
     }
 
-    public String getImage() {
+    public Long getId() {
+        return id;
+    }
+
+    public Long getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Long image) {
         this.image = image;
     }
 

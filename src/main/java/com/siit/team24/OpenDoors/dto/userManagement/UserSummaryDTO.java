@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.dto;
+package com.siit.team24.OpenDoors.dto.userManagement;
 
 import com.siit.team24.OpenDoors.model.User;
 
@@ -7,6 +7,14 @@ public class UserSummaryDTO {
     private String firstName;
     private String lastName;
     private String role;
+
+    public UserSummaryDTO(String email, String firstName, String lastName, String role) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
     public UserSummaryDTO(User user){
         this.email = user.getAccount().getEmail();
         this.firstName = user.getFirstName();

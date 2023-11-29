@@ -1,10 +1,12 @@
 package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Accommodation {
@@ -15,25 +17,29 @@ public class Accommodation {
     private String name;
     private String description;
     private String location;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Amenity> amenities;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<String> images;
+    @OneToMany(cascade = CascadeType.REFRESH)
+    private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
-
     private int maxGuests;
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType accommodationType;
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerNight;
     private double averageRating;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
+    @ElementCollection
+    private List<Price> seasonalRates;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, List<String> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host) {
+    @Embedded
+    private Address address;
+
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,6 +54,8 @@ public class Accommodation {
         this.isPricePerNight = isPricePerNight;
         this.averageRating = averageRating;
         this.host = host;
+        this.seasonalRates = seasonalRates;
+        this.address = address;
     }
     public Accommodation() {}
 
@@ -95,15 +103,15 @@ public class Accommodation {
         this.amenities.remove(amenity);
     }
 
-    public List<String> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void addImage(String image) {
+    public void addImage(Image image) {
         this.images.add(image);
     }
 
-    public void removeImage(String image) {
+    public void removeImage(Image image) {
         this.images.remove(image);
     }
 
@@ -175,6 +183,38 @@ public class Accommodation {
         this.host = host;
     }
 
+    public List<Price> getSeasonalRates() {
+        return seasonalRates;
+    }
+
+    public void setSeasonalRates(List<Price> seasonalRates) {
+        this.seasonalRates = seasonalRates;
+    }
+
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+    public void setAvailability(List<DateRange> availability) {
+        this.availability = availability;
+    }
+
+    public void setPricePerNight(boolean pricePerNight) {
+        isPricePerNight = pricePerNight;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -206,6 +246,8 @@ public class Accommodation {
                 ", isPricePerNight=" + isPricePerNight +
                 ", averageRating=" + averageRating +
                 ", host=" + host +
+                ", seasonRates=" + seasonalRates +
+                ", address=" + address +
                 '}';
     }
 
