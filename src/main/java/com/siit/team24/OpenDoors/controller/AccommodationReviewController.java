@@ -45,7 +45,7 @@ public class AccommodationReviewController {
         return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "application/json")
+    @PutMapping(consumes = "application/json")
     public ResponseEntity<AccommodationReviewDTO> updateAccommodationReview(@RequestBody HostReviewForHostDTO reviewDTO) {
         return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.OK);
     }

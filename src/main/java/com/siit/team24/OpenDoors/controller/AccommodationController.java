@@ -72,7 +72,7 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }

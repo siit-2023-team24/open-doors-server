@@ -69,7 +69,7 @@ public class HostReviewController {
 
     @PutMapping(value = "/{reviewId}/status")
     public ResponseEntity<Void> changeReviewStatus(@PathVariable Long reviewId,
-                                                  @RequestBody boolean isReported){
+                                                  @RequestParam boolean isReported){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

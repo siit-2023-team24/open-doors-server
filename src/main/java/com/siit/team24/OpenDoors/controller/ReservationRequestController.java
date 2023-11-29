@@ -37,14 +37,14 @@ public class ReservationRequestController {
             3, 2230.5, ReservationRequestStatus.PENDING, new Timestamp(72524)
     );
 
-    @GetMapping(value = "/all/{guestId}")
+    @GetMapping(value = "/all/guest/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> getAllForGuest(@PathVariable Long guestId) {
         List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
         requests.add(testReservationRequestForGuestDTO);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/confirmed/{guestId}")
+    @GetMapping(value = "/confirmed/guest/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> getConfirmedForGuest(@PathVariable Long guestId) {
         List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
         requests.add(testReservationRequestForGuestDTO);
@@ -61,8 +61,8 @@ public class ReservationRequestController {
     @GetMapping(value = "/filtered")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> getFiltered(
             @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "dateStart", required = false) LocalDate startDate,
-            @RequestParam(name = "dateEnd", required = false) LocalDate endDate,
+            @RequestParam(name = "dateStart", required = false) String startDate,
+            @RequestParam(name = "dateEnd", required = false) String endDate,
             @RequestParam(name = "filter", required = false) ReservationRequestStatus filter) {
         List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
         requests.add(testReservationRequestForGuestDTO);

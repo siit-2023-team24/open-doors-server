@@ -25,8 +25,8 @@ public class FinancialReportController {
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<List<FinancialReportDateRangeItemDTO>> getDateRangeReport(
             @PathVariable Long hostId,
-            @RequestParam(name = "start", required = true)LocalDate start,
-            @RequestParam(name = "end", required = true)LocalDate end) {
+            @RequestParam(name = "start", required = true)String start,
+            @RequestParam(name = "end", required = true)String end) {
 
         List<FinancialReportDateRangeItemDTO> items = new ArrayList<>();
         items.add(testFinancialReportDateRangeItemDTO);

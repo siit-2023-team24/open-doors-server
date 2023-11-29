@@ -108,7 +108,7 @@ public class UserController {
  
     @PutMapping(value = "/{userId}/status")
     public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
-                                                  @RequestBody boolean isBlocked){
+                                                  @RequestParam boolean isBlocked){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

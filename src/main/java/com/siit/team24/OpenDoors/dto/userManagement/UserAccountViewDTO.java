@@ -25,7 +25,7 @@ public class UserAccountViewDTO extends UserDTO {
 
     public UserAccountViewDTO(String email, String role) {
         this.email = email;
-        this.role = role
+        this.role = role;
     }
 
     public String getEmail() {
