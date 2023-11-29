@@ -26,13 +26,19 @@ public class AccommodationWholeDTO {
 
     private List<Price> seasonalRates;
 
+    private String city;
+    private String country;
+    private String street;
+    private int number;
+
     public AccommodationWholeDTO() {}
 
     public AccommodationWholeDTO(Accommodation accommodation) {
-        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates());
+        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates) {
+    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,6 +54,10 @@ public class AccommodationWholeDTO {
         this.availability = availability;
         this.price = price;
         this.seasonalRates = seasonalRates;
+        this.city = city;
+        this.country = country;
+        this.street = street;
+        this.number = number;
     }
 
     public Long getId() {

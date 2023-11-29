@@ -25,7 +25,8 @@ import java.util.Set;
 public class AccommodationController {
     // test data
     AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true
+            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
+            "Novi Sad", "Serbia"
     );
     List<Amenity> testAmenities = new ArrayList<>(Arrays.asList(Amenity.BAR, Amenity.GYM));
     Image testImage = new Image((long)432343252, "./image", "Test Image", "jpg");
@@ -39,7 +40,8 @@ public class AccommodationController {
 
     AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
             (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
-            testAmenities, testImages, 3, 8, AccommodationType.HOTEL, testDates, 4000.0, testPrices
+            testAmenities, testImages, 3, 8, AccommodationType.HOTEL, testDates, 4000.0, testPrices,
+            "New York City", "United States", "Manhattan Street", 5
     );
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {

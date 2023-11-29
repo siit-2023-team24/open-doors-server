@@ -3,41 +3,34 @@ package com.siit.team24.OpenDoors.dto.userManagement;
 import com.siit.team24.OpenDoors.model.Account;
 import com.siit.team24.OpenDoors.model.User;
 
-public class UserAccountDTO {
-    private AccountDTO account;
-    private UserDTO user;
+public class UserAccountDTO extends UserDTO {
+    private String email;
+    private String password;
     private String role;
 
-    public UserAccountDTO(AccountDTO account, UserDTO user, String role) {
-        this.account = account;
-        this.user = user;
-        this.role = role;
-    }
-
-    public UserAccountDTO(User user) {
-        this.account = new AccountDTO(user.getAccount());
-        this.role = user.getAccount().getRole().name();
-        this.user = new UserDTO(user);
-    }
 
     public UserAccountDTO() {
 
     }
 
-    public AccountDTO getAccount() {
-        return account;
+    public UserAccountDTO(Long id, String firstName, String lastName, String phone, String street, int number, String city, String country, Long imageId, String email, String password, String role) {
+        super(id, firstName, lastName, phone, street, number, city, country, imageId);
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
-    public void setAccount(AccountDTO account) {
-        this.account = account;
+    public UserAccountDTO(User user, String email, String password, String role) {
+        super(user);
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
-    public UserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public UserAccountDTO(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public String getRole() {
@@ -48,11 +41,27 @@ public class UserAccountDTO {
         this.role = role;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
-        return "RegisterDTO{" +
-                "account=" + account +
-//                ", user=" + user +
+        return "UserAccountDTO{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

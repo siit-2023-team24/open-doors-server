@@ -36,7 +36,10 @@ public class Accommodation {
     @ElementCollection
     private List<Price> seasonalRates;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates) {
+    @Embedded
+    private Address address;
+
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,6 +55,7 @@ public class Accommodation {
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
+        this.address = address;
     }
     public Accommodation() {}
 
@@ -187,6 +191,30 @@ public class Accommodation {
         this.seasonalRates = seasonalRates;
     }
 
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+    public void setAvailability(List<DateRange> availability) {
+        this.availability = availability;
+    }
+
+    public void setPricePerNight(boolean pricePerNight) {
+        isPricePerNight = pricePerNight;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -219,6 +247,7 @@ public class Accommodation {
                 ", averageRating=" + averageRating +
                 ", host=" + host +
                 ", seasonRates=" + seasonalRates +
+                ", address=" + address +
                 '}';
     }
 

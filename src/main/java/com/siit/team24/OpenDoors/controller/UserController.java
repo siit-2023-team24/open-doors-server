@@ -25,11 +25,17 @@ public class UserController {
     );
 
     UserAccountDTO testUserAccountDTO = new UserAccountDTO(
-            testAccountDTO, testUserDTO, "guest"
+            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)2398423, "steve@testnmail.me", "St3v3St3v3ns", "guest"
     );
 
     UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
             "bob@testmail.me", "Bob", "Roberts", "host"
+    );
+
+    UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
+            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)2398423, "steve@testnmail.me"
     );
 
     NotificationDTO testNotificationDTO = new NotificationDTO(
@@ -37,7 +43,8 @@ public class UserController {
     );
 
     AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true
+            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
+            "Novi Sad", "Serbia"
     );
 
     @PostMapping(consumes="application/json", value = "/login")
@@ -80,9 +87,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserAccountDTO> getUser(
+    public ResponseEntity<UserAccountViewDTO> getUser(
             @PathVariable Long id) {
-        return new ResponseEntity<>(testUserAccountDTO, HttpStatus.OK);
+        return new ResponseEntity<>(testUserAccountViewDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userId}/notifications")
