@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("open-doors/users")
 public class UserController {
@@ -59,9 +60,9 @@ public class UserController {
 
     @PutMapping(consumes = "application/json")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(testUserDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
-    @PutMapping(consumes = "application/json", value = "/newPassword")
+    @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
         return new ResponseEntity<>(HttpStatus.OK);
     }

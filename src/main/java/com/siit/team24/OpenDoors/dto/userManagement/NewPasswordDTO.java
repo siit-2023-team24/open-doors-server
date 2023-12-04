@@ -4,6 +4,7 @@ public class NewPasswordDTO {
     private Long userId;
     private String oldPassword;
     private String newPassword;
+    private String repeatPassword;
 
     public Long getUserId() {
         return userId;
@@ -29,10 +30,19 @@ public class NewPasswordDTO {
         this.newPassword = newPassword;
     }
 
-    public NewPasswordDTO(Long userId, String oldPassword, String newPassword) {
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }
+
+    public NewPasswordDTO(Long userId, String oldPassword, String newPassword, String repeatPassword) {
         this.userId = userId;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
+        this.repeatPassword = repeatPassword;
     }
 
     @Override
@@ -43,4 +53,6 @@ public class NewPasswordDTO {
                 ", newPassword='" + newPassword + '\'' +
                 '}';
     }
+
+
 }
