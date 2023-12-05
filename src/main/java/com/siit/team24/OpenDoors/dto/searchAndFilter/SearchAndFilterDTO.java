@@ -8,11 +8,11 @@ import java.util.Set;
 
 public class SearchAndFilterDTO {
     private String location;
-    private int guestNumber;
+    private Integer guestNumber;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double startPrice;
-    private double endPrice;
+    private Double startPrice;
+    private Double endPrice;
     private Set<AccommodationType> types;
     private Set<Amenity> amenities;
 
@@ -39,7 +39,7 @@ public class SearchAndFilterDTO {
         this.location = location;
     }
 
-    public int getGuestNumber() {
+    public Integer getGuestNumber() {
         return guestNumber;
     }
 
@@ -63,7 +63,7 @@ public class SearchAndFilterDTO {
         this.endDate = endDate;
     }
 
-    public double getStartPrice() {
+    public Double getStartPrice() {
         return startPrice;
     }
 
@@ -71,7 +71,7 @@ public class SearchAndFilterDTO {
         this.startPrice = startPrice;
     }
 
-    public double getEndPrice() {
+    public Double getEndPrice() {
         return endPrice;
     }
 
