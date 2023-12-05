@@ -2,9 +2,10 @@ package com.siit.team24.OpenDoors.repository.image;
 
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.model.Image;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Optional;
 
 public class FileRepository {
 
@@ -29,5 +30,17 @@ public class FileRepository {
         fileDto.getFile().transferTo(file);
 
         return new Image(null, filepath, fileDto.getFile().getOriginalFilename(), fileDto.getFile().getContentType());
+    }
+
+    public byte[] getFile(Optional<Image> image) throws IOException {
+        String filepath;
+        byte[] bytes;
+        if (image.isEmpty()) {
+            filepath = ".\\src\\main\\resources\\static\\logo.png";
+        } else {
+            filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
+        }
+        File file = new File(filepath);
+        return new BufferedInputStream(new FileInputStream(file)).readAllBytes();
     }
 }

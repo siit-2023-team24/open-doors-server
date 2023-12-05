@@ -6,8 +6,12 @@ import com.siit.team24.OpenDoors.repository.image.FileRepository;
 import com.siit.team24.OpenDoors.repository.image.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 @Service
@@ -18,8 +22,10 @@ public class ImageService {
 
     private FileRepository fileRepo = new FileRepository();
 
-    public Optional<Image> findById(Long id) {
-        return repo.findById(id);
+    public byte[] findById(Long id) throws IOException {
+
+        Optional<Image> image = repo.findById(id);
+        return fileRepo.getFile(image);
     }
 
     public Image save(ImageFileDTO file) throws IOException {

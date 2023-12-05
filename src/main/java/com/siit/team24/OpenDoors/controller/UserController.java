@@ -17,8 +17,8 @@ import java.util.List;
 @RequestMapping("open-doors/users")
 public class UserController {
     UserDTO testUserDTO = new UserDTO(
-            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)2398423
+            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)1
     );
 
     AccountDTO testAccountDTO = new AccountDTO(
@@ -26,8 +26,8 @@ public class UserController {
     );
 
     UserAccountDTO testUserAccountDTO = new UserAccountDTO(
-            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)2398423, "steve@testnmail.me", "St3v3St3v3ns", "guest"
+            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)1, "steve@testnmail.me", "St3v3St3v3ns", "guest"
     );
 
     UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
@@ -35,8 +35,8 @@ public class UserController {
     );
 
     UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
-            (long)923732, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)2398423, "steve@testnmail.me", "guest"
+            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
+            "Washington", "United States", (long)1, "steve@testnmail.me", "guest"
     );
 
     NotificationDTO testNotificationDTO = new NotificationDTO(
