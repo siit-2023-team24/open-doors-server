@@ -4,9 +4,7 @@ import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Accommodation {
@@ -25,7 +23,7 @@ public class Accommodation {
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
     @Column(name = "accommodationType", nullable = false)
-    private AccommodationType accommodationType;
+    private AccommodationType type;
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
@@ -35,11 +33,12 @@ public class Accommodation {
     private Host host;
     @ElementCollection
     private List<Price> seasonalRates;
-
+    private int deadline;
+    private boolean isAutomatic;
     @Embedded
     private Address address;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address) {
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address, int deadline, boolean isAutomatic) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,15 +48,23 @@ public class Accommodation {
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.availability = availability;
-        this.accommodationType = accommodationType;
+        this.type = accommodationType;
         this.price = price;
         this.isPricePerNight = isPricePerNight;
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
         this.address = address;
+        this.deadline = deadline;
+        this.isAutomatic = isAutomatic;
     }
-    public Accommodation() {}
+    public Accommodation() {
+        this.address =  new Address();
+        this.images = new HashSet<>();
+        this.availability = new ArrayList<>();
+        this.amenities = new ArrayList<>();
+        this.availability = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -131,12 +138,12 @@ public class Accommodation {
         this.maxGuests = maxGuests;
     }
 
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
+    public AccommodationType getType() {
+        return type;
     }
 
-    public void setAccommodationType(AccommodationType accommodationType) {
-        this.accommodationType = accommodationType;
+    public void setType(AccommodationType accommodationType) {
+        this.type = accommodationType;
     }
 
     public List<DateRange> getAvailability() {
@@ -215,6 +222,14 @@ public class Accommodation {
         this.address = address;
     }
 
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(int deadline) {
+        this.deadline = deadline;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -229,6 +244,14 @@ public class Accommodation {
         return Objects.hashCode(id);
     }
 
+    public boolean isAutomatic() {
+        return isAutomatic;
+    }
+
+    public void setAutomatic(boolean automatic) {
+        isAutomatic = automatic;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
@@ -240,7 +263,7 @@ public class Accommodation {
                 ", images=" + images +
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
-                ", accommodationType=" + accommodationType +
+                ", accommodationType=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
                 ", isPricePerNight=" + isPricePerNight +
@@ -248,6 +271,8 @@ public class Accommodation {
                 ", host=" + host +
                 ", seasonRates=" + seasonalRates +
                 ", address=" + address +
+                ", deadline=" + deadline +
+                ", isAutomatic=" + isAutomatic +
                 '}';
     }
 
