@@ -9,6 +9,9 @@ import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.Price;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
+import com.siit.team24.OpenDoors.service.AccommodationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "open-doors/accommodations")
 public class AccommodationController {
@@ -38,10 +42,13 @@ public class AccommodationController {
             new Price(5000.0, new DateRange(
                     LocalDate.now().plusDays(200), LocalDate.now().plusDays(231)))));
 
+    @Autowired
+    private AccommodationService accommodationService;
+
     AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
             (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
-            testAmenities, testImages, 3, 8, AccommodationType.HOTEL, testDates, 4000.0, testPrices,
-            "New York City", "United States", "Manhattan Street", 5
+            testAmenities, testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, testPrices,
+            "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
     );
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
@@ -64,7 +71,35 @@ public class AccommodationController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.CREATED);
+
+        Accommodation accommodation = new Accommodation();
+
+        accommodation.setId(accommodationWholeDTO.getId());
+        accommodation.setName(accommodationWholeDTO.getName());
+        accommodation.setDescription(accommodationWholeDTO.getDescription());
+        accommodation.setLocation(accommodationWholeDTO.getLocation());
+        accommodation.setAmenities(accommodationWholeDTO.getAmenities());
+        // TODO: images
+        accommodation.setMinGuests(accommodationWholeDTO.getMinGuests());
+        accommodation.setMaxGuests(accommodationWholeDTO.getMaxGuests());
+        accommodation.setType(AccommodationType.fromString(accommodationWholeDTO.getType()));
+
+        accommodation.getAddress().setCity(accommodationWholeDTO.getCity());
+        accommodation.getAddress().setCountry(Country.fromString(accommodationWholeDTO.getCountry()));
+        accommodation.getAddress().setStreet(accommodationWholeDTO.getStreet());
+        accommodation.getAddress().setNumber(accommodationWholeDTO.getNumber());
+        accommodation.setDeadline(accommodationWholeDTO.getDeadline());
+        accommodation.setAutomatic(accommodation.isAutomatic());
+
+        // TODO: expand front-end with the following
+
+        accommodation.setAvailability(accommodationWholeDTO.getAvailability());
+        accommodation.setPrice(accommodationWholeDTO.getPrice());
+        accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
+
+        accommodationService.save(accommodation);
+
+        return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")
