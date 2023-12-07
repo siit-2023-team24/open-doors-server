@@ -25,22 +25,29 @@ public class FileRepository {
             else System.out.println("Success making directory: " + directory.getAbsolutePath());
         }
 
-
         File file = new File(filepath + "\\" + fileDto.getFile().getOriginalFilename());
         fileDto.getFile().transferTo(file);
-
-        return new Image(null, filepath, fileDto.getFile().getOriginalFilename(), fileDto.getFile().getContentType());
+        System.out.println("Received file: " + fileDto.getFile().getOriginalFilename());
+        return new Image(fileDto.getImageId(), filepath, fileDto.getFile().getOriginalFilename(), fileDto.getFile().getContentType());
     }
 
     public byte[] getFile(Optional<Image> image) throws IOException {
         String filepath;
-        byte[] bytes;
         if (image.isEmpty()) {
-            filepath = ".\\src\\main\\resources\\static\\logo.png";
+            filepath = ".\\src\\main\\resources\\static\\account.png";
         } else {
             filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
         }
         File file = new File(filepath);
         return new BufferedInputStream(new FileInputStream(file)).readAllBytes();
+    }
+
+    public void delete(Image image) {
+        String filepath = String.join(File.separator, image.getPath(), image.getName());
+        File file = new File(filepath);
+        if (file.delete())
+            System.out.println("Deleted image with id: " + image);
+        else
+            System.err.println("Error deleting image: " + image + "from file system");
     }
 }

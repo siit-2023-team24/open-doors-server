@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.dto.image;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ImageFileDTO {
+    private Long imageId;
     private MultipartFile file;
     private boolean isProfile;
     private Long entityId;
@@ -10,10 +11,19 @@ public class ImageFileDTO {
     public ImageFileDTO() {
     }
 
-    public ImageFileDTO(MultipartFile file, boolean isProfile, Long entityId) {
+    public ImageFileDTO(Long imageId, MultipartFile file, boolean isProfile, Long entityId) {
+        this.imageId = imageId;
         this.file = file;
         this.isProfile = isProfile;
         this.entityId = entityId;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 
     public MultipartFile getFile() {
@@ -43,7 +53,8 @@ public class ImageFileDTO {
     @Override
     public String toString() {
         return "ImageFileDTO{" +
-                "file=" + file.getName() +
+                "imageId=" + imageId +
+                ", file=" + file +
                 ", isProfile=" + isProfile +
                 ", entityId=" + entityId +
                 '}';

@@ -1,7 +1,7 @@
 package com.siit.team24.OpenDoors.repository.user;
 
-import com.siit.team24.OpenDoors.model.Guest;
+import com.siit.team24.OpenDoors.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GuestRepository extends JpaRepository<Guest, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

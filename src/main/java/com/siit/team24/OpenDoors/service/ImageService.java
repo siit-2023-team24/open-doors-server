@@ -6,12 +6,8 @@ import com.siit.team24.OpenDoors.repository.image.FileRepository;
 import com.siit.team24.OpenDoors.repository.image.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 
 @Service
@@ -34,6 +30,13 @@ public class ImageService {
     }
 
     public void delete(Long id) {
-
+        Optional<Image> image = repo.findById(id);
+        if (image.isEmpty()) {
+            System.err.println("Image not found: " + id );
+            return;
+        }
+        repo.deleteById(id);
+        fileRepo.delete(image.get());
     }
+
 }

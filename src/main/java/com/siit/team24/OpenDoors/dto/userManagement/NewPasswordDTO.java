@@ -1,17 +1,17 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
 public class NewPasswordDTO {
-    private Long userId;
+    private String user;
     private String oldPassword;
     private String newPassword;
     private String repeatPassword;
 
-    public Long getUserId() {
-        return userId;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getOldPasswod() {
@@ -38,8 +38,8 @@ public class NewPasswordDTO {
         this.repeatPassword = repeatPassword;
     }
 
-    public NewPasswordDTO(Long userId, String oldPassword, String newPassword, String repeatPassword) {
-        this.userId = userId;
+    public NewPasswordDTO(String user, String oldPassword, String newPassword, String repeatPassword) {
+        this.user = user;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
         this.repeatPassword = repeatPassword;
@@ -48,7 +48,7 @@ public class NewPasswordDTO {
     @Override
     public String toString() {
         return "NewPasswordDTO{" +
-                "userId=" + userId +
+                "user=" + user +
                 ", oldPassword='" + oldPassword + '\'' +
                 ", newPassword='" + newPassword + '\'' +
                 '}';
