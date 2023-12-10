@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.service.user.AccountService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private AccountService accountService;
 
 
 
@@ -91,7 +96,14 @@ public class UserController {
 
     @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
-        //TODO
+        try {
+            this.accountService.changePassword(newPasswordDTO);
+        } catch (Exception e) {
+            System.err.println("Error changing password for: " + newPasswordDTO.getUser());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        //TODO test
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

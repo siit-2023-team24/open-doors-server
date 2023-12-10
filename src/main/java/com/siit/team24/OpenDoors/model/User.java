@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "users")
-public abstract class User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
