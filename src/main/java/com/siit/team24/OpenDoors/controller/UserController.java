@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class UserController {
         try {
             this.accountService.changePassword(newPasswordDTO);
         } catch (Exception e) {
-            System.err.println("Error changing password for: " + newPasswordDTO.getUser());
+            System.err.println("Error changing password for: " + newPasswordDTO.getEmail());
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

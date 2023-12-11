@@ -24,7 +24,7 @@ public class AccountService {
         if (!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,20}$"))
             throw new PasswordValidationException();
 
-        Optional<Account> account = repo.findById(dto.getUser());
+        Optional<Account> account = repo.findByEmail(dto.getEmail());
         if (account.isEmpty())
             throw new AccountNotFoundException();
 

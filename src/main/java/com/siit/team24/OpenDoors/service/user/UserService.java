@@ -2,6 +2,7 @@ package com.siit.team24.OpenDoors.service.user;
 
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
+import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.ImageService;
@@ -32,12 +33,14 @@ public class UserService {
     public UserEditedDTO update(UserEditedDTO newData) throws IOException {
         User user = this.findById(newData.getId());
 
-        //image changed?
-        if (newData.getFile() != null) {
-            if (user.getImage() != null) {
-                imageService.delete(user.getImage().getId());
-            }
-            imageService.save(new ImageFileDTO(newData.getImageId(), newData.getFile(), true, user.getId()));
+        Image oldImage = user.getImage();
+        if (oldImage != null && (newData.getImageId() == null || newData.getFile() != null)) { //the user wants to delete or replace their image
+            user.setImage(null);
+            imageService.delete(oldImage.getId());
+        }
+        if (newData.getFile() != null) {    //uploaded new image
+            Image newImage = imageService.save(new ImageFileDTO(newData.getImageId(), newData.getFile(), true, user.getId()));
+            user.setImage(newImage);
         }
         user.updateSimpleValues(newData); //updates all attributes except for image
         User updated = repo.save(user);

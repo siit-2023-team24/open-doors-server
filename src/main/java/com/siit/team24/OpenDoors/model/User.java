@@ -15,7 +15,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @Nullable
     private Image image;
     @Embedded
