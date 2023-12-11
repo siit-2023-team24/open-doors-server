@@ -39,15 +39,20 @@ public class FileRepository {
             filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
         }
         File file = new File(filepath);
-        return new BufferedInputStream(new FileInputStream(file)).readAllBytes();
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+        byte[] bytes = in.readAllBytes();
+        in.close();
+        return bytes;
     }
 
     public void delete(Image image) {
         String filepath = String.join(File.separator, image.getPath(), image.getName());
         File file = new File(filepath);
+        System.out.println("Attempting to delete file: " + filepath);
+
         if (file.delete())
             System.out.println("Deleted image with id: " + image);
         else
-            System.err.println("Error deleting image: " + image + "from file system");
+            System.err.println("Error deleting image: " + image + " from file system");
     }
 }

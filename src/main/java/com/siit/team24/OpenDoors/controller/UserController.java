@@ -102,7 +102,6 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        //TODO test
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
