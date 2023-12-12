@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class AccommodationWholeDTO {
     private List<Long> images;
     private int minGuests;
     private int maxGuests;
-    private AccommodationType accommodationType;
+    private String type;
     private List<DateRange> availability;
     private double price;
     private boolean isPricePerNight;
@@ -29,15 +30,18 @@ public class AccommodationWholeDTO {
     private String country;
     private String street;
     private int number;
+    private int deadline;
+
+    private boolean isAutomatic;
 
     public AccommodationWholeDTO() {}
 
     public AccommodationWholeDTO(Accommodation accommodation) {
-        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), accommodation.getAverageRating(), accommodation.getHost());
+        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.isAutomatic());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double averageRating, Host host) {
+    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,7 +53,7 @@ public class AccommodationWholeDTO {
         }
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
-        this.accommodationType = accommodationType;
+        this.type = accommodationType;
         this.availability = availability;
         this.price = price;
         this.isPricePerNight = isPricePerNight;
@@ -60,6 +64,8 @@ public class AccommodationWholeDTO {
         this.country = country;
         this.street = street;
         this.number = number;
+        this.deadline = deadline;
+        this.isAutomatic = isAutomatic;
     }
 
     public Long getId() {
@@ -126,12 +132,12 @@ public class AccommodationWholeDTO {
         this.maxGuests = maxGuests;
     }
 
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
+    public String getType() {
+        return type;
     }
 
-    public void setAccommodationType(AccommodationType accommodationType) {
-        this.accommodationType = accommodationType;
+    public void setType(String accommodationType) {
+        this.type = accommodationType;
     }
 
     public List<DateRange> getAvailability() {
@@ -212,6 +218,22 @@ public class AccommodationWholeDTO {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(int deadline) {
+        this.deadline = deadline;
+    }
+
+    public boolean isAutomatic() {
+        return isAutomatic;
+    }
+
+    public void setAutomatic(boolean automatic) {
+        isAutomatic = automatic;
     }
 }
 

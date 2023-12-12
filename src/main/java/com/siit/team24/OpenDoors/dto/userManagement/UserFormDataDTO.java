@@ -1,19 +1,27 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
-import com.siit.team24.OpenDoors.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
-public class UserDTO {
-    private Long id;
+public class UserFormDataDTO {
+
+    private String id;
     private String firstName;
     private String lastName;
     private String phone;
     private String street;
-    private int number;
+    private String number;
     private String city;
     private String country;
-    private Long imageId;
+    private String imageId;
+    private MultipartFile file;
 
-    public UserDTO(Long id, String firstName, String lastName, String phone, String street, int number, String city, String country, Long imageId) {
+
+    public UserFormDataDTO() {
+    }
+
+    public UserFormDataDTO(String id, String firstName, String lastName, String phone,
+                           String street, String number, String city, String country, String imageId,
+                           MultipartFile file) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,26 +31,15 @@ public class UserDTO {
         this.city = city;
         this.country = country;
         this.imageId = imageId;
+        this.file = file;
     }
 
-    public UserDTO(User user){
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.phone = user.getPhone();
-        this.street = user.getAddress().getStreet();
-        this.number = user.getAddress().getNumber();
-        this.city = user.getAddress().getCity();
-        this.country = user.getAddress().getCountry().getCountryName();
-        this.imageId = user.getImage().getId();
-    }
-
-    public UserDTO() {
-
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -77,11 +74,11 @@ public class UserDTO {
         this.street = street;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -101,25 +98,41 @@ public class UserDTO {
         this.country = country;
     }
 
-    public Long getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
-    public void setImageId(Long image) {
-        this.imageId = image;
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "firstName='" + firstName + '\'' +
+        return "UserDataPackageDTO{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", street='" + street + '\'' +
-                ", number=" + number +
+                ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", imageId='" + imageId + '\'' +
+                ", file=" + file +
                 '}';
+    }
+
+    public UserEditedDTO toEditedDTO() {
+        Long imgId = (imageId.isEmpty())? null : Long.parseLong(imageId);
+        return new UserEditedDTO(Long.parseLong(id), firstName, lastName, phone, street, Integer.parseInt(number),
+                city, country, imgId, file);
     }
 }

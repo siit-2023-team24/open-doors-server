@@ -13,6 +13,8 @@ import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import com.siit.team24.OpenDoors.model.enums.Country;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,11 @@ public class AccommodationController {
     @Autowired
     private AccommodationService accommodationService;
 
+    AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
+            (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
+            testAmenities, testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, testPrices,
+            "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
+    );
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
         List<Accommodation> accommodations = accommodationService.findAll();
@@ -67,14 +74,33 @@ public class AccommodationController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        ImageService imageService = new ImageService();
-        Accommodation accommodation = new Accommodation(accommodationWholeDTO);
 
-        for(Long imageId : accommodationWholeDTO.getImages()) {
-            accommodation.addImage(imageService.findOne(imageId));
-        }
+        Accommodation accommodation = new Accommodation();
 
-        accommodation = accommodationService.save(accommodation);
+        accommodation.setId(accommodationWholeDTO.getId());
+        accommodation.setName(accommodationWholeDTO.getName());
+        accommodation.setDescription(accommodationWholeDTO.getDescription());
+        accommodation.setLocation(accommodationWholeDTO.getLocation());
+        accommodation.setAmenities(accommodationWholeDTO.getAmenities());
+        // TODO: images
+        accommodation.setMinGuests(accommodationWholeDTO.getMinGuests());
+        accommodation.setMaxGuests(accommodationWholeDTO.getMaxGuests());
+        accommodation.setType(AccommodationType.fromString(accommodationWholeDTO.getType()));
+
+        accommodation.getAddress().setCity(accommodationWholeDTO.getCity());
+        accommodation.getAddress().setCountry(Country.fromString(accommodationWholeDTO.getCountry()));
+        accommodation.getAddress().setStreet(accommodationWholeDTO.getStreet());
+        accommodation.getAddress().setNumber(accommodationWholeDTO.getNumber());
+        accommodation.setDeadline(accommodationWholeDTO.getDeadline());
+        accommodation.setAutomatic(accommodation.isAutomatic());
+
+        // TODO: expand front-end with the following
+
+        accommodation.setAvailability(accommodationWholeDTO.getAvailability());
+        accommodation.setPrice(accommodationWholeDTO.getPrice());
+        accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
+
+        accommodationService.save(accommodation);
 
         return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.CREATED);
     }

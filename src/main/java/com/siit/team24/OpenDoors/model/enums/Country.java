@@ -1,5 +1,8 @@
 package com.siit.team24.OpenDoors.model.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Country {
     AFGHANISTAN("Afghanistan"),
     ALBANIA("Albania"),
@@ -76,6 +79,25 @@ public enum Country {
     VATICAN_CITY("Vatican City");
 
     private final String countryName;
+    private static final Map<String, Country> countryMap = new HashMap<>();
+
+    static {
+        for (Country country : Country.values()) {
+            countryMap.put(country.getCountryName(), country);
+        }
+    }
+
+    private static final Map<String, Country> countryMap = new HashMap<>();
+
+    static {
+        for (Country country: Country.values()) {
+            countryMap.put(country.getCountryName(), country);
+        }
+    }
+
+    public static Country fromString(String countryName) {
+        return countryMap.get(countryName);
+    }
 
     Country(String countryName) {
         this.countryName = countryName;

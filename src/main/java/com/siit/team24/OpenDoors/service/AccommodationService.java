@@ -35,6 +35,7 @@ public class AccommodationService {
     }
 
     public Accommodation save(Accommodation accommodation) {
+        System.out.println("I SAVED IT" + accommodation.toString());
         return accommodationRepository.save(accommodation);
     }
 
