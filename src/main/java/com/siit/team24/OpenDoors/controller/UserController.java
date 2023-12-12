@@ -2,7 +2,6 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
-import com.siit.team24.OpenDoors.model.Account;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +41,10 @@ public class UserController {
             "You have a new review.", "Excellent", new Timestamp(98423)
     );
 
-    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
-            "Novi Sad", "Serbia"
-    );
+//    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
+//            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
+//            "Novi Sad", "Serbia"
+//    );
 
     @PostMapping(consumes="application/json", value = "/login")
     public ResponseEntity<UserDTO> login(@RequestBody AccountDTO accountDTO) {
@@ -102,7 +101,7 @@ public class UserController {
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        favorites.add(testAccommodationSearchDTO);
+        // favorites.add(testAccommodationSearchDTO);
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
  

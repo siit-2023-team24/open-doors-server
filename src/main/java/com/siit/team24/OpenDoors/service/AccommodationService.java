@@ -1,10 +1,11 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
-import com.siit.team24.OpenDoors.repository.accommodation.AccommodationRepository;
+import com.siit.team24.OpenDoors.repository.AccommodationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,13 +38,18 @@ public class AccommodationService {
         return accommodationRepository.save(accommodation);
     }
 
+    public Accommodation update(Accommodation accommodation) {
+        return accommodationRepository.save(accommodation);
+    }
+
     public void remove(Long id) {
         accommodationRepository.deleteById(id);
     }
 
-    public List<Accommodation> searchAndFilter(SearchAndFilterDTO searchAndFilterDTO) {
+    public List<AccommodationSearchDTO> searchAndFilter(SearchAndFilterDTO searchAndFilterDTO) {
         List<Accommodation> allAccommodations = findAll();
         List<Accommodation> appropriateAccommodations = new ArrayList<>();
+        List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
 
         for(Accommodation a : allAccommodations) {
             if(searchAndFilterDTO.getLocation() != null && !a.getLocation().equals(searchAndFilterDTO.getLocation()))
@@ -65,7 +70,12 @@ public class AccommodationService {
             appropriateAccommodations.add(a);
         }
 
-        return appropriateAccommodations;
+        for(Accommodation a: appropriateAccommodations) {
+            Double totalPrice = calculateTotalPrice(a, searchAndFilterDTO);
+            accommodationSearchDTOS.add(new AccommodationSearchDTO(a, totalPrice));
+        }
+
+        return accommodationSearchDTOS;
     }
 
     public boolean isAvailable(Accommodation accommodation, LocalDate startDate, LocalDate endDate) {
@@ -93,4 +103,15 @@ public class AccommodationService {
         return accommodation.getAmenities().containsAll(amenities);
     }
 
+    public Double calculateTotalPrice(Accommodation accommodation, SearchAndFilterDTO dto) {
+        if(dto.getStartDate() == null && dto.getEndDate() == null) {
+            return null;
+        } else if(dto.getStartDate() == null) {
+            return accommodation.getPrice();
+        } else if(dto.getEndDate() == null) {
+            return accommodation.getPrice();
+        }
+        DateRange dateRange = new DateRange(dto.getStartDate(), dto.getEndDate());
+        return dateRange.getNumberOfNights() * accommodation.getPrice();
+    }
 }

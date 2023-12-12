@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AccommodationWholeDTO {
+public class AccommodationWithTotalPriceDTO {
     private Long id;
     private String name;
     private String description;
@@ -21,28 +21,26 @@ public class AccommodationWholeDTO {
     private List<DateRange> availability;
     private double price;
     private boolean isPricePerNight;
+    private Double totalPrice;
     private Double averageRating;
     private Host host;
     private List<Price> seasonalRates;
+    private Address address;
 
-    private String city;
-    private String country;
-    private String street;
-    private int number;
+    public AccommodationWithTotalPriceDTO() {}
 
-    public AccommodationWholeDTO() {}
-
-    public AccommodationWholeDTO(Accommodation accommodation) {
+    public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), accommodation.getAverageRating(), accommodation.getHost());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double averageRating, Host host) {
+    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, Host host, Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.amenities = amenities;
+        this.totalPrice = totalPrice;
         this.images = new ArrayList<Long>();
         for (Image image : images){
             this.images.add(image.getId());
@@ -56,10 +54,7 @@ public class AccommodationWholeDTO {
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
-        this.city = city;
-        this.country = country;
-        this.street = street;
-        this.number = number;
+        this.address = address;
     }
 
     public Long getId() {
@@ -182,36 +177,20 @@ public class AccommodationWholeDTO {
         this.host = host;
     }
 
-    public String getCity() {
-        return city;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getCountry() {
-        return country;
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
 

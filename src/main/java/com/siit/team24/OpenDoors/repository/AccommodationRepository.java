@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.repository.accommodation;
+package com.siit.team24.OpenDoors.repository;
 
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
@@ -14,5 +14,4 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
 
     public Page<Accommodation> findAll(Pageable pageable);
 
-    public List<Accommodation> searchAndFilterAccommodations(SearchAndFilterDTO searchAndFilterDTO);
 }

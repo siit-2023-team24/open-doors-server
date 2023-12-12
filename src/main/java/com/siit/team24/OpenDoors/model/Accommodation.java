@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
@@ -30,12 +31,11 @@ public class Accommodation {
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerNight;
-    private double averageRating;
+    private Double averageRating;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
     private List<Price> seasonalRates;
-
     @Embedded
     private Address address;
 
@@ -58,6 +58,24 @@ public class Accommodation {
         this.address = address;
     }
     public Accommodation() {}
+
+    public Accommodation(AccommodationWholeDTO accommodationDTO) {
+        this.name = accommodationDTO.getName();
+        this.description = accommodationDTO.getDescription();
+        this.location = accommodationDTO.getLocation();
+        this.amenities = accommodationDTO.getAmenities();
+        //this.images = accommodationDTO.getImages();
+        this.minGuests = accommodationDTO.getMinGuests();
+        this.maxGuests = accommodationDTO.getMaxGuests();
+        this.accommodationType = accommodationDTO.getAccommodationType();
+        this.availability = accommodationDTO.getAvailability();
+        this.price = accommodationDTO.getPrice();
+        this.isPricePerNight = accommodationDTO.isPricePerNight();
+        this.averageRating = accommodationDTO.getAverageRating();
+        this.host = accommodationDTO.getHost();
+        this.seasonalRates = accommodationDTO.getSeasonalRates();
+        this.address = accommodationDTO.getAddress();
+    }
 
     public Long getId() {
         return id;

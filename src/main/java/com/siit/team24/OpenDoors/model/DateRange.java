@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Embeddable
@@ -33,6 +34,10 @@ public class DateRange {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public int getNumberOfNights() {
+        return (int) ChronoUnit.DAYS.between(startDate, endDate);
     }
 
     @Override
