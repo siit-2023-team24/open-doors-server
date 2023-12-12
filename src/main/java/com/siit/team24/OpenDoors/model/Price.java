@@ -4,23 +4,23 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Price {
-    private double value;
+    private double amount;
     private DateRange period;
 
     public Price() {
 
     }
-    public Price(double value, DateRange period) {
-        this.value = value;
+    public Price(double amount, DateRange period) {
+        this.amount = amount;
         this.period = period;
     }
 
-    public double getValue() {
-        return value;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public DateRange getPeriod() {
@@ -34,7 +34,7 @@ public class Price {
     @Override
     public String toString() {
         return "Price{" +
-                "value=" + value +
+                "amount=" + amount +
                 ", period=" + period +
                 '}';
     }

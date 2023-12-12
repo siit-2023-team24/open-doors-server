@@ -11,6 +11,17 @@ public class Address {
     private String city;
     @Enumerated
     private Country country;
+
+    public Address() {
+    }
+
+    public Address(String street, int number, String city, Country country) {
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -51,5 +62,12 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", country=" + country +
                 '}';
+    }
+
+    public void update(String country, String city, String street, int number) {
+        this.country = Country.fromString(country);
+        this.city = city;
+        this.street = street;
+        this.number = number;
     }
 }

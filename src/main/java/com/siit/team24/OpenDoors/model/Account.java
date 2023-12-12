@@ -18,6 +18,13 @@ public class Account {
     public Account() {
     }
 
+    public Account(String email, String password, boolean isBlocked, UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.isBlocked = isBlocked;
+        this.role = role;
+    }
+
     public String getEmail() {
         return email;
     }
