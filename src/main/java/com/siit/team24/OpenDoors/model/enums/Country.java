@@ -79,6 +79,13 @@ public enum Country {
     VATICAN_CITY("Vatican City");
 
     private final String countryName;
+    private static final Map<String, Country> countryMap = new HashMap<>();
+
+    static {
+        for (Country country : Country.values()) {
+            countryMap.put(country.getCountryName(), country);
+        }
+    }
 
     private static final Map<String, Country> countryMap = new HashMap<>();
 
@@ -99,7 +106,5 @@ public enum Country {
     public String getCountryName() {
         return countryName;
     }
-
-
 }
 
