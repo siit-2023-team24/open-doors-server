@@ -18,10 +18,10 @@ public class ImageService {
 
     private FileRepository fileRepo = new FileRepository();
 
-    public byte[] findById(Long id) throws IOException {
+    public byte[] findById(Long id, boolean isProfile) throws IOException {
 
         Optional<Image> image = repo.findById(id);
-        return fileRepo.getFile(image);
+        return fileRepo.getFile(image, isProfile);
     }
 
     public Image save(ImageFileDTO file) throws IOException {

@@ -26,10 +26,10 @@ public class ImageController {
     @Autowired
     private ImageService service;
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long id) {
+    @GetMapping(value = "/{id}/profile/{isProfile}")
+    public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long id, @PathVariable boolean isProfile) {
         try {
-            byte[] bytes = service.findById(id);
+            byte[] bytes = service.findById(id, isProfile);
             System.out.println("Sent image");
             return ResponseEntity.ok().body(new ByteArrayResource(bytes));
 
