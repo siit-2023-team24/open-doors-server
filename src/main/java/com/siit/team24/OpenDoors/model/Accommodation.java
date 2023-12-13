@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
@@ -279,4 +280,12 @@ public class Accommodation {
     public String getUniqueName() {
         return this.name + " #" + this.id;
     }
+
+//    public AccommodationHostDTO toHostDTO() {
+//        Long imageId = null;
+//        if (!images.isEmpty()) {
+//            imageId = (images.toArray(Image)[0])
+//        }
+//        return new AccommodationHostDTO(id, )
+//    }
 }

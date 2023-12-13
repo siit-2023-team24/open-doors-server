@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
@@ -18,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -124,5 +122,13 @@ public class AccommodationController {
         List<byte[]> images = new ArrayList<>();
         images.add(testImage.toString().getBytes());
         return new ResponseEntity<>(images, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/host/{hostId}")
+    public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
+        //TODO
+        Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
+
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 }

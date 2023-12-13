@@ -3,6 +3,9 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Image;
 
+import java.sql.Array;
+import java.util.ArrayList;
+
 public class AccommodationHostDTO {
     private Long id;
     private Long image;
@@ -10,14 +13,20 @@ public class AccommodationHostDTO {
 
     public AccommodationHostDTO() {}
 
-    public AccommodationHostDTO(Accommodation accommodation) {
-        this(accommodation.getId(), ((Image) accommodation.getImages().toArray()[0]).getId(), accommodation.getName());
-    }
-
     public AccommodationHostDTO(Long id, Long image, String name) {
         this.id = id;
         this.image = image;
         this.name = name;
+    }
+
+    public AccommodationHostDTO(Accommodation accommodation) {
+        this();
+        id = accommodation.getId();
+        name = accommodation.getName();
+        image = null;
+        if (!accommodation.getImages().isEmpty()) {
+            image = new ArrayList<Image>(accommodation.getImages()).get(0).getId();
+        }
     }
 
     public Long getId() {
