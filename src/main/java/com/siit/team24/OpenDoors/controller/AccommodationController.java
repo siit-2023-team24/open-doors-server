@@ -41,7 +41,7 @@ public class AccommodationController {
             new DateRange(new Timestamp(329597), new Timestamp(2934823))));
     List<SeasonalRate> testSeasonalRates = new ArrayList<>(Arrays.asList(
             new SeasonalRate(5000.0, new DateRange(
-                    new Timestamp(12345), new Timestamp(123456))));
+                    new Timestamp(12345), new Timestamp(123456)))));
 
     @Autowired
     private AccommodationService accommodationService;
