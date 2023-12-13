@@ -23,17 +23,17 @@ public class ReservationRequestController {
     //service
 
     ReservationRequestForGuestDTO testReservationRequestForGuestDTO = new ReservationRequestForGuestDTO(
-            (long)3982329, "Hay House", new DateRange(LocalDate.now().minusDays(12), LocalDate.now()),
+            (long)3982329, "Hay House", new DateRange(new Timestamp(1234556), new Timestamp(1234567)),
             3, 3700.5, ReservationRequestStatus.CONFIRMED, new Timestamp(39274)
     );
 
     ReservationRequestForHostDTO testReservationRequestForHostDTO = new ReservationRequestForHostDTO(
-            (long)3243423, "guest@gue.st", "Wood House", new DateRange(LocalDate.now().minusDays(6), LocalDate.now()),
+            (long)3243423, "guest@gue.st", "Wood House", new DateRange(new Timestamp(1234556), new Timestamp(1234567)),
             3, 13200.0, ReservationRequestStatus.PENDING, new Timestamp(72524), 3
     );
 
     ReservationRequestDTO testReservationRequestDTO = new ReservationRequestDTO(
-            (long)294743, "guest2@gue2.st", "Brick House", new DateRange(LocalDate.now().minusDays(6), LocalDate.now()),
+            (long)294743, "guest2@gue2.st", "Brick House", new DateRange(new Timestamp(1234556), new Timestamp(1234567)),
             3, 2230.5, ReservationRequestStatus.PENDING, new Timestamp(72524)
     );
 

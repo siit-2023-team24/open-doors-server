@@ -16,7 +16,7 @@ public class AccommodationSearchDTO {
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation) {
-        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight(), accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
+        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
     }
 
     public AccommodationSearchDTO(Long id, Long image, String name, double averageRating, double price, boolean isPricePerNight, String city, String country) {

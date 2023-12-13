@@ -11,8 +11,11 @@ public class AccommodationService {
     private AccommodationRepository accommodationRepository;
 
     public Accommodation save (Accommodation accommodation) {
-        System.out.println("I SAVED IT" + accommodation.toString());
-        return accommodationRepository.save(accommodation);
+        System.out.println("Accommodation to be saved: " + accommodation.toString());
+
+        Accommodation newAccommodation = accommodationRepository.save(accommodation);
+        System.out.println("New accommodation: " + newAccommodation.toString());
+        return newAccommodation;
     }
 
 }
