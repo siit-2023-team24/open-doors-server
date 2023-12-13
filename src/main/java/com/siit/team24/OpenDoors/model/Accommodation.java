@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.model;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -75,14 +76,14 @@ public class Accommodation {
         //this.images = accommodationDTO.getImages();
         this.minGuests = accommodationDTO.getMinGuests();
         this.maxGuests = accommodationDTO.getMaxGuests();
-        this.accommodationType = accommodationDTO.getAccommodationType();
+        this.type = AccommodationType.valueOf(accommodationDTO.getType());
         this.availability = accommodationDTO.getAvailability();
         this.price = accommodationDTO.getPrice();
         this.isPricePerNight = accommodationDTO.isPricePerNight();
         this.averageRating = accommodationDTO.getAverageRating();
         this.host = accommodationDTO.getHost();
         this.seasonalRates = accommodationDTO.getSeasonalRates();
-        this.address = accommodationDTO.getAddress();
+        this.address = new Address(accommodationDTO.getStreet(), accommodationDTO.getNumber(), accommodationDTO.getCity(), Country.valueOf(accommodationDTO.getCountry()));
     }
 
     public Long getId() {

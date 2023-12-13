@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +33,6 @@ public class AccommodationController {
     @Autowired
     private AccommodationService accommodationService;
 
-    AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
-            (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
-            testAmenities, testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, testPrices,
-            "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
-    );
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
         List<Accommodation> accommodations = accommodationService.findAll();
@@ -117,7 +113,11 @@ public class AccommodationController {
         accommodation = new Accommodation(accommodationWholeDTO);
 
         for(Long imageId : accommodationWholeDTO.getImages()) {
-            accommodation.addImage(imageService.findOne(imageId));
+            try {
+                accommodation.addImage(imageService.findById(imageId, false));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         accommodation = accommodationService.save(accommodation);
