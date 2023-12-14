@@ -1,2 +1,0 @@
-# iss
-Inzenjerstvo serverskog sloja

@@ -9,11 +9,16 @@ import java.util.Set;
 
 
 @Entity
-public class Guest extends User{
+public class Guest extends User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<Accommodation> favorites;
     public Guest(){
 
+    }
+
+    public Guest(Long id, String firstName, String lastName, String phone, Image image, Address address, Account account, Set<Accommodation> favorites) {
+        super(id, firstName, lastName, phone, image, address, account);
+        this.favorites = favorites;
     }
 
     public Set<Accommodation> getFavorites() {

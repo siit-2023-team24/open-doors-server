@@ -209,16 +209,24 @@ public enum Country {
         }
     }
 
+    private static final Map<String, Country> countryMap = new HashMap<>();
+
+    static {
+        for (Country country: Country.values()) {
+            countryMap.put(country.getCountryName(), country);
+        }
+    }
+
+    public static Country fromString(String countryName) {
+        return countryMap.get(countryName);
+    }
+
     Country(String countryName) {
         this.countryName = countryName;
     }
 
     public String getCountryName() {
         return countryName;
-    }
-
-    public static Country fromString(String countryName) {
-        return countryMap.get(countryName);
     }
 }
 
