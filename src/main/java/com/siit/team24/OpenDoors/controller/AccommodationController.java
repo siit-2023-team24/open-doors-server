@@ -40,6 +40,8 @@ public class AccommodationController {
             new Price(5000.0, new DateRange(
                     LocalDate.now().plusDays(200), LocalDate.now().plusDays(231)))));
 
+
+
     @Autowired
     private AccommodationService accommodationService;
 
@@ -48,6 +50,8 @@ public class AccommodationController {
             testAmenities, testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, testPrices,
             "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
     );
+
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
         List<AccommodationSearchDTO> accommodations = new ArrayList<>();
@@ -67,6 +71,7 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+    //TODO: create and edit are handled here
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
 
@@ -100,10 +105,12 @@ public class AccommodationController {
         return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
-    }
+//    @PutMapping(consumes = "application/json")
+//    public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
+//        return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
+//    }
+
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
@@ -126,9 +133,8 @@ public class AccommodationController {
 
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
-        //TODO
         Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
-
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
+
 }

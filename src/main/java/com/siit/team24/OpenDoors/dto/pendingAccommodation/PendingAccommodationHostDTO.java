@@ -1,47 +1,51 @@
-package com.siit.team24.OpenDoors.dto.accommodation;
+package com.siit.team24.OpenDoors.dto.pendingAccommodation;
 
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
-public class AccommodationHostDTO {
+public class PendingAccommodationHostDTO {
+
     private Long id;
+    private Long accommodationId;
     private Long image;
     private String name;
 
-    public AccommodationHostDTO() {}
+    public PendingAccommodationHostDTO() {
+    }
 
-    public AccommodationHostDTO(Long id, Long image, String name) {
+    public PendingAccommodationHostDTO(Long id, Long accommodationId, Long image, String name) {
         this.id = id;
+        this.accommodationId = accommodationId;
         this.image = image;
         this.name = name;
     }
 
-    public AccommodationHostDTO(Accommodation accommodation) {
+    public PendingAccommodationHostDTO(PendingAccommodation accommodation) {
         this();
         id = accommodation.getId();
+        accommodationId = accommodation.getAccommodationId();
         name = accommodation.getName();
         image = null;
-        if (!accommodation.getImages().isEmpty()) {
-            image = new ArrayList<>(accommodation.getImages()).get(0).getId();
-        }
-    }
-
-    public AccommodationHostDTO(PendingAccommodation accommodation) {
-        this();
-        id = accommodation.getId();
-        name = accommodation.getName();
-        image = null;
-        if (!accommodation.getImages().isEmpty()) {
+        if (!accommodation.getImages().isEmpty()){
             image = new ArrayList<>(accommodation.getImages()).get(0).getId();
         }
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getAccommodationId() {
+        return accommodationId;
+    }
+
+    public void setAccommodationId(Long accommodationId) {
+        this.accommodationId = accommodationId;
     }
 
     public Long getImage() {
@@ -62,8 +66,9 @@ public class AccommodationHostDTO {
 
     @Override
     public String toString() {
-        return "AccommodationHostDTO{" +
+        return "PendingAccommodationHostDTO{" +
                 "id=" + id +
+                ", accommodationId=" + accommodationId +
                 ", image=" + image +
                 ", name='" + name + '\'' +
                 '}';
