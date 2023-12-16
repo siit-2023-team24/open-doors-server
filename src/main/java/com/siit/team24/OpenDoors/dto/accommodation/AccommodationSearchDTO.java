@@ -4,11 +4,12 @@ import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
 
+import java.util.Set;
 public class AccommodationSearchDTO {
     private Long id;
     private Long image;
     private String name;
-    private double averageRating;
+    private Double averageRating;
     private double price;
     private boolean isPricePerNight;
     private Double totalPrice;
@@ -21,7 +22,7 @@ public class AccommodationSearchDTO {
         this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight(), totalPrice, accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
     }
 
-    public AccommodationSearchDTO(Long id, Long image, String name, double averageRating, double price, boolean isPricePerNight, Double totalPrice, String city, String country) {
+    public AccommodationSearchDTO(Long id, Long image, String name, Double averageRating, double price, boolean isPricePerNight, Double totalPrice, String city, String country) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -34,8 +35,23 @@ public class AccommodationSearchDTO {
     }
 
     public AccommodationSearchDTO(Accommodation accommodation) {
-        this(accommodation.getId(), null, accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight(), 0.0, null, null);
+        this.id = accommodation.getId();
+        this.image = getFirstImageId(accommodation);
+        this.name = accommodation.getName();
+        this.averageRating = accommodation.getAverageRating();
+        this.price = accommodation.getPrice();
+        this.isPricePerNight = accommodation.isPricePerNight();
+        this.totalPrice = 0.0;
+        this.city = accommodation.getAddress().getCity();
+        this.country = accommodation.getAddress().getCountry().getCountryName();
     }
+
+    private Long getFirstImageId(Accommodation accommodation) {
+        Set<Image> images = accommodation.getImages();
+        Image firstImage = images.isEmpty() ? null : images.iterator().next();
+        return (firstImage != null) ? firstImage.getId() : null;
+    }
+
 
     public Long getId() {
         return id;
@@ -103,6 +119,21 @@ public class AccommodationSearchDTO {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "AccommodationSearchDTO{" +
+                "id=" + id +
+                ", image=" + image +
+                ", name='" + name + '\'' +
+                ", averageRating=" + averageRating +
+                ", price=" + price +
+                ", isPricePerNight=" + isPricePerNight +
+                ", totalPrice=" + totalPrice +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
 

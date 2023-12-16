@@ -24,6 +24,7 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+    @Enumerated(EnumType.STRING)
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
@@ -31,7 +32,7 @@ public class Accommodation {
     private double price;
     private boolean isPricePerNight;
     private Double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
     private List<Price> seasonalRates;
@@ -63,7 +64,6 @@ public class Accommodation {
     public Accommodation() {
         this.address =  new Address();
         this.images = new HashSet<>();
-        this.availability = new ArrayList<>();
         this.amenities = new ArrayList<>();
         this.availability = new ArrayList<>();
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -22,8 +23,8 @@ public class AccommodationService {
     @Autowired
     private AccommodationRepository accommodationRepository;
 
-    public Accommodation findOne(Long id) {
-        return accommodationRepository.findOneById(id);
+    public Optional<Accommodation> findOne(Long id) {
+        return accommodationRepository.findById(id);
     }
 
     public List<Accommodation> findAll() {
@@ -63,7 +64,7 @@ public class AccommodationService {
                 continue;
             if(searchAndFilterDTO.getEndPrice() != null && searchAndFilterDTO.getEndPrice() < a.getPrice())
                 continue;
-            if(searchAndFilterDTO.getTypes() != null && !searchAndFilterDTO.getTypes().contains(a.getAccommodationType()))
+            if(searchAndFilterDTO.getTypes() != null && !searchAndFilterDTO.getTypes().contains(a.getType()))
                 continue;
             if(searchAndFilterDTO.getAmenities() != null && !hasAmenities(a, searchAndFilterDTO.getAmenities()))
                 continue;

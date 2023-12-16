@@ -30,7 +30,7 @@ public class AccommodationWithTotalPriceDTO {
     public AccommodationWithTotalPriceDTO() {}
 
     public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
-        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getAccommodationType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
+        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
     }
 

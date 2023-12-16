@@ -1,29 +1,27 @@
 package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWithTotalPriceDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Image;
+import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ImageService;
+import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import com.siit.team24.OpenDoors.model.enums.Country;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -39,7 +37,7 @@ public class AccommodationController {
 
         List<AccommodationSearchDTO> AccommodationSearchDTOS = new ArrayList<>();
 
-        for(Accommodation a : accommodations)
+        for (Accommodation a : accommodations)
             AccommodationSearchDTOS.add(new AccommodationSearchDTO(a));
 
         return new ResponseEntity<>(AccommodationSearchDTOS, HttpStatus.OK);
@@ -49,23 +47,26 @@ public class AccommodationController {
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsSearchPage(Pageable page) {
         Page<Accommodation> accommodations = accommodationService.findAll(page);
 
-        List<AccommodationSearchDTO> AccommodationSearchDTOS = new ArrayList<>();
+        List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
 
-        for(Accommodation a : accommodations)
-            AccommodationSearchDTOS.add(new AccommodationSearchDTO(a));
+        for (Accommodation a : accommodations)
+            accommodationSearchDTOS.add(new AccommodationSearchDTO(a));
 
-        return new ResponseEntity<>(AccommodationSearchDTOS, HttpStatus.OK);
+        for (AccommodationSearchDTO dto : accommodationSearchDTOS)
+            System.out.println(dto);
+
+        return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccommodationWithTotalPriceDTO> getAccommodation(@PathVariable Long id) {
 
-        Accommodation accommodation = accommodationService.findOne(id);
+        Optional<Accommodation> accommodation = accommodationService.findOne(id);
 
-        if(accommodation == null)
+        if (accommodation.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation, null), HttpStatus.OK);
+        return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
@@ -105,20 +106,20 @@ public class AccommodationController {
     public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         ImageService imageService = new ImageService();
 
-        Accommodation accommodation = accommodationService.findOne(accommodationWholeDTO.getId());
+        Optional<Accommodation> optionalAccommodation = accommodationService.findOne(accommodationWholeDTO.getId());
 
-        if(accommodation == null)
+        if (optionalAccommodation.isEmpty())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        accommodation = new Accommodation(accommodationWholeDTO);
+        Accommodation accommodation = new Accommodation(accommodationWholeDTO);
 
-        for(Long imageId : accommodationWholeDTO.getImages()) {
-            try {
-                accommodation.addImage(imageService.findById(imageId, false));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        for(Long imageId : accommodationWholeDTO.getImages()) {
+//            try {
+//                accommodation.addImage(imageService.findById(imageId, false));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
         accommodation = accommodationService.save(accommodation);
 
@@ -128,9 +129,9 @@ public class AccommodationController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
 
-        Accommodation accommodation = accommodationService.findOne(id);
+        Optional<Accommodation> accommodation = accommodationService.findOne(id);
 
-        if(accommodation == null) {
+        if (accommodation.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -138,7 +139,7 @@ public class AccommodationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(consumes="application/json", value = "/search")
+    @PostMapping(consumes = "application/json", value = "/search")
     public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@RequestBody SearchAndFilterDTO searchAndFilterDTO) {
 
         List<AccommodationSearchDTO> accommodations = accommodationService.searchAndFilter(searchAndFilterDTO);
@@ -148,10 +149,13 @@ public class AccommodationController {
 
     @GetMapping(value = "/{accommodationId}/images") // TODO: sta je sa ovim? :(
     public ResponseEntity<List<byte[]>> getAccommodationImages(@PathVariable Long accommodationId) {
-        Accommodation accommodation = accommodationService.findOne(accommodationId);
+        Optional<Accommodation> accommodation = accommodationService.findOne(accommodationId);
+
+        if (accommodation.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         List<byte[]> images = new ArrayList<>();
-        for(Image image : accommodation.getImages())
+        for (Image image : accommodation.get().getImages())
             images.add(image.toString().getBytes());
 
         return new ResponseEntity<>(images, HttpStatus.OK);
