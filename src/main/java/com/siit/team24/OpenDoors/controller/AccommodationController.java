@@ -121,7 +121,7 @@ public class AccommodationController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
-        //accommodationService.delete(id);
+        accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

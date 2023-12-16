@@ -4,9 +4,13 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.*;
 
+@SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class Accommodation {
     @Id
@@ -38,6 +42,8 @@ public class Accommodation {
     private boolean isAutomatic;
     @Embedded
     private Address address;
+
+    private boolean deleted;
 
     public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address, int deadline, boolean isAutomatic) {
         this.id = id;
