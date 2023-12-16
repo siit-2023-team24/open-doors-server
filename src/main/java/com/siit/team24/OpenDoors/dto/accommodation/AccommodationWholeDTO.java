@@ -10,27 +10,28 @@ import java.util.List;
 import java.util.Set;
 
 public class AccommodationWholeDTO {
-    private Long id;
-    private String name;
-    private String description;
-    private String location;
-    private List<Amenity> amenities;
-    private List<Long> images;
-    private int minGuests;
-    private int maxGuests;
-    private String type;
-    private List<DateRange> availability;
-    private double price;
 
-    private List<Price> seasonalRates;
+    protected Long id;
+    protected String name;
+    protected String description;
+    protected String location;
+    protected List<Amenity> amenities;
+    protected List<Long> images;
+    protected int minGuests;
+    protected int maxGuests;
+    protected String type;
+    protected List<DateRange> availability;
+    protected double price;
 
-    private String city;
-    private String country;
-    private String street;
-    private int number;
-    private int deadline;
+    protected List<Price> seasonalRates;
 
-    private boolean isAutomatic;
+    protected String city;
+    protected String country;
+    protected String street;
+    protected int number;
+    protected int deadline;
+
+    protected boolean isAutomatic;
 
     public AccommodationWholeDTO() {}
 

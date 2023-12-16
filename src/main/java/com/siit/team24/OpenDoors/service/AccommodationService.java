@@ -19,6 +19,12 @@ public class AccommodationService {
         return accommodationRepository.save(accommodation);
     }
 
+    public void delete(Long id) {
+        //TODO check if there are any reservations confirmed for this accommodation in the future
+        //throw exception if so
+        accommodationRepository.deleteById(id);
+    }
+
     public Collection<AccommodationHostDTO> getForHost(Long hostId) {
         return accommodationRepository.findByHost(hostId);
     }

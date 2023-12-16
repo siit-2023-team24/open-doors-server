@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import jakarta.persistence.*;
@@ -58,8 +59,9 @@ public class PendingAccommodation {
 
     }
 
-    public PendingAccommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType type, List<DateRange> availability, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, int deadline, boolean isAutomatic, Address address) {
+    public PendingAccommodation(Long id, @Nullable Long accommodationId, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType type, List<DateRange> availability, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, int deadline, boolean isAutomatic, Address address) {
         this.id = id;
+        this.accommodationId = accommodationId;
         this.name = name;
         this.description = description;
         this.location = location;
@@ -78,7 +80,6 @@ public class PendingAccommodation {
         this.isAutomatic = isAutomatic;
         this.address = address;
     }
-
 
     public Long getId() {
         return id;
