@@ -1,26 +1,26 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
-import com.siit.team24.OpenDoors.model.Account;
+import com.siit.team24.OpenDoors.model.User;
 
 public class AccountDTO {
-    private String email;
+    private String username;
     private String password;
-    public AccountDTO(Account account){
-        this.email=account.getEmail();
+    public AccountDTO(User account){
+        this.username =account.getUsername();
         this.password=account.getPassword();
     }
 
-    public AccountDTO(){
+    public AccountDTO() {
 
     }
 
     public AccountDTO(String email, String password) {
-        this.email = email;
+        this.username = email;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
@@ -34,7 +34,7 @@ public class AccountDTO {
     @Override
     public String toString() {
         return "AccountDTO{" +
-                "email='" + email + '\'' +
+                "email='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

@@ -32,20 +32,22 @@ public class Accommodation {
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
-    private boolean isPricePerNight;
+    private boolean isPricePerGuest;
     private double averageRating;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
-    private List<Price> seasonalRates;
+    private List<SeasonalRate> seasonalRates;
     private int deadline;
     private boolean isAutomatic;
     @Embedded
     private Address address;
-
+  
     private boolean deleted;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address, int deadline, boolean isAutomatic) {
+  
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
+
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,7 +59,7 @@ public class Accommodation {
         this.availability = availability;
         this.type = accommodationType;
         this.price = price;
-        this.isPricePerNight = isPricePerNight;
+        this.isPricePerGuest = isPricePerGuest;
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
@@ -173,12 +175,12 @@ public class Accommodation {
         this.price = price;
     }
 
-    public boolean isPricePerNight() {
-        return isPricePerNight;
+    public boolean getIsPricePerGuest() {
+        return isPricePerGuest;
     }
 
-    public void setIsPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
+    public void setIsPricePerGuest(boolean pricePerGuest) {
+        isPricePerGuest = pricePerGuest;
     }
 
     public double getAverageRating() {
@@ -197,11 +199,12 @@ public class Accommodation {
         this.host = host;
     }
 
-    public List<Price> getSeasonalRates() {
+    public List<SeasonalRate> getSeasonalRates() {
         return seasonalRates;
     }
 
-    public void setSeasonalRates(List<Price> seasonalRates) {
+
+    public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
     }
 
@@ -215,10 +218,6 @@ public class Accommodation {
 
     public void setAvailability(List<DateRange> availability) {
         this.availability = availability;
-    }
-
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
     }
 
     public Address getAddress() {
@@ -251,12 +250,12 @@ public class Accommodation {
         return Objects.hashCode(id);
     }
 
-    public boolean isAutomatic() {
-        return isAutomatic;
+    public boolean getIsAutomatic() {
+        return this.isAutomatic;
     }
 
-    public void setAutomatic(boolean automatic) {
-        isAutomatic = automatic;
+    public void setIsAutomatic(boolean isAutomatic) {
+        this.isAutomatic = isAutomatic;
     }
 
     @Override
@@ -273,7 +272,7 @@ public class Accommodation {
                 ", accommodationType=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerNight +
+                ", isPricePerNight=" + isPricePerGuest +
                 ", averageRating=" + averageRating +
                 ", host=" + host +
                 ", seasonRates=" + seasonalRates +

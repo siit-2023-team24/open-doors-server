@@ -3,6 +3,9 @@ package com.siit.team24.OpenDoors.model;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+
+import java.sql.Timestamp;
+
 @Entity
 public class Account {
     @Id
@@ -10,6 +13,7 @@ public class Account {
     private String email;
     private String password;
     private boolean isBlocked;
+    private Timestamp lastPasswordResetDate;
     @Enumerated
     private UserRole role;
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -57,7 +61,15 @@ public class Account {
         this.role = role;
     }
 
-//    public User getUser() {
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    //    public User getUser() {
 //        return user;
 //    }
 

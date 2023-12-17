@@ -120,7 +120,7 @@ public class ReservationRequest {
     }
 
     public ReservationRequestDTO toDTO() {
-        return new ReservationRequestDTO(id, guest.getAccount().getEmail(), accommodation.getUniqueName(),
+        return new ReservationRequestDTO(id, guest.getUsername(), accommodation.getUniqueName(),
                 dateRange, guestNumber, totalPrice, status, timestamp);
     }
 }

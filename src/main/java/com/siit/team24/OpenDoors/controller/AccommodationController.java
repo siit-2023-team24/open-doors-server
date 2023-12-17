@@ -8,7 +8,7 @@ import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
-import com.siit.team24.OpenDoors.model.Price;
+import com.siit.team24.OpenDoors.model.SeasonalRate;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.Country;
@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -37,10 +38,10 @@ public class AccommodationController {
     Set<Image> testImages = Set.of(
             testImage);
     List<DateRange> testDates = new ArrayList<>(Arrays.asList(
-            new DateRange(LocalDate.now(), LocalDate.now().plusDays(17))));
-    List<Price> testPrices = new ArrayList<>(Arrays.asList(
-            new Price(5000.0, new DateRange(
-                    LocalDate.now().plusDays(200), LocalDate.now().plusDays(231)))));
+            new DateRange(new Timestamp(329597), new Timestamp(2934823))));
+    List<SeasonalRate> testSeasonalRates = new ArrayList<>(Arrays.asList(
+            new SeasonalRate(5000.0, new DateRange(
+                    new Timestamp(12345), new Timestamp(123456)))));
 
 
 
@@ -52,7 +53,7 @@ public class AccommodationController {
 
     AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
             (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
-            testAmenities, testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, testPrices,
+            Amenity.fromAmenityList(testAmenities), testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, true, testSeasonalRates,
             "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
     );
 
@@ -76,19 +77,23 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+
+    // @PreAuthorize("hasRole('HOST')")
+
     //TODO: create and edit are handled here
     //for edit (accommodationId!=null): soft delete from a.repo and save to pa.repo
     //for create save to pa.repo
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-
+        System.out.println("Old DTO: " + accommodationWholeDTO);
         Accommodation accommodation = new Accommodation();
 
         accommodation.setId(accommodationWholeDTO.getId());
         accommodation.setName(accommodationWholeDTO.getName());
         accommodation.setDescription(accommodationWholeDTO.getDescription());
         accommodation.setLocation(accommodationWholeDTO.getLocation());
-        accommodation.setAmenities(accommodationWholeDTO.getAmenities());
+        accommodation.setAmenities(Amenity.fromStringList(accommodationWholeDTO.getAmenities()));
         // TODO: images
         accommodation.setMinGuests(accommodationWholeDTO.getMinGuests());
         accommodation.setMaxGuests(accommodationWholeDTO.getMaxGuests());
@@ -99,26 +104,29 @@ public class AccommodationController {
         accommodation.getAddress().setStreet(accommodationWholeDTO.getStreet());
         accommodation.getAddress().setNumber(accommodationWholeDTO.getNumber());
         accommodation.setDeadline(accommodationWholeDTO.getDeadline());
-        accommodation.setAutomatic(accommodation.isAutomatic());
-
-        // TODO: expand front-end with the following
+        accommodation.setIsAutomatic(accommodationWholeDTO.getIsAutomatic());
 
         accommodation.setAvailability(accommodationWholeDTO.getAvailability());
         accommodation.setPrice(accommodationWholeDTO.getPrice());
+        accommodation.setIsPricePerGuest(accommodationWholeDTO.getIsPricePerGuest());
         accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
+        accommodation.setAverageRating(0);
 
         accommodationService.save(accommodation);
+        AccommodationWholeDTO newDto = new AccommodationWholeDTO(accommodation);
+        System.out.println("New DTO: " + newDto);
 
-        return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.CREATED);
+        return new ResponseEntity<>(newDto, HttpStatus.CREATED);
     }
 
+    //@PreAuthorize("hasRole('HOST')")
     @PutMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
 
-
+    //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         accommodationService.delete(id);
