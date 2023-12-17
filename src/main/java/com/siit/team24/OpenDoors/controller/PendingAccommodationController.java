@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.model.PendingAccommodation;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class PendingAccommodationController {
     private PendingAccommodationService service;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AccommodationWholeDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<PendingAccommodationWholeDTO> getById(@PathVariable Long id) {
         try {
-            AccommodationWholeDTO dto = new AccommodationWholeDTO(service.findById(id));
+            PendingAccommodationWholeDTO dto = new PendingAccommodationWholeDTO(service.findById(id));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             System.err.println("Pending accommodation not found with id: " + id);
@@ -48,15 +49,23 @@ public class PendingAccommodationController {
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updatePending(@RequestBody PendingAccommodationWholeDTO dto) {
-        //TODO
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PutMapping
+//    public ResponseEntity<Void> updatePending(@RequestBody PendingAccommodationWholeDTO dto) {
+//        //TODO
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePending(@PathVariable Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //create new or edit existing accommodation - active or pending
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeDTO dto) {
+        PendingAccommodation pendingAccommodation = service.save(dto);
+        System.out.println("New: " + pendingAccommodation);
+        return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.CREATED);
     }
 }

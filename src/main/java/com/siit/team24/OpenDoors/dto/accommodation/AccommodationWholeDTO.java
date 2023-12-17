@@ -1,13 +1,7 @@
 package com.siit.team24.OpenDoors.dto.accommodation;
 
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Image;
-import com.siit.team24.OpenDoors.model.SeasonalRate;
-import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
-import com.siit.team24.OpenDoors.model.enums.AccommodationType;
-import com.siit.team24.OpenDoors.model.enums.Country;
 
 
 import java.util.ArrayList;
@@ -16,43 +10,45 @@ import java.util.Set;
 
 public class AccommodationWholeDTO {
 
-    private Long id;
-    private String name;
-    private String description;
-    private String location;
-    private List<String> amenities;
-    private List<Long> images;
-    private int minGuests;
-    private int maxGuests;
-    private String type;
-    private List<DateRange> availability;
-    private double price;
+    protected Long id;
+    protected String name;
+    protected String description;
+    protected String location;
+    protected List<String> amenities;
+    protected List<Long> images;
+    protected int minGuests;
+    protected int maxGuests;
+    protected String type;
+    protected List<DateRange> availability;
+    protected double price;
 
-    private boolean isPricePerGuest;
+    protected boolean isPricePerGuest;
 
-    private List<SeasonalRate> seasonalRates;
+    protected List<SeasonalRate> seasonalRates;
 
-    private String city;
-    private String country;
-    private String street;
-    private int number;
-    private int deadline;
+    protected String city;
+    protected String country;
+    protected String street;
+    protected int number;
+    protected int deadline;
 
-    private boolean isAutomatic;
+    protected boolean isAutomatic;
+
+    protected String hostUsername;
 
     public AccommodationWholeDTO() {}
 
     public AccommodationWholeDTO(Accommodation accommodation) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 
     public AccommodationWholeDTO(PendingAccommodation accommodation) {
-        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.isAutomatic());
+        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<String> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, boolean isPricePerGuest, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic) {
+    public AccommodationWholeDTO(Long id, String name, String description, String location, List<String> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, boolean isPricePerGuest, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic, String hostUsername) {
 
         this.id = id;
         this.name = name;
@@ -76,6 +72,7 @@ public class AccommodationWholeDTO {
         this.number = number;
         this.deadline = deadline;
         this.isAutomatic = isAutomatic;
+        this.hostUsername = hostUsername;
     }
 
     public Long getId() {
@@ -222,6 +219,14 @@ public class AccommodationWholeDTO {
 
     public void setIsAutomatic(boolean isAutomatic) {
         this.isAutomatic = isAutomatic;
+    }
+
+    public String getHostUsername() {
+        return hostUsername;
+    }
+
+    public void setHostUsername(String hostUsername) {
+        this.hostUsername = hostUsername;
     }
 }
 

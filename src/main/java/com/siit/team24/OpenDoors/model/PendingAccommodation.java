@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.model;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
 
@@ -40,14 +41,13 @@ public class PendingAccommodation {
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
-    private boolean isPricePerNight;
+    private boolean isPricePerGuest;
 
-    private double averageRating;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
 
     @ElementCollection
-    private List<Price> seasonalRates;
+    private List<SeasonalRate> seasonalRates;
     private int deadline;
     private boolean isAutomatic;
 
@@ -59,7 +59,7 @@ public class PendingAccommodation {
 
     }
 
-    public PendingAccommodation(Long id, @Nullable Long accommodationId, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType type, List<DateRange> availability, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, int deadline, boolean isAutomatic, Address address) {
+    public PendingAccommodation(Long id, @Nullable Long accommodationId, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType type, List<DateRange> availability, double price, boolean isPricePerGuest, Host host, List<SeasonalRate> seasonalRates, int deadline, boolean isAutomatic, Address address) {
         this.id = id;
         this.accommodationId = accommodationId;
         this.name = name;
@@ -72,8 +72,7 @@ public class PendingAccommodation {
         this.type = type;
         this.availability = availability;
         this.price = price;
-        this.isPricePerNight = isPricePerNight;
-        this.averageRating = averageRating;
+        this.isPricePerGuest = isPricePerGuest;
         this.host = host;
         this.seasonalRates = seasonalRates;
         this.deadline = deadline;
@@ -178,20 +177,12 @@ public class PendingAccommodation {
         this.price = price;
     }
 
-    public boolean isPricePerNight() {
-        return isPricePerNight;
+    public boolean isPricePerGuest() {
+        return isPricePerGuest;
     }
 
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
+    public void setPricePerGuest(boolean pricePerGuest) {
+        isPricePerGuest = pricePerGuest;
     }
 
     public Host getHost() {
@@ -202,11 +193,11 @@ public class PendingAccommodation {
         this.host = host;
     }
 
-    public List<Price> getSeasonalRates() {
+    public List<SeasonalRate> getSeasonalRates() {
         return seasonalRates;
     }
 
-    public void setSeasonalRates(List<Price> seasonalRates) {
+    public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
     }
 
@@ -218,11 +209,11 @@ public class PendingAccommodation {
         this.deadline = deadline;
     }
 
-    public boolean isAutomatic() {
+    public boolean getIsAutomatic() {
         return isAutomatic;
     }
 
-    public void setAutomatic(boolean automatic) {
+    public void setIsAutomatic(boolean automatic) {
         isAutomatic = automatic;
     }
 
@@ -249,13 +240,33 @@ public class PendingAccommodation {
                 ", type=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerNight +
-                ", averageRating=" + averageRating +
+                ", isPricePerNight=" + isPricePerGuest +
                 ", host=" + host +
                 ", seasonalRates=" + seasonalRates +
                 ", deadline=" + deadline +
                 ", isAutomatic=" + isAutomatic +
                 ", address=" + address +
                 '}';
+    }
+
+    //everything except for images, host
+    public void setSimpleValues(PendingAccommodationWholeDTO dto) {
+        id = dto.getId();
+        accommodationId = dto.getAccommodationId();
+        name = dto.getName();
+        description = dto.getDescription();
+        location = dto.getLocation();
+        amenities = Amenity.fromStringList(dto.getAmenities());
+        minGuests = dto.getMinGuests();
+        maxGuests = dto.getMaxGuests();
+        type = AccommodationType.fromString(dto.getType());
+        availability = dto.getAvailability();
+        price = dto.getPrice();
+        isPricePerGuest = dto.getIsPricePerGuest();
+        seasonalRates = dto.getSeasonalRates();
+        deadline = dto.getDeadline();
+        isAutomatic = dto.getIsAutomatic();
+        address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
+
     }
 }

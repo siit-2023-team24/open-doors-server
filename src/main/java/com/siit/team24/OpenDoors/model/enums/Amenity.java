@@ -58,8 +58,10 @@ public enum Amenity {
 
     public static List<String> fromAmenityList(List<Amenity> amenities) {
         List<String> amenityNames = new ArrayList<>();
-        for (Amenity amenity : amenities) {
-            amenityNames.add(amenity.getAmenityName());
+        if (amenities != null) {
+            for (Amenity amenity : amenities) {
+                amenityNames.add(amenity.getAmenityName());
+            }
         }
         return amenityNames;
     }

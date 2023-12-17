@@ -1,8 +1,8 @@
 package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -286,11 +286,4 @@ public class Accommodation {
         return this.name + " #" + this.id;
     }
 
-//    public AccommodationHostDTO toHostDTO() {
-//        Long imageId = null;
-//        if (!images.isEmpty()) {
-//            imageId = (images.toArray(Image)[0])
-//        }
-//        return new AccommodationHostDTO(id, )
-//    }
 }

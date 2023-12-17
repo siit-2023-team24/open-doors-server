@@ -4,7 +4,7 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
-import com.siit.team24.OpenDoors.model.Price;
+import com.siit.team24.OpenDoors.model.SeasonalRate;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
 import java.util.List;
@@ -14,11 +14,6 @@ public class PendingAccommodationWholeDTO extends AccommodationWholeDTO {
     private Long accommodationId;
 
     public PendingAccommodationWholeDTO() {
-    }
-
-    public PendingAccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic, Long accommodationId) {
-        super(id, name, description, location, amenities, images, minGuests, maxGuests, accommodationType, availability, price, seasonalRates, city, country, street, number, deadline, isAutomatic);
-        this.accommodationId = accommodationId;
     }
 
     public PendingAccommodationWholeDTO(PendingAccommodation accommodation) {

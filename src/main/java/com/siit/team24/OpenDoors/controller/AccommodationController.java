@@ -3,7 +3,6 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
-import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.*;
 
 @CrossOrigin
@@ -43,6 +41,7 @@ public class AccommodationController {
             new SeasonalRate(5000.0, new DateRange(
                     new Timestamp(12345), new Timestamp(123456)))));
 
+    AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO();
 
 
     @Autowired
@@ -50,12 +49,6 @@ public class AccommodationController {
 
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
-
-    AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
-            (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
-            Amenity.fromAmenityList(testAmenities), testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, true, testSeasonalRates,
-            "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
-    );
 
 
     @GetMapping(value = "/all")
@@ -74,7 +67,14 @@ public class AccommodationController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccommodationWholeDTO> getAccommodation(@PathVariable Long id) {
-        return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
+//        try {
+            Accommodation accommodation = accommodationService.findById(id);
+            return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.OK);
+//        }
+//        catch (EntityNotFoundException e) {
+//            System.err.println("Active accommodation not found with id: " + id);
+//            return new ResponseEntity<>(new AccommodationWholeDTO(), HttpStatus.NOT_FOUND);
+//        }
     }
 
 
@@ -147,6 +147,7 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
         Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
