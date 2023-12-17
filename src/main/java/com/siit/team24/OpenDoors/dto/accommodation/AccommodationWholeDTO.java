@@ -3,14 +3,19 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.SeasonalRate;
-import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.DateRange;
+import com.siit.team24.OpenDoors.model.*;
+import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class AccommodationWholeDTO {
+
     private Long id;
     private String name;
     private String description;
@@ -42,7 +47,13 @@ public class AccommodationWholeDTO {
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic());
     }
 
+    public AccommodationWholeDTO(PendingAccommodation accommodation) {
+        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.isAutomatic());
+    }
+
     public AccommodationWholeDTO(Long id, String name, String description, String location, List<String> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, boolean isPricePerGuest, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic) {
+
         this.id = id;
         this.name = name;
         this.description = description;

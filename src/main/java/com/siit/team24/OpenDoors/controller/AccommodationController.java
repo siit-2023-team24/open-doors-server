@@ -1,7 +1,9 @@
 package com.siit.team24.OpenDoors.controller;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
@@ -11,6 +13,7 @@ import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.Country;
 import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -43,14 +43,21 @@ public class AccommodationController {
             new SeasonalRate(5000.0, new DateRange(
                     new Timestamp(12345), new Timestamp(123456)))));
 
+
+
     @Autowired
     private AccommodationService accommodationService;
+
+    @Autowired
+    private PendingAccommodationService pendingAccommodationService;
 
     AccommodationWholeDTO testAccommodationWholeDTO = new AccommodationWholeDTO(
             (long)34873493, "Hotel Plaza", "Description", "45.3554 19.3453",
             Amenity.fromAmenityList(testAmenities), testImages, 3, 8, AccommodationType.HOTEL.name(), testDates, 4000.0, true, testSeasonalRates,
             "New York City", Country.UNITED_STATES.getCountryName(), "Manhattan Street", 5, 10, true
     );
+
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
         List<AccommodationSearchDTO> accommodations = new ArrayList<>();
@@ -70,7 +77,13 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+
     // @PreAuthorize("hasRole('HOST')")
+
+    //TODO: create and edit are handled here
+    //for edit (accommodationId!=null): soft delete from a.repo and save to pa.repo
+    //for create save to pa.repo
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         System.out.println("Old DTO: " + accommodationWholeDTO);
@@ -112,9 +125,11 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+
     //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
+        accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -131,4 +146,12 @@ public class AccommodationController {
         images.add(testImage.toString().getBytes());
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/host/{hostId}")
+    public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
+        Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
+
+
 }
