@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.financialReport.AccommodationFinancialRepor
 import com.siit.team24.OpenDoors.dto.financialReport.FinancialReportDateRangeItemDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class FinancialReportController {
     AccommodationFinancialReportItemDTO testAccommodationFinancialReportItemDTO = new AccommodationFinancialReportItemDTO(
             3, 64600.0, 11
     );
-
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<List<FinancialReportDateRangeItemDTO>> getDateRangeReport(
             @PathVariable Long hostId,
@@ -32,7 +33,7 @@ public class FinancialReportController {
         items.add(testFinancialReportDateRangeItemDTO);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/accommodation/{accommodationId}")
     public ResponseEntity<List<AccommodationFinancialReportItemDTO>> getAccommodationReport(
             @PathVariable Long accommodationId,

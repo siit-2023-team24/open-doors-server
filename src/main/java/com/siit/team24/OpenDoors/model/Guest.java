@@ -1,10 +1,12 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 
@@ -16,8 +18,12 @@ public class Guest extends User {
 
     }
 
-    public Guest(Long id, String firstName, String lastName, String phone, Image image, Address address, Account account, Set<Accommodation> favorites) {
-        super(id, firstName, lastName, phone, image, address, account);
+    public Guest(Set<Accommodation> favorites) {
+        this.favorites = favorites;
+    }
+
+    public Guest(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, Image image, Address address, boolean enabled, Set<Accommodation> favorites) {
+        super(id, email, password, lastPasswordResetDate, role, firstName, lastName, phone, image, address, enabled);
         this.favorites = favorites;
     }
 

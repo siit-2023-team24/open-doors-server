@@ -41,7 +41,7 @@ public class AccommodationController {
             new DateRange(new Timestamp(329597), new Timestamp(2934823))));
     List<SeasonalRate> testSeasonalRates = new ArrayList<>(Arrays.asList(
             new SeasonalRate(5000.0, new DateRange(
-                    new Timestamp(12345), new Timestamp(123456))));
+                    new Timestamp(12345), new Timestamp(123456)))));
 
     @Autowired
     private AccommodationService accommodationService;
@@ -70,6 +70,7 @@ public class AccommodationController {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+    // @PreAuthorize("hasRole('HOST')")
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         System.out.println("Old DTO: " + accommodationWholeDTO);
@@ -96,6 +97,7 @@ public class AccommodationController {
         accommodation.setPrice(accommodationWholeDTO.getPrice());
         accommodation.setIsPricePerGuest(accommodationWholeDTO.getIsPricePerGuest());
         accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
+        accommodation.setAverageRating(0);
 
         accommodationService.save(accommodation);
         AccommodationWholeDTO newDto = new AccommodationWholeDTO(accommodation);
@@ -104,11 +106,13 @@ public class AccommodationController {
         return new ResponseEntity<>(newDto, HttpStatus.CREATED);
     }
 
+    //@PreAuthorize("hasRole('HOST')")
     @PutMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
