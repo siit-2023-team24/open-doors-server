@@ -82,6 +82,7 @@ public class WebSecurityConfig {
         http.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint));
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(new AntPathRequestMatcher("/open-doors/auth/*")).permitAll()
+
 //                    .requestMatchers(new AntPathRequestMatcher("/api/foo")).permitAll()
 //                    //Da nam lepsu poruku vrati
 //                    .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()

@@ -205,7 +205,7 @@ public enum Country {
     private static final Map<String, Country> countryMap = new HashMap<>();
 
     static {
-        for (Country country: Country.values()) {
+        for (Country country : Country.values()) {
             countryMap.put(country.getCountryName(), country);
         }
     }

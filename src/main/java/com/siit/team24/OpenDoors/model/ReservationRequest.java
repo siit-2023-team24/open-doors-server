@@ -4,9 +4,14 @@ import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
+@SQLDelete(sql = "UPDATE reservation_request SET status = 4 WHERE id = ?")
+@Where(clause = "status != 4")
 @Entity
 public class ReservationRequest {
 
@@ -117,6 +122,15 @@ public class ReservationRequest {
                 ", status=" + status +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public boolean isActive() {
+        if (status != ReservationRequestStatus.CONFIRMED && status != ReservationRequestStatus.PENDING)
+            return false;
+        if (dateRange.getEndDate().before(new Timestamp(System.currentTimeMillis())))
+            return false;
+        return true;
+
     }
 
     public ReservationRequestDTO toDTO() {

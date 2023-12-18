@@ -1,54 +1,67 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
-
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
-@SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
-@Where(clause = "deleted=false")
 @Entity
-public class Accommodation {
-    @Id
+public class PendingAccommodation {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
+
+    @Nullable
+    private Long accommodationId;
+
     @Column(name = "name", unique = true, nullable = false)
     private String name;
     private String description;
     private String location;
     private List<Amenity> amenities;
+
     @OneToMany(cascade = CascadeType.REFRESH)
     private Set<Image> images;
+
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
+
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
+
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerGuest;
-    private double averageRating;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Host host;
+
     @ElementCollection
     private List<SeasonalRate> seasonalRates;
     private int deadline;
     private boolean isAutomatic;
+
     @Embedded
     private Address address;
-  
-    private boolean deleted;
 
-  
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
 
+    public PendingAccommodation() {
+
+    }
+
+    public PendingAccommodation(Long id, @Nullable Long accommodationId, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType type, List<DateRange> availability, double price, boolean isPricePerGuest, Host host, List<SeasonalRate> seasonalRates, int deadline, boolean isAutomatic, Address address) {
         this.id = id;
+        this.accommodationId = accommodationId;
         this.name = name;
         this.description = description;
         this.location = location;
@@ -56,23 +69,15 @@ public class Accommodation {
         this.images = images;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
+        this.type = type;
         this.availability = availability;
-        this.type = accommodationType;
         this.price = price;
         this.isPricePerGuest = isPricePerGuest;
-        this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
-        this.address = address;
         this.deadline = deadline;
         this.isAutomatic = isAutomatic;
-    }
-    public Accommodation() {
-        this.address =  new Address();
-        this.images = new HashSet<>();
-        this.availability = new ArrayList<>();
-        this.amenities = new ArrayList<>();
-        this.availability = new ArrayList<>();
+        this.address = address;
     }
 
     public Long getId() {
@@ -81,6 +86,15 @@ public class Accommodation {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Nullable
+    public Long getAccommodationId() {
+        return accommodationId;
+    }
+
+    public void setAccommodationId(@Nullable Long accommodationId) {
+        this.accommodationId = accommodationId;
     }
 
     public String getName() {
@@ -111,24 +125,16 @@ public class Accommodation {
         return amenities;
     }
 
-    public void addAmenity(Amenity amenity) {
-        this.amenities.add(amenity);
-    }
-
-    public void removeAmenity(Amenity amenity) {
-        this.amenities.remove(amenity);
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
     }
 
     public Set<Image> getImages() {
         return images;
     }
 
-    public void addImage(Image image) {
-        this.images.add(image);
-    }
-
-    public void removeImage(Image image) {
-        this.images.remove(image);
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 
     public int getMinGuests() {
@@ -151,20 +157,16 @@ public class Accommodation {
         return type;
     }
 
-    public void setType(AccommodationType accommodationType) {
-        this.type = accommodationType;
+    public void setType(AccommodationType type) {
+        this.type = type;
     }
 
     public List<DateRange> getAvailability() {
         return availability;
     }
 
-    public void addDateRange(DateRange dateRange) {
-        this.availability.add(dateRange);
-    }
-
-    public void removeDateRange(DateRange dateRange) {
-        this.availability.remove(dateRange);
+    public void setAvailability(List<DateRange> availability) {
+        this.availability = availability;
     }
 
     public double getPrice() {
@@ -175,20 +177,12 @@ public class Accommodation {
         this.price = price;
     }
 
-    public boolean getIsPricePerGuest() {
+    public boolean isPricePerGuest() {
         return isPricePerGuest;
     }
 
-    public void setIsPricePerGuest(boolean pricePerGuest) {
+    public void setPricePerGuest(boolean pricePerGuest) {
         isPricePerGuest = pricePerGuest;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
     }
 
     public Host getHost() {
@@ -203,29 +197,8 @@ public class Accommodation {
         return seasonalRates;
     }
 
-
     public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
-    }
-
-    public void setAmenities(List<Amenity> amenities) {
-        this.amenities = amenities;
-    }
-
-    public void setImages(Set<Image> images) {
-        this.images = images;
-    }
-
-    public void setAvailability(List<DateRange> availability) {
-        this.availability = availability;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public int getDeadline() {
@@ -236,40 +209,27 @@ public class Accommodation {
         this.deadline = deadline;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Accommodation accommodation)) return false;
-        if(accommodation.id == null || id == null) return false;
-
-        return accommodation.id.equals(id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
     public boolean getIsAutomatic() {
-        return this.isAutomatic;
+        return isAutomatic;
     }
 
-    public void setIsAutomatic(boolean isAutomatic) {
-        this.isAutomatic = isAutomatic;
+    public void setIsAutomatic(boolean automatic) {
+        isAutomatic = automatic;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
     public String toString() {
-        return "Accommodation{" +
+        return "PendingAccommodation{" +
                 "id=" + id +
+                ", accommodationId=" + accommodationId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
@@ -277,21 +237,36 @@ public class Accommodation {
                 ", images=" + images +
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
-                ", accommodationType=" + type +
+                ", type=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
                 ", isPricePerNight=" + isPricePerGuest +
-                ", averageRating=" + averageRating +
                 ", host=" + host +
-                ", seasonRates=" + seasonalRates +
-                ", address=" + address +
+                ", seasonalRates=" + seasonalRates +
                 ", deadline=" + deadline +
                 ", isAutomatic=" + isAutomatic +
+                ", address=" + address +
                 '}';
     }
 
-    public String getUniqueName() {
-        return this.name + " #" + this.id;
-    }
+    //everything except for images, host
+    public void setSimpleValues(PendingAccommodationWholeDTO dto) {
+        id = dto.getId();
+        accommodationId = dto.getAccommodationId();
+        name = dto.getName();
+        description = dto.getDescription();
+        location = dto.getLocation();
+        amenities = Amenity.fromStringList(dto.getAmenities());
+        minGuests = dto.getMinGuests();
+        maxGuests = dto.getMaxGuests();
+        type = AccommodationType.fromString(dto.getType());
+        availability = dto.getAvailability();
+        price = dto.getPrice();
+        isPricePerGuest = dto.getIsPricePerGuest();
+        seasonalRates = dto.getSeasonalRates();
+        deadline = dto.getDeadline();
+        isAutomatic = dto.getIsAutomatic();
+        address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
 
+    }
 }

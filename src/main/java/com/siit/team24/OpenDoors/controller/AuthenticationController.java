@@ -68,12 +68,10 @@ public class AuthenticationController {
             errorToken.setMessage("Unexpected server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorToken);
         }
-
     }
 
     @PostMapping(consumes="application/json", value = "/register")
     public ResponseEntity<User> register(@RequestBody UserAccountDTO userAccountDTO) {
-
 
         User existUser = this.userService.findByUsername(userAccountDTO.getUsername());
 
