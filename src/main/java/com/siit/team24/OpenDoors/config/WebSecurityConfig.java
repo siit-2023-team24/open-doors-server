@@ -81,8 +81,8 @@ public class WebSecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint));
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers(new AntPathRequestMatcher("/open-doors/auth/login")).permitAll()
-//                    .requestMatchers(new AntPathRequestMatcher("/open-doors/users/*")).hasAnyRole("ADMIN", "HOST", "GUEST")
+            request.requestMatchers(new AntPathRequestMatcher("/open-doors/auth/*")).permitAll()
+
 //                    .requestMatchers(new AntPathRequestMatcher("/api/foo")).permitAll()
 //                    //Da nam lepsu poruku vrati
 //                    .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
