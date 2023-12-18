@@ -34,10 +34,10 @@ public class FileRepository {
         String filepath;
         if (image.isEmpty()) {
             if (isProfile)
-                filepath = ".\\src\\main\\resources\\static\\account.png";
+                filepath = "./src/main/resources/static/account.png";
             else
                 //TODO change path to the new image
-                filepath = ".\\src\\main\\resources\\static\\logo.png";
+                filepath = "./src/main/resources/static/logo.png";
         } else {
             filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
         }

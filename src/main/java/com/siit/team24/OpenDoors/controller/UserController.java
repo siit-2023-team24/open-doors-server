@@ -61,7 +61,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
         UserEditedDTO dto = null;
@@ -118,7 +118,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountViewDTO> getUser(
             @PathVariable Long id) {
