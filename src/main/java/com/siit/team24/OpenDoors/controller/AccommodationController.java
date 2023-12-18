@@ -13,6 +13,7 @@ import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.Country;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,6 @@ public class AccommodationController {
     @Autowired
     private AccommodationService accommodationService;
 
-    @Autowired
-    private PendingAccommodationService pendingAccommodationService;
 
 
     @GetMapping(value = "/all")
@@ -67,14 +66,14 @@ public class AccommodationController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccommodationWholeDTO> getAccommodation(@PathVariable Long id) {
-//        try {
+        try {
             Accommodation accommodation = accommodationService.findById(id);
             return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.OK);
-//        }
-//        catch (EntityNotFoundException e) {
-//            System.err.println("Active accommodation not found with id: " + id);
-//            return new ResponseEntity<>(new AccommodationWholeDTO(), HttpStatus.NOT_FOUND);
-//        }
+        }
+        catch (EntityNotFoundException e) {
+            System.err.println("Active accommodation not found with id: " + id);
+            return new ResponseEntity<>(new AccommodationWholeDTO(), HttpStatus.NOT_FOUND);
+        }
     }
 
 
@@ -83,7 +82,7 @@ public class AccommodationController {
     //TODO: create and edit are handled here
     //for edit (accommodationId!=null): soft delete from a.repo and save to pa.repo
     //for create save to pa.repo
-
+/*
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         System.out.println("Old DTO: " + accommodationWholeDTO);
@@ -124,7 +123,7 @@ public class AccommodationController {
     public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
         return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
-
+*/
 
     //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")

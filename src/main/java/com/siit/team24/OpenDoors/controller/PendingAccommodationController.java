@@ -1,9 +1,9 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
+import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +19,13 @@ import java.util.Collection;
 public class PendingAccommodationController {
 
     @Autowired
-    private PendingAccommodationService service;
+    private PendingAccommodationService pendingService;
+
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PendingAccommodationWholeDTO> getById(@PathVariable Long id) {
         try {
-            PendingAccommodationWholeDTO dto = new PendingAccommodationWholeDTO(service.findById(id));
-            return new ResponseEntity<>(dto, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            System.err.println("Pending accommodation not found with id: " + id);
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping(value = "/{id}/editing")
-    public ResponseEntity<PendingAccommodationWholeDTO> getPendingById(@PathVariable Long id) {
-        try {
-            PendingAccommodationWholeDTO dto = new PendingAccommodationWholeDTO(service.findById(id));
+            PendingAccommodationWholeDTO dto = new PendingAccommodationWholeDTO(pendingService.findById(id));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             System.err.println("Pending accommodation not found with id: " + id);
@@ -45,26 +35,21 @@ public class PendingAccommodationController {
 
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getPendingForHost(@PathVariable Long hostId) {
-        Collection<PendingAccommodationHostDTO> accommodations = service.getForHost(hostId);
+        Collection<PendingAccommodationHostDTO> accommodations = pendingService.getForHost(hostId);
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
-//    @PutMapping
-//    public ResponseEntity<Void> updatePending(@RequestBody PendingAccommodationWholeDTO dto) {
-//        //TODO
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePending(@PathVariable Long id) {
-        service.delete(id);
+        pendingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //create new or edit existing accommodation - active or pending
     @PostMapping(consumes = "application/json")
     public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeDTO dto) {
-        PendingAccommodation pendingAccommodation = service.save(dto);
+        System.out.println("Received: " + dto);
+        PendingAccommodation pendingAccommodation = pendingService.save(dto);
         System.out.println("New: " + pendingAccommodation);
         return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.CREATED);
     }

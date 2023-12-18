@@ -56,8 +56,9 @@ public class AccommodationWholeDTO {
         this.location = location;
         this.amenities = amenities;
         this.images = new ArrayList<Long>();
-        for (Image image : images){
-            this.images.add(image.getId());
+        if (images != null)
+            for (Image image : images){
+                this.images.add(image.getId());
         }
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;

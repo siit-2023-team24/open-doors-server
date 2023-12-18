@@ -20,6 +20,9 @@ public class PendingAccommodationService {
     private PendingAccommodationRepository repo;
 
     @Autowired
+    private AccommodationService accommodationService;
+
+    @Autowired
     private UserService userService;
 
     public PendingAccommodation findById(Long id) {
@@ -30,6 +33,11 @@ public class PendingAccommodationService {
     }
 
     public PendingAccommodation save(PendingAccommodationWholeDTO dto) {
+        if (dto.getId() == null && dto.getAccommodationId() != null) {
+            //editing active accommodation
+            accommodationService.delete(dto.getAccommodationId());
+        }
+
         PendingAccommodation pendingAccommodation = new PendingAccommodation();
         pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
 
@@ -41,12 +49,11 @@ public class PendingAccommodationService {
         return repo.save(pendingAccommodation);
     }
 
-//    public PendingAccommodation update(PendingAccommodation newData) {
-//        PendingAccommodation accommodation = findById(newData.getId());
-//        return repo.save(newData);
-//    }
-
     public void delete(Long id) {
+        PendingAccommodation pending = findById(id);
+        if (pending.getAccommodationId() != null) {
+            accommodationService.revive(pending.getAccommodationId());
+        }
         repo.deleteById(id);
     }
 
