@@ -14,6 +14,8 @@ import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.ImageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +38,18 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     public User findById(Long id) {
         Optional<User> user = repo.findById(id);
         if (user.isEmpty()){
             throw new EntityNotFoundException();}
         return user.get();
+    }
+
+    public UserService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
     public User findByUsername(String username) {
@@ -83,36 +92,67 @@ public class UserService {
         return updated.toEditedDTO();
     }
 
-    public User save(UserAccountDTO userAccountDTO) {
-        if(userAccountDTO.getRole().equals("GUEST")) {
+    public User save(UserAccountDTO userAccountDTO, boolean enabled) {
+        if(userAccountDTO.getRole().equals("ROLE_GUEST")) {
             Guest guest = new Guest();
             guest.setFavorites(new HashSet<>());
             guest.setUsername(userAccountDTO.getUsername());
             guest.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
             guest.setLastPasswordResetDate(null);
-            guest.setRole(UserRole.GUEST);
+            guest.setRole(UserRole.ROLE_GUEST);
             guest.setFirstName(userAccountDTO.getFirstName());
             guest.setLastName(userAccountDTO.getLastName());
             guest.setPhone(userAccountDTO.getPhone());
             guest.setImage(new Image());
             guest.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
             , Country.fromString(userAccountDTO.getCountry())));
-            guest.setEnabled(true);
+            guest.setEnabled(enabled);
             return repo.save(guest);
         }
-        Host user = new Host();
-        user.setUsername(userAccountDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
-        user.setLastPasswordResetDate(null);
-        user.setRole(UserRole.HOST);
-        user.setFirstName(userAccountDTO.getFirstName());
-        user.setLastName(userAccountDTO.getLastName());
-        user.setPhone(userAccountDTO.getPhone());
-        user.setImage(new Image());
-        user.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
+        if(userAccountDTO.getRole().equals("ROLE_HOST")){
+            Host host = new Host();
+            host.setUsername(userAccountDTO.getUsername());
+            host.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
+            host.setLastPasswordResetDate(null);
+            host.setRole(UserRole.ROLE_HOST);
+            host.setFirstName(userAccountDTO.getFirstName());
+            host.setLastName(userAccountDTO.getLastName());
+            host.setPhone(userAccountDTO.getPhone());
+            host.setImage(new Image());
+            host.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
+                    , Country.fromString(userAccountDTO.getCountry())));
+            host.setEnabled(enabled);
+            return repo.save(host);
+        }
+        Admin admin = new Admin();
+        admin.setUsername(userAccountDTO.getUsername());
+        admin.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
+        admin.setLastPasswordResetDate(null);
+        admin.setRole(UserRole.ROLE_ADMIN);
+        admin.setFirstName(userAccountDTO.getFirstName());
+        admin.setLastName(userAccountDTO.getLastName());
+        admin.setPhone(userAccountDTO.getPhone());
+        admin.setImage(new Image());
+        admin.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
                 , Country.fromString(userAccountDTO.getCountry())));
-        user.setEnabled(true);
-        return repo.save(user);
-
+        admin.setEnabled(enabled);
+        return repo.save(admin);
     }
+
+    public void sendActivationEmail(String recipient, String link) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("opendoorsteam24@gmail.com");
+        message.setTo(recipient);
+        message.setSubject("Activation mail");
+        message.setText("Verify your account here\n" + link);
+        javaMailSender.send(message);
+    }
+
+    public void activateUser(Long id){
+        Optional<User> user = repo.findById(id);
+        if (user.isEmpty()) return;
+        user.get().setEnabled(true);
+        repo.save(user.get());
+    }
+
 }

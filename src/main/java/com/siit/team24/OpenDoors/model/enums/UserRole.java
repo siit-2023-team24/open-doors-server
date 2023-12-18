@@ -3,9 +3,9 @@ package com.siit.team24.OpenDoors.model.enums;
 import lombok.Getter;
 
 public enum UserRole {
-    GUEST("GUEST"),
-    HOST("HOST"),
-    ADMIN("ADMIN");
+    ROLE_GUEST("ROLE_GUEST"),
+    ROLE_HOST("ROLE_HOST"),
+    ROLE_ADMIN("ROLE_ADMIN");
 
     private final String role;
     UserRole(String role) {
