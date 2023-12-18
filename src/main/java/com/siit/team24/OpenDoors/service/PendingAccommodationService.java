@@ -33,9 +33,8 @@ public class PendingAccommodationService {
     }
 
     public PendingAccommodation save(PendingAccommodationWholeDTO dto) {
-        if (dto.getId() == null && dto.getAccommodationId() != null) {
-            //editing active accommodation
-            accommodationService.delete(dto.getAccommodationId());
+        if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
+            accommodationService.deleteForEdit(dto.getAccommodationId());
         }
 
         PendingAccommodation pendingAccommodation = new PendingAccommodation();

@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.service;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
+import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
 import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.repository.AccommodationRepository;
@@ -42,6 +43,12 @@ public class AccommodationService {
             throw new ExistingReservationsException();
         }
         reservationRequestService.denyAllFor(id);
+        accommodationRepository.deleteById(id);
+    }
+
+    public void deleteForEdit(Long id) {
+        boolean found = reservationRequestService.foundActiveFor(id);
+        if (found) throw new ActiveReservationRequestsFoundException();
         accommodationRepository.deleteById(id);
     }
 
