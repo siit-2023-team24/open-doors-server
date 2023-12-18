@@ -11,6 +11,4 @@ import java.util.List;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
-    public Accommodation findOById(Long id);
-
 }
