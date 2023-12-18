@@ -20,9 +20,10 @@ public class ReservationRequestService {
         return !repo.getActiveFor(accommodationId, today).isEmpty();
     }
 
-    public int foundConfirmedFutureFor(Long accommodationId) {
+    public int countConfirmedFutureFor(Long accommodationId) {
         Timestamp today = new Timestamp(System.currentTimeMillis());
-        return repo.getConfirmedFutureFor(accommodationId, today).size();
+        List<ReservationRequest> confirmed = repo.getConfirmedFutureFor(accommodationId, today);
+        return confirmed.size();
     }
 
     public void denyAllFor(Long accommodationId) {

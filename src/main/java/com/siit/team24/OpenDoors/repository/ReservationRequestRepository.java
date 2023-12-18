@@ -14,7 +14,7 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     List<ReservationRequest> getActiveFor(Long accommodationId, Timestamp today);
 
     @Query("select r from ReservationRequest r where r.accommodation.id = :accommodationId" +
-            " and r.status = 1 and r.dateRange.endDate < :today")
+            " and r.status = 1 and r.dateRange.endDate > :today")
     List<ReservationRequest> getConfirmedFutureFor(Long accommodationId, Timestamp today);
 
     @Query("select r from ReservationRequest r where r.accommodation.id = :accommodationId and r.status = 0")

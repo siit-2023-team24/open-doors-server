@@ -3,7 +3,6 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
-import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +32,21 @@ public class PendingAccommodationController {
         }
     }
 
+    // @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getPendingForHost(@PathVariable Long hostId) {
         Collection<PendingAccommodationHostDTO> accommodations = pendingService.getForHost(hostId);
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
+    // @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePending(@PathVariable Long id) {
         pendingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // @PreAuthorize("hasRole('HOST')")
     //create new or edit existing accommodation - active or pending
     @PostMapping(consumes = "application/json")
     public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeDTO dto) {

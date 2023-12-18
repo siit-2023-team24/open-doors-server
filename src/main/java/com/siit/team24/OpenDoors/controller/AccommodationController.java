@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
+import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
@@ -78,10 +79,6 @@ public class AccommodationController {
 
 
     // @PreAuthorize("hasRole('HOST')")
-
-    //TODO: create and edit are handled here
-    //for edit (accommodationId!=null): soft delete from a.repo and save to pa.repo
-    //for create save to pa.repo
 /*
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
@@ -116,12 +113,6 @@ public class AccommodationController {
         System.out.println("New DTO: " + newDto);
 
         return new ResponseEntity<>(newDto, HttpStatus.CREATED);
-    }
-
-    //@PreAuthorize("hasRole('HOST')")
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        return new ResponseEntity<>(testAccommodationWholeDTO, HttpStatus.OK);
     }
 */
 
