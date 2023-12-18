@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public interface PendingAccommodationRepository extends JpaRepository<PendingAccommodation, Long> {
 
+    @Query("select new com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO(a) from PendingAccommodation a")
+    Collection<PendingAccommodationHostDTO> findAllDtos();
+
     @Query("select new com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO(a) from PendingAccommodation a where a.host.id =:hostId")
     Collection<PendingAccommodationHostDTO> findByHost(Long hostId);
 }

@@ -32,6 +32,13 @@ public class PendingAccommodationController {
         }
     }
 
+    // @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<Collection<PendingAccommodationHostDTO>> getAllPending() {
+        Collection<PendingAccommodationHostDTO> accommodations = pendingService.getAll();
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
+
     // @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getPendingForHost(@PathVariable Long hostId) {
@@ -54,5 +61,11 @@ public class PendingAccommodationController {
         PendingAccommodation pendingAccommodation = pendingService.save(dto);
         System.out.println("New: " + pendingAccommodation);
         return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.CREATED);
+    }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) {
+        pendingService.approve(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

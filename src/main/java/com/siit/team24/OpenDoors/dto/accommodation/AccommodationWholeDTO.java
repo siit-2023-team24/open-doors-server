@@ -44,7 +44,7 @@ public class AccommodationWholeDTO {
     }
 
     public AccommodationWholeDTO(PendingAccommodation accommodation) {
-        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
+        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().getValue(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 
@@ -228,6 +228,32 @@ public class AccommodationWholeDTO {
 
     public void setHostUsername(String hostUsername) {
         this.hostUsername = hostUsername;
+    }
+
+    @Override
+    public String toString() {
+        return "AccommodationWholeDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", amenities=" + amenities +
+                ", images=" + images +
+                ", minGuests=" + minGuests +
+                ", maxGuests=" + maxGuests +
+                ", type='" + type + '\'' +
+                ", availability=" + availability +
+                ", price=" + price +
+                ", isPricePerGuest=" + isPricePerGuest +
+                ", seasonalRates=" + seasonalRates +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", street='" + street + '\'' +
+                ", number=" + number +
+                ", deadline=" + deadline +
+                ", isAutomatic=" + isAutomatic +
+                ", hostUsername='" + hostUsername + '\'' +
+                '}';
     }
 }
 

@@ -26,7 +26,7 @@ public class PendingAccommodation {
     private String location;
     private List<Amenity> amenities;
 
-    @OneToMany(cascade = CascadeType.REFRESH)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Image> images;
 
     @Column(name = "minGuests", nullable = false)
@@ -267,6 +267,11 @@ public class PendingAccommodation {
         deadline = dto.getDeadline();
         isAutomatic = dto.getIsAutomatic();
         address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
+    }
 
+    //sets average rating to 0
+    public Accommodation toAccommodation() {
+        return new Accommodation(accommodationId, name, description, location, amenities, images, minGuests, maxGuests,
+                availability, type, price, isPricePerGuest, 0, host, seasonalRates, address, deadline, isAutomatic);
     }
 }

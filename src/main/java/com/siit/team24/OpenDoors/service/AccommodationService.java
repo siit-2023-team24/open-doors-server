@@ -30,8 +30,6 @@ public class AccommodationService {
     }
 
     public Accommodation save (Accommodation accommodation) {
-        System.out.println("Accommodation to be saved: " + accommodation.toString());
-
         Accommodation newAccommodation = accommodationRepository.save(accommodation);
         System.out.println("New accommodation: " + newAccommodation);
         return newAccommodation;

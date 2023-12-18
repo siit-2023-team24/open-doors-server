@@ -1,7 +1,9 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
 import com.siit.team24.OpenDoors.repository.PendingAccommodationRepository;
@@ -56,8 +58,41 @@ public class PendingAccommodationService {
         repo.deleteById(id);
     }
 
+    public Collection<PendingAccommodationHostDTO> getAll() {
+        return repo.findAllDtos();
+    }
+
     public Collection<PendingAccommodationHostDTO> getForHost(Long hostId) {
         return repo.findByHost(hostId);
     }
 
+    public void approve(PendingAccommodationHostDTO dto) {
+        PendingAccommodation pendingAccommodation = findById(dto.getId());
+        System.out.println(pendingAccommodation);
+        AccommodationWholeDTO accommodationWholeDTO = new AccommodationWholeDTO(pendingAccommodation);
+
+        System.out.println(accommodationWholeDTO);
+
+        this.delete(dto.getId());
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setSimpleValues(accommodationWholeDTO);
+
+        Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
+        accommodation.setHost(host);
+
+        accommodation.setImages(pendingAccommodation.getImages());
+
+
+
+        if (dto.getAccommodationId() != null) {
+            Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
+            accommodation.setAverageRating(oldData.getAverageRating());
+        }
+
+
+        Accommodation saved = accommodationService.save(accommodation);
+        System.out.println("Saved to accommodations: " + saved);
+
+    }
 }
