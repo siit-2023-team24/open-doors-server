@@ -79,7 +79,7 @@ public class AuthenticationController {
             throw new ResourceConflictException(existUser.getId(), "Username already exists");
         }
 
-        User user = this.userService.save(userAccountDTO, false);
+        User user = this.userService.create(userAccountDTO);
 
         userService.sendActivationEmail(userAccountDTO.getUsername(), "http://localhost:4200/activate-account?id=" + user.getId());
 
