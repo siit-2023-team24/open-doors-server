@@ -2,10 +2,15 @@ package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.*;
 
+@SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class Accommodation {
     @Id
@@ -37,8 +42,12 @@ public class Accommodation {
     private boolean isAutomatic;
     @Embedded
     private Address address;
+  
+    private boolean deleted;
 
+  
     public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
+
         this.id = id;
         this.name = name;
         this.description = description;
@@ -249,6 +258,14 @@ public class Accommodation {
         this.isAutomatic = isAutomatic;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
@@ -276,4 +293,5 @@ public class Accommodation {
     public String getUniqueName() {
         return this.name + " #" + this.id;
     }
+
 }

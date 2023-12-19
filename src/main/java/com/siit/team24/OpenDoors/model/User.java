@@ -1,21 +1,47 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.siit.team24.OpenDoors.dto.userManagement.UserAccountViewDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
+import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.*;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "users")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
+    @Column(unique = true, nullable = false)
+    private String username;
+    @JsonIgnore
+    private String password;
+    private Timestamp lastPasswordResetDate;
+    @Enumerated
+    private UserRole role;
     private String firstName;
     private String lastName;
     private String phone;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
+    @Nullable
     private Image image;
     @Embedded
     private Address address;
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Account account;
+//    @OneToOne(cascade = {CascadeType.ALL})
+//    private Account account;
+    private boolean enabled;
+
+
 
     public Long getId() {
         return id;
@@ -56,14 +82,14 @@ public abstract class User {
     public void setAddress(Address address) {
         this.address = address;
     }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+//
+//    public Account getAccount() {
+//        return account;
+//    }
+//
+//    public void setAccount(Account account) {
+//        this.account = account;
+//    }
 
     public Image getImage() {
         return image;
@@ -73,19 +99,120 @@ public abstract class User {
         this.image = image;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public void setUsername(String email) {
+        this.username = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(this.role.name()));
+        return authorities;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public User(){
 
     }
+
+    public User(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, @Nullable Image image, Address address, boolean enabled) {
+        this.id = id;
+        this.username = email;
+        this.password = password;
+        this.lastPasswordResetDate = lastPasswordResetDate;
+        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.image = image;
+        this.address = address;
+        this.enabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", email='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", lastPasswordResetDate=" + lastPasswordResetDate +
+                ", role=" + role +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", image='" + image + '\'' +
+                ", image=" + image +
                 ", address=" + address +
-                ", account=" + account +
+                ", enabled=" + enabled +
                 '}';
+    }
+
+    public UserEditedDTO toEditedDTO() {
+        Long imgId = (image != null)? image.getId() : null;
+        return new UserEditedDTO(id, firstName, lastName, phone, address.getStreet(), address.getNumber(), address.getCity(),
+                address.getCountry().toString(), imgId, null);
+    }
+
+    public UserAccountViewDTO toAccountViewDTO() {
+        Long imgId = (image != null)? image.getId() : null;
+        return new UserAccountViewDTO(id, firstName, lastName, phone, address.getStreet(), address.getNumber(),
+                address.getCity(), address.getCountry().getCountryName(), imgId, this.getUsername(),
+                this.getRole().toString());
+    }
+
+    public void updateSimpleValues(UserEditedDTO dto) {
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.phone = dto.getPhone();
+        this.address.update(dto.getCountry(), dto.getCity(), dto.getStreet(), dto.getNumber());
     }
 }

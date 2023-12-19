@@ -101,11 +101,11 @@ public class UserDTO {
         this.country = country;
     }
 
-    public Long getImage() {
+    public Long getImageId() {
         return imageId;
     }
 
-    public void setImage(Long image) {
+    public void setImageId(Long image) {
         this.imageId = image;
     }
 
@@ -119,7 +119,7 @@ public class UserDTO {
                 ", number=" + number +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
-                ", image='" + imageId + '\'' +
+                ", imageId='" + imageId + '\'' +
                 '}';
     }
 }

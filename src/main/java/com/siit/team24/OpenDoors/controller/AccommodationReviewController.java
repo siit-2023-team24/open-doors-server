@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "open-doors/accommodation-reviews")
 public class AccommodationReviewController {
-
+    //TODO : add authorization
     //service
 
     AccommodationReviewDetailsDTO testAccommodationReviewDetailsDTO = new AccommodationReviewDetailsDTO(

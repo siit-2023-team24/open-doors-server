@@ -3,31 +3,31 @@ package com.siit.team24.OpenDoors.dto.userManagement;
 import com.siit.team24.OpenDoors.model.User;
 
 public class UserSummaryDTO {
-    private String email;
+    private String username;
     private String firstName;
     private String lastName;
     private String role;
 
     public UserSummaryDTO(String email, String firstName, String lastName, String role) {
-        this.email = email;
+        this.username = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
     }
 
     public UserSummaryDTO(User user){
-        this.email = user.getAccount().getEmail();
+        this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.role = user.getAccount().getRole().name();
+        this.role = user.getRole().name();
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -57,7 +57,7 @@ public class UserSummaryDTO {
     @Override
     public String toString() {
         return "UserSummaryDTO{" +
-                "email='" + email + '\'' +
+                "email='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role='" + role + '\'' +
