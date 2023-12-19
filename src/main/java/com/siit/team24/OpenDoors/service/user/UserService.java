@@ -127,6 +127,7 @@ public class UserService {
         if (user.getRole() == UserRole.GUEST) {
             if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
                 throw new ConfirmedReservationRequestsFound();
+            reservationRequestService.deletePendingForGuest(user.getUsername());
         }
         else if (user.getRole() == UserRole.HOST) {
 

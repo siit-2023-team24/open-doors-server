@@ -35,4 +35,9 @@ public class ReservationRequestService {
     public List<ReservationRequest> findByUsernameAndStatus(String guestUsername, ReservationRequestStatus status) {
         return repo.getFutureForGuestWithStatus(guestUsername, status);
     }
+
+    public void deletePendingForGuest(String username) {
+        List<ReservationRequest> requests = findByUsernameAndStatus(username, ReservationRequestStatus.PENDING);
+        repo.deleteAll(requests);
+    }
 }
