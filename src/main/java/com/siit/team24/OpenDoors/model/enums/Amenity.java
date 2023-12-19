@@ -1,11 +1,10 @@
 package com.siit.team24.OpenDoors.model.enums;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import lombok.Getter;
 public enum Amenity {
     WIFI("Wi-Fi"),
     PARKING("Parking"),
@@ -28,13 +27,42 @@ public enum Amenity {
     MEETING_ROOMS("Meeting Rooms"),
     FITNESS_CLASSES("Fitness Classes");
 
-    private final String displayName;
+    private final String amenityName;
+    private static final Map<String, Amenity> amenityMap = new HashMap<>();
 
-    Amenity(String displayName) {
-        this.displayName = displayName;
+    static {
+        for (Amenity amenity : Amenity.values()) {
+            amenityMap.put(amenity.getAmenityName(), amenity);
+        }
     }
 
-    public String getDisplayName() {
-        return displayName;
+    Amenity(String amenityName) {
+        this.amenityName = amenityName;
+    }
+
+    public String getAmenityName() {
+        return amenityName;
+    }
+
+    public static Amenity fromString(String amenityName) {
+        return amenityMap.get(amenityName);
+    }
+
+    public static List<Amenity> fromStringList(List<String> amenityNames) {
+        List<Amenity> amenities = new ArrayList<>();
+        for (String amenityName : amenityNames) {
+            amenities.add(fromString(amenityName));
+        }
+        return amenities;
+    }
+
+    public static List<String> fromAmenityList(List<Amenity> amenities) {
+        List<String> amenityNames = new ArrayList<>();
+        if (amenities != null) {
+            for (Amenity amenity : amenities) {
+                amenityNames.add(amenity.getAmenityName());
+            }
+        }
+        return amenityNames;
     }
 }

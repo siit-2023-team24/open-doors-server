@@ -38,5 +38,4 @@ public class ImageService {
         repo.deleteById(id);
         fileRepo.delete(image.get());
     }
-
 }

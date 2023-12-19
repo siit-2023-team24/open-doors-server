@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String firstName;
     private String lastName;

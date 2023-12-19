@@ -1,5 +1,7 @@
 package com.siit.team24.OpenDoors.dto.accommodationReview;
 
+import com.siit.team24.OpenDoors.model.AccommodationReview;
+
 import java.sql.Timestamp;
 
 public class AccommodationReviewDetailsDTO {
@@ -8,16 +10,27 @@ public class AccommodationReviewDetailsDTO {
     protected String comment;
     protected Timestamp timestamp;
     protected String authorUsername;
+    protected Long authorId;
 
     public AccommodationReviewDetailsDTO() {
     }
 
-    public AccommodationReviewDetailsDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername) {
+    public AccommodationReviewDetailsDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long authorId) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.timestamp = timestamp;
         this.authorUsername = authorUsername;
+        this.authorId = authorId;
+    }
+
+    public AccommodationReviewDetailsDTO(AccommodationReview accommodationReview) {
+        this(accommodationReview.getId(),
+            accommodationReview.getRating(),
+            accommodationReview.getComment(),
+            accommodationReview.getTimestamp(),
+            accommodationReview.getAuthor().getAccount().getEmail(),
+            accommodationReview.getAuthor().getId());
     }
 
     public Long getId() {
@@ -54,5 +67,13 @@ public class AccommodationReviewDetailsDTO {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }

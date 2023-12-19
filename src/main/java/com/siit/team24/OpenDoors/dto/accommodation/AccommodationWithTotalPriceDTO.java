@@ -3,13 +3,12 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
-import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AccommodationWholeDTO {
+public class AccommodationWithTotalPriceDTO {
     private Long id;
     private String name;
     private String description;
@@ -18,54 +17,44 @@ public class AccommodationWholeDTO {
     private List<Long> images;
     private int minGuests;
     private int maxGuests;
-    private String type;
+    private AccommodationType accommodationType;
     private List<DateRange> availability;
     private double price;
     private boolean isPricePerNight;
+    private Double totalPrice;
     private Double averageRating;
     private Host host;
     private List<Price> seasonalRates;
+    private Address address;
 
-    private String city;
-    private String country;
-    private String street;
-    private int number;
-    private int deadline;
+    public AccommodationWithTotalPriceDTO() {}
 
-    private boolean isAutomatic;
-
-    public AccommodationWholeDTO() {}
-
-    public AccommodationWholeDTO(Accommodation accommodation) {
-        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.isAutomatic());
+    public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
+        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
     }
 
-    public AccommodationWholeDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, String accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic) {
+    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, Host host, Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.amenities = amenities;
+        this.totalPrice = totalPrice;
         this.images = new ArrayList<Long>();
         for (Image image : images){
             this.images.add(image.getId());
         }
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
-        this.type = accommodationType;
+        this.accommodationType = accommodationType;
         this.availability = availability;
         this.price = price;
         this.isPricePerNight = isPricePerNight;
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
-        this.city = city;
-        this.country = country;
-        this.street = street;
-        this.number = number;
-        this.deadline = deadline;
-        this.isAutomatic = isAutomatic;
+        this.address = address;
     }
 
     public Long getId() {
@@ -132,12 +121,12 @@ public class AccommodationWholeDTO {
         this.maxGuests = maxGuests;
     }
 
-    public String getType() {
-        return type;
+    public AccommodationType getAccommodationType() {
+        return accommodationType;
     }
 
-    public void setType(String accommodationType) {
-        this.type = accommodationType;
+    public void setAccommodationType(AccommodationType accommodationType) {
+        this.accommodationType = accommodationType;
     }
 
     public List<DateRange> getAvailability() {
@@ -188,52 +177,20 @@ public class AccommodationWholeDTO {
         this.host = host;
     }
 
-    public String getCity() {
-        return city;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getCountry() {
-        return country;
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public int getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(int deadline) {
-        this.deadline = deadline;
-    }
-
-    public boolean isAutomatic() {
-        return isAutomatic;
-    }
-
-    public void setAutomatic(boolean automatic) {
-        isAutomatic = automatic;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
 

@@ -1,7 +1,9 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -22,14 +24,15 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+    @Enumerated(EnumType.STRING)
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerNight;
-    private double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private Double averageRating;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
     private List<Price> seasonalRates;
@@ -61,9 +64,26 @@ public class Accommodation {
     public Accommodation() {
         this.address =  new Address();
         this.images = new HashSet<>();
-        this.availability = new ArrayList<>();
         this.amenities = new ArrayList<>();
         this.availability = new ArrayList<>();
+    }
+
+    public Accommodation(AccommodationWholeDTO accommodationDTO) {
+        this.name = accommodationDTO.getName();
+        this.description = accommodationDTO.getDescription();
+        this.location = accommodationDTO.getLocation();
+        this.amenities = accommodationDTO.getAmenities();
+        //this.images = accommodationDTO.getImages();
+        this.minGuests = accommodationDTO.getMinGuests();
+        this.maxGuests = accommodationDTO.getMaxGuests();
+        this.type = AccommodationType.valueOf(accommodationDTO.getType());
+        this.availability = accommodationDTO.getAvailability();
+        this.price = accommodationDTO.getPrice();
+        this.isPricePerNight = accommodationDTO.isPricePerNight();
+        this.averageRating = accommodationDTO.getAverageRating();
+        this.host = accommodationDTO.getHost();
+        this.seasonalRates = accommodationDTO.getSeasonalRates();
+        this.address = new Address(accommodationDTO.getStreet(), accommodationDTO.getNumber(), accommodationDTO.getCity(), Country.valueOf(accommodationDTO.getCountry()));
     }
 
     public Long getId() {
