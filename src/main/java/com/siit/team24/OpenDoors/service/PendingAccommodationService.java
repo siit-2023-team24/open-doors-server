@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,8 +25,6 @@ public class PendingAccommodationService {
     @Autowired
     private AccommodationService accommodationService;
 
-    @Autowired
-    private UserService userService;
 
     public PendingAccommodation findById(Long id) {
         Optional<PendingAccommodation> accommodation = repo.findById(id);
@@ -34,19 +33,10 @@ public class PendingAccommodationService {
         return accommodation.get();
     }
 
-    public PendingAccommodation save(PendingAccommodationWholeDTO dto) {
-        if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
-            accommodationService.deleteForEdit(dto.getAccommodationId());
+    public PendingAccommodation save(PendingAccommodation pendingAccommodation) {
+        if (pendingAccommodation.getId() == null && pendingAccommodation.getAccommodationId() != null) { //editing active accommodation
+            accommodationService.deleteForEdit(pendingAccommodation.getAccommodationId());
         }
-
-        PendingAccommodation pendingAccommodation = new PendingAccommodation();
-        pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
-
-        Host host = (Host)userService.findByUsername(dto.getHostUsername());
-        pendingAccommodation.setHost(host);
-
-        //TODO images
-
         return repo.save(pendingAccommodation);
     }
 
@@ -56,6 +46,11 @@ public class PendingAccommodationService {
             accommodationService.revive(pending.getAccommodationId());
         }
         repo.deleteById(id);
+    }
+
+    public void deleteAllForHost(Long hostId) {
+        List<PendingAccommodation> accommodations = repo.findAllByHostId(hostId);
+        repo.deleteAll(accommodations);
     }
 
     public Collection<PendingAccommodationHostDTO> getAll() {
@@ -78,7 +73,7 @@ public class PendingAccommodationService {
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
 
-        Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
+        Host host = pendingAccommodation.getHost();
         accommodation.setHost(host);
 
         accommodation.setImages(pendingAccommodation.getImages());
@@ -95,4 +90,5 @@ public class PendingAccommodationService {
         System.out.println("Saved to accommodations: " + saved);
 
     }
+
 }

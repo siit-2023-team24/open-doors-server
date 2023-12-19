@@ -2,8 +2,10 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
+import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ public class PendingAccommodationController {
 
     @Autowired
     private PendingAccommodationService pendingService;
+
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping(value = "/{id}")
@@ -58,9 +63,17 @@ public class PendingAccommodationController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeDTO dto) {
         System.out.println("Received: " + dto);
-        PendingAccommodation pendingAccommodation = pendingService.save(dto);
-        System.out.println("New: " + pendingAccommodation);
-        return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.CREATED);
+
+        PendingAccommodation pendingAccommodation = new PendingAccommodation();
+        pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
+
+        Host host = (Host)userService.findByUsername(dto.getHostUsername());
+        pendingAccommodation.setHost(host);
+
+        //TODO images
+        PendingAccommodation saved = pendingService.save(pendingAccommodation);
+        System.out.println("New: " + saved);
+        return new ResponseEntity<>(new PendingAccommodationWholeDTO(saved), HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")

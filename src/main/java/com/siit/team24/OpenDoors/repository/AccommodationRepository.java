@@ -8,11 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
     @Query("select new com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO(a) from Accommodation a where a.host.id =:hostId")
-    Collection<AccommodationHostDTO> findByHost(Long hostId);
+    Collection<AccommodationHostDTO> findAllDtoByHostId(Long hostId);
+
+    @Query("select a from Accommodation a where a.host.id =:hostId")
+    List<Accommodation> findAllByHostId(Long hostId);
 
 
     @Query(value = "UPDATE accommodation SET deleted = false WHERE id = ?1", nativeQuery = true)

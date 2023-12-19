@@ -13,7 +13,9 @@ import com.siit.team24.OpenDoors.model.enums.Country;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
+import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ImageService;
+import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,12 @@ public class UserService {
 
     @Autowired
     private ReservationRequestService reservationRequestService;
+
+    @Autowired
+    private AccommodationService accommodationService;
+
+    @Autowired
+    private PendingAccommodationService pendingAccommodationService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -124,14 +132,24 @@ public class UserService {
 
     public void delete(Long id) {
         User user = findById(id);
+
         if (user.getRole() == UserRole.GUEST) {
             if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
                 throw new ConfirmedReservationRequestsFound();
         }
-        else if (user.getRole() == UserRole.HOST) {
 
-            //TODO
+        else if (user.getRole() == UserRole.HOST) {
+            List<Accommodation> accommodations = accommodationService.findAllByHostId(user.getId());
+            for (Accommodation accommodation: accommodations) {
+                if (reservationRequestService.countConfirmedFutureFor(accommodation.getId()) > 0)
+                    throw new ConfirmedReservationRequestsFound();
+            }
+            for (Accommodation accommodation: accommodations)
+                accommodationService.delete(accommodation.getId());
+
+            pendingAccommodationService.deleteAllForHost(user.getId());
         }
+
         else return;
 
         if (user.getImage() != null) {
