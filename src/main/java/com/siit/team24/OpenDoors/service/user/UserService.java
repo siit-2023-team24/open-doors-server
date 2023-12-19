@@ -4,14 +4,17 @@ import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.NewPasswordDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
+import com.siit.team24.OpenDoors.exception.ConfirmedReservationRequestsFound;
 import com.siit.team24.OpenDoors.exception.CredentialsNotValidException;
 import com.siit.team24.OpenDoors.exception.PasswordNotConfirmedException;
 import com.siit.team24.OpenDoors.exception.PasswordValidationException;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Country;
+import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.ImageService;
+import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +35,9 @@ public class UserService {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ReservationRequestService reservationRequestService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -114,5 +120,23 @@ public class UserService {
         user.setEnabled(true);
         return repo.save(user);
 
+    }
+
+    public void delete(Long id) {
+        User user = findById(id);
+        if (user.getRole() == UserRole.GUEST) {
+            if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
+                throw new ConfirmedReservationRequestsFound();
+        }
+        else if (user.getRole() == UserRole.HOST) {
+
+            //TODO
+        }
+        else return;
+
+        if (user.getImage() != null) {
+            imageService.delete(user.getImage().getId());
+        }
+        repo.deleteById(id);
     }
 }
