@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,7 +142,7 @@ public class AccommodationController {
     public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@RequestBody SearchAndFilterDTO searchAndFilterDTO) {
 
         List<AccommodationSearchDTO> accommodations = accommodationService.searchAndFilter(searchAndFilterDTO);
-
+        
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
@@ -164,7 +163,7 @@ public class AccommodationController {
     @GetMapping("/accommodationTypes")
     public ResponseEntity<List<String>> getAccommodationTypes() {
         List<String> accommodationTypes = Arrays.stream(AccommodationType.values())
-                .map(AccommodationType::getValue)
+                .map(type -> type.name().toUpperCase()) // Convert to uppercase
                 .collect(Collectors.toList());
         return ResponseEntity.ok(accommodationTypes);
     }
@@ -172,8 +171,9 @@ public class AccommodationController {
     @GetMapping("/amenities")
     public ResponseEntity<List<String>> getAmenities() {
         List<String> amenities = Arrays.stream(Amenity.values())
-                .map(Amenity::getDisplayName)
+                .map(type -> type.name().toUpperCase())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(amenities);
     }
+
 }

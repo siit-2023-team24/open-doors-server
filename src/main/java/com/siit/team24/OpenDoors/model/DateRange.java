@@ -2,42 +2,47 @@ package com.siit.team24.OpenDoors.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import java.time.LocalDate;
+
+import java.sql.Timestamp;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Embeddable
 public class DateRange {
     @Column(name = "startDate", nullable = false)
-    private LocalDate startDate;
+    private Timestamp startDate;
     @Column(name = "endDate", nullable = false)
-    private LocalDate endDate;
+    private Timestamp endDate;
 
-    public DateRange(LocalDate startDate, LocalDate endDate) {
+    public DateRange(Timestamp startDate, Timestamp endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
     public DateRange() {}
 
-    public LocalDate getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
     public int getNumberOfNights() {
-        return (int) ChronoUnit.DAYS.between(startDate, endDate);
+        long millisPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
+        long startMillis = startDate.getTime();
+        long endMillis = endDate.getTime();
+
+        return (int) ((endMillis - startMillis) / millisPerDay);
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +49,16 @@ public class AccommodationService {
     }
 
     public List<AccommodationSearchDTO> searchAndFilter(SearchAndFilterDTO searchAndFilterDTO) {
+
+        System.out.println(searchAndFilterDTO);
+
+//        if(searchAndFilterDTO.getGuestNumber() == 0)
+//            searchAndFilterDTO.setGuestNumber(null);
+//        if(searchAndFilterDTO.getStartPrice() == 0.0)
+//            searchAndFilterDTO.setStartPrice(null);
+//        if(searchAndFilterDTO.getEndPrice() == 0.0)
+//            searchAndFilterDTO.setEndPrice(null);
+
         List<Accommodation> allAccommodations = findAll();
         List<Accommodation> appropriateAccommodations = new ArrayList<>();
         List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
@@ -64,9 +74,9 @@ public class AccommodationService {
                 continue;
             if(searchAndFilterDTO.getEndPrice() != null && searchAndFilterDTO.getEndPrice() < a.getPrice())
                 continue;
-            if(searchAndFilterDTO.getTypes() != null && !searchAndFilterDTO.getTypes().contains(a.getType()))
+            if(!searchAndFilterDTO.getTypes().isEmpty() && !searchAndFilterDTO.getTypes().contains(a.getType()))
                 continue;
-            if(searchAndFilterDTO.getAmenities() != null && !hasAmenities(a, searchAndFilterDTO.getAmenities()))
+            if(!searchAndFilterDTO.getAmenities().isEmpty() && !hasAmenities(a, searchAndFilterDTO.getAmenities()))
                 continue;
 
             appropriateAccommodations.add(a);
@@ -80,7 +90,7 @@ public class AccommodationService {
         return accommodationSearchDTOS;
     }
 
-    public boolean isAvailable(Accommodation accommodation, LocalDate startDate, LocalDate endDate) {
+    public boolean isAvailable(Accommodation accommodation, Timestamp startDate, Timestamp endDate) {
         if(startDate != null && endDate != null) {
             DateRange dateRange = new DateRange(startDate, endDate);
             for(DateRange dr : accommodation.getAvailability()) {
@@ -89,12 +99,12 @@ public class AccommodationService {
             }
         } else if (startDate != null) {
             for(DateRange dr : accommodation.getAvailability()) {
-                if(DateRangeService.IsDateWithinRange(startDate, dr))
+                if(DateRangeService.isDateWithinRange(startDate, dr))
                     return false;
             }
         } else if (endDate != null) {
             for(DateRange dr : accommodation.getAvailability()) {
-                if(DateRangeService.IsDateWithinRange(endDate, dr))
+                if(DateRangeService.isDateWithinRange(endDate, dr))
                     return false;
             }
         }

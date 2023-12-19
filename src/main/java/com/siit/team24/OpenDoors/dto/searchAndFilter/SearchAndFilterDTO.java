@@ -3,14 +3,14 @@ package com.siit.team24.OpenDoors.dto.searchAndFilter;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.Set;
 
 public class SearchAndFilterDTO {
     private String location;
     private Integer guestNumber;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private Double startPrice;
     private Double endPrice;
     private Set<AccommodationType> types;
@@ -19,7 +19,7 @@ public class SearchAndFilterDTO {
     public SearchAndFilterDTO() {
     }
 
-    public SearchAndFilterDTO(String location, int guestNumber, LocalDate startDate, LocalDate endDate,
+    public SearchAndFilterDTO(String location, int guestNumber, Timestamp startDate, Timestamp endDate,
                               double startPrice, double endPrice, Set<AccommodationType> types, Set<Amenity> amenities) {
         this.location = location;
         this.guestNumber = guestNumber;
@@ -43,23 +43,23 @@ public class SearchAndFilterDTO {
         return guestNumber;
     }
 
-    public void setGuestNumber(int guestNumber) {
+    public void setGuestNumber(Integer guestNumber) {
         this.guestNumber = guestNumber;
     }
 
-    public LocalDate getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
@@ -67,7 +67,7 @@ public class SearchAndFilterDTO {
         return startPrice;
     }
 
-    public void setStartPrice(double startPrice) {
+    public void setStartPrice(Double startPrice) {
         this.startPrice = startPrice;
     }
 
@@ -75,7 +75,7 @@ public class SearchAndFilterDTO {
         return endPrice;
     }
 
-    public void setEndPrice(double endPrice) {
+    public void setEndPrice(Double endPrice) {
         this.endPrice = endPrice;
     }
 
@@ -98,7 +98,7 @@ public class SearchAndFilterDTO {
     @Override
     public String toString() {
         return "SearchAndFilterDTO{" +
-                "location='" + location + '\'' +
+                "location=" + location +
                 ", guestNumber=" + guestNumber +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
