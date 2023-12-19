@@ -144,7 +144,7 @@ public class UserService {
         message.setFrom("opendoorsteam24@gmail.com");
         message.setTo(recipient);
         message.setSubject("Activation mail");
-        message.setText("Verify your account here\n" + link);
+        message.setText("Please verify your account here. Otherwise it will expire in the next 24 hours.\n" + link);
         javaMailSender.send(message);
     }
 
