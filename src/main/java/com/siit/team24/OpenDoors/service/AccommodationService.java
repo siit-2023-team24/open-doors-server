@@ -117,7 +117,7 @@ public class AccommodationService {
 
     public Double calculateTotalPrice(Accommodation accommodation, SearchAndFilterDTO dto) {
         if(dto.getStartDate() == null && dto.getEndDate() == null) {
-            return null;
+            return 0.0;
         } else if(dto.getStartDate() == null) {
             return accommodation.getPrice();
         } else if(dto.getEndDate() == null) {
