@@ -15,7 +15,8 @@ import java.util.Optional;
 public class FileRepository {
 
     //TODO move to aplication.properties
-    private final String path = "Z:\\opendoors";
+//    private final String path = "Z:\\opendoors";
+    private final String path = "C:\\opendoors";
 
     public Image save(ImageFileDTO fileDto) throws IOException {
         String filepath = getFilepath(fileDto.getImageType(), fileDto.getEntityId());
@@ -75,8 +76,9 @@ public class FileRepository {
                 //TODO change path to the new image
                 filepath = "./src/main/resources/static/logo.png";
         } else {
-            filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
+            filepath = String.join(File.separator, image.get().getPath());
         }
+        System.out.println(filepath);
         File file = new File(filepath);
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
         byte[] bytes = in.readAllBytes();
