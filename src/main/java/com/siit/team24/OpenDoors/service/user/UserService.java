@@ -93,7 +93,7 @@ public class UserService {
         return updated.toEditedDTO();
     }
 
-    public User save(UserAccountDTO userAccountDTO, boolean enabled) {
+    public User create(UserAccountDTO userAccountDTO) {
         if(userAccountDTO.getRole().equals("ROLE_GUEST")) {
             Guest guest = new Guest();
             guest.setFavorites(new HashSet<>());
@@ -104,10 +104,10 @@ public class UserService {
             guest.setFirstName(userAccountDTO.getFirstName());
             guest.setLastName(userAccountDTO.getLastName());
             guest.setPhone(userAccountDTO.getPhone());
-            guest.setImage(new Image());
+            guest.setImage(null);
             guest.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
             , Country.fromString(userAccountDTO.getCountry())));
-            guest.setEnabled(enabled);
+            guest.setEnabled(false);
             return repo.save(guest);
         }
         if(userAccountDTO.getRole().equals("ROLE_HOST")){
@@ -119,10 +119,10 @@ public class UserService {
             host.setFirstName(userAccountDTO.getFirstName());
             host.setLastName(userAccountDTO.getLastName());
             host.setPhone(userAccountDTO.getPhone());
-            host.setImage(new Image());
+            host.setImage(null);
             host.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
                     , Country.fromString(userAccountDTO.getCountry())));
-            host.setEnabled(enabled);
+            host.setEnabled(false);
             return repo.save(host);
         }
         Admin admin = new Admin();
@@ -133,10 +133,10 @@ public class UserService {
         admin.setFirstName(userAccountDTO.getFirstName());
         admin.setLastName(userAccountDTO.getLastName());
         admin.setPhone(userAccountDTO.getPhone());
-        admin.setImage(new Image());
+        admin.setImage(null);
         admin.setAddress(new Address(userAccountDTO.getStreet(), userAccountDTO.getNumber(), userAccountDTO.getCity()
                 , Country.fromString(userAccountDTO.getCountry())));
-        admin.setEnabled(enabled);
+        admin.setEnabled(false);
         return repo.save(admin);
     }
 
@@ -145,7 +145,7 @@ public class UserService {
         message.setFrom("opendoorsteam24@gmail.com");
         message.setTo(recipient);
         message.setSubject("Activation mail");
-        message.setText("Verify your account here\n" + link);
+        message.setText("Please verify your account here. Otherwise it will expire in the next 24 hours.\n" + link);
         javaMailSender.send(message);
     }
 

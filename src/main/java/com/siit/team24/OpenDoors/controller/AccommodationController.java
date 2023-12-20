@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "open-doors/accommodations")
 public class AccommodationController {
-
     @Autowired
     private AccommodationService accommodationService;
 

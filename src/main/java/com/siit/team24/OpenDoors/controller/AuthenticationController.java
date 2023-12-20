@@ -24,6 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.sql.Timestamp;
+
 @RestController
 @RequestMapping("open-doors/auth")
 public class AuthenticationController {
@@ -79,9 +81,10 @@ public class AuthenticationController {
             throw new ResourceConflictException(existUser.getId(), "Username already exists");
         }
 
-        User user = this.userService.save(userAccountDTO, false);
+        User user = this.userService.create(userAccountDTO);
 
-        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://localhost:4200/activate-account?id=" + user.getId());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://localhost:4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
