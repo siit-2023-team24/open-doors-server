@@ -6,6 +6,7 @@ import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.repository.AccommodationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,12 @@ public class AccommodationService {
         return accommodationRepository.findById(id);
     }
 
+    public Accommodation findById(Long id) {
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if(accommodation.isEmpty())
+            throw new EntityNotFoundException();
+        return accommodation.get();
+    }
     public List<Accommodation> findAll() {
         return accommodationRepository.findAll();
     }
