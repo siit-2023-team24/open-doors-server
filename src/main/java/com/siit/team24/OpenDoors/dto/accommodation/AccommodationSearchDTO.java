@@ -19,7 +19,7 @@ public class AccommodationSearchDTO {
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation, Double totalPrice) {
-        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.isPricePerNight(), totalPrice, accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
+        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
 
     }
 
@@ -41,7 +41,7 @@ public class AccommodationSearchDTO {
         this.name = accommodation.getName();
         this.averageRating = accommodation.getAverageRating();
         this.price = accommodation.getPrice();
-        this.isPricePerNight = accommodation.isPricePerNight();
+        this.isPricePerNight = accommodation.getIsPricePerGuest();
         this.totalPrice = 0.0;
         this.city = accommodation.getAddress().getCity();
         this.country = accommodation.getAddress().getCountry().getCountryName();

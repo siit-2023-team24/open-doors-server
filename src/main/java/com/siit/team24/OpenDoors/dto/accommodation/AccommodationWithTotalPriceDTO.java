@@ -24,17 +24,17 @@ public class AccommodationWithTotalPriceDTO {
     private Double totalPrice;
     private Double averageRating;
     private Host host;
-    private List<Price> seasonalRates;
+    private List<SeasonalRate> seasonalRates;
     private Address address;
 
     public AccommodationWithTotalPriceDTO() {}
 
     public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.isPricePerNight(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
     }
 
-    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<Price> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, Host host, Address address) {
+    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, Host host, Address address) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -145,11 +145,11 @@ public class AccommodationWithTotalPriceDTO {
         this.price = price;
     }
 
-    public List<Price> getSeasonalRates() {
+    public List<SeasonalRate> getSeasonalRates() {
         return seasonalRates;
     }
 
-    public void setSeasonalRates(List<Price> seasonalRates) {
+    public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
     }
 

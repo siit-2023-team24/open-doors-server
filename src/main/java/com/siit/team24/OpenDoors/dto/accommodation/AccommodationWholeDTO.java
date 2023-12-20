@@ -178,27 +178,7 @@ public class AccommodationWholeDTO {
     }
 
     public boolean isPricePerNight() {
-        return isPricePerNight;
-    }
-
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
-    }
-
-    public Double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(Double averageRating) {
-        this.averageRating = averageRating;
-    }
-
-    public Host getHost() {
-        return host;
-    }
-
-    public void setHost(Host host) {
-        this.host = host;
+        return isPricePerGuest;
     }
 
     public String getCity() {

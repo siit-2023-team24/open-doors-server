@@ -77,23 +77,6 @@ public class Accommodation {
         this.availability = new ArrayList<>();
     }
 
-    public Accommodation(AccommodationWholeDTO accommodationDTO) {
-        this.name = accommodationDTO.getName();
-        this.description = accommodationDTO.getDescription();
-        this.location = accommodationDTO.getLocation();
-        this.amenities = accommodationDTO.getAmenities();
-        this.minGuests = accommodationDTO.getMinGuests();
-        this.maxGuests = accommodationDTO.getMaxGuests();
-        this.type = AccommodationType.valueOf(accommodationDTO.getType());
-        this.availability = accommodationDTO.getAvailability();
-        this.price = accommodationDTO.getPrice();
-        this.isPricePerNight = accommodationDTO.isPricePerNight();
-        this.averageRating = accommodationDTO.getAverageRating();
-        this.host = accommodationDTO.getHost();
-        this.seasonalRates = accommodationDTO.getSeasonalRates();
-        this.address = new Address(accommodationDTO.getStreet(), accommodationDTO.getNumber(), accommodationDTO.getCity(), Country.valueOf(accommodationDTO.getCountry()));
-    }
-
     public Long getId() {
         return id;
     }

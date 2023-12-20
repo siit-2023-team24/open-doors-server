@@ -77,6 +77,7 @@ public class AccommodationService {
 
     public Collection<AccommodationHostDTO> getForHost(Long hostId) {
         return accommodationRepository.findByHost(hostId);
+    }
 
     public Optional<Accommodation> findOne(Long id) {
         return accommodationRepository.findById(id);
