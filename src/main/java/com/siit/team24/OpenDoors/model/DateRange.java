@@ -4,6 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.sql.Timestamp;
+
+import java.time.temporal.ChronoUnit;
+
 import java.util.Objects;
 
 @Embeddable
@@ -34,6 +37,14 @@ public class DateRange {
 
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    public int getNumberOfNights() {
+        long millisPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
+        long startMillis = startDate.getTime();
+        long endMillis = endDate.getTime();
+
+        return (int) ((endMillis - startMillis) / millisPerDay);
     }
 
     @Override

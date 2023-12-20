@@ -3,6 +3,8 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
+import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class AccommodationWholeDTO {
     protected boolean isAutomatic;
 
     protected String hostUsername;
+  
 
     public AccommodationWholeDTO() {}
 
@@ -172,6 +175,10 @@ public class AccommodationWholeDTO {
 
     public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
+    }
+
+    public boolean isPricePerNight() {
+        return isPricePerGuest;
     }
 
     public String getCity() {

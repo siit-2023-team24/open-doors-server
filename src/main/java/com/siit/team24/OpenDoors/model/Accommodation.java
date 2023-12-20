@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
@@ -30,14 +31,15 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+    @Enumerated(EnumType.STRING)
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerGuest;
-    private double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private Double averageRating;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
     private List<SeasonalRate> seasonalRates;
@@ -73,7 +75,6 @@ public class Accommodation {
     public Accommodation() {
         this.address =  new Address();
         this.images = new HashSet<>();
-        this.availability = new ArrayList<>();
         this.amenities = new ArrayList<>();
         this.availability = new ArrayList<>();
     }

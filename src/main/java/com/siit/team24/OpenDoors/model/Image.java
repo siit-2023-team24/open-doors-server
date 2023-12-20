@@ -19,6 +19,13 @@ public class Image {
     public Image() {
     }
 
+    public Image(Long id, String path, String name) {
+        this.id = id;
+        this.path = path;
+        this.name = name;
+        this.type = "";
+    }
+
     public Image(Long id, String path, String name, String type) {
         this.id = id;
         this.path = path;
