@@ -53,10 +53,10 @@ public class UserController {
             "You have a new review.", "Excellent", new Timestamp(98423)
     );
 
-    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
-            "Novi Sad", "Serbia"
-    );
+//    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
+//            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
+//            "Novi Sad", "Serbia"
+//    );
 
 
 
@@ -118,7 +118,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountViewDTO> getUser(
             @PathVariable Long id) {
@@ -147,7 +147,7 @@ public class UserController {
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         //todo
         List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        favorites.add(testAccommodationSearchDTO);
+        // favorites.add(testAccommodationSearchDTO);
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 

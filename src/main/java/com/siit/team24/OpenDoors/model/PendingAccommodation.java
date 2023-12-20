@@ -7,6 +7,7 @@ import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class PendingAccommodation {
     private String location;
     private List<Amenity> amenities;
 
-    @OneToMany(cascade = CascadeType.REFRESH)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Image> images;
 
     @Column(name = "minGuests", nullable = false)
@@ -130,6 +131,7 @@ public class PendingAccommodation {
     }
 
     public Set<Image> getImages() {
+//        if (images == null) return new HashSet<>();
         return images;
     }
 

@@ -1,39 +1,35 @@
 package com.siit.team24.OpenDoors.dto.pendingAccommodation;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
-import com.siit.team24.OpenDoors.model.DateRange;
-import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
-import com.siit.team24.OpenDoors.model.SeasonalRate;
-import com.siit.team24.OpenDoors.model.enums.Amenity;
 
 import java.util.List;
-import java.util.Set;
 
-public class PendingAccommodationWholeDTO extends AccommodationWholeDTO {
-    protected Long accommodationId;
+public class PendingAccommodationWholeEditedDTO extends PendingAccommodationWholeDTO {
 
-    public PendingAccommodationWholeDTO() {
+    private List<Long> toDeleteImages;
+
+    public PendingAccommodationWholeEditedDTO() {
     }
 
-    public PendingAccommodationWholeDTO(PendingAccommodation accommodation) {
+    public PendingAccommodationWholeEditedDTO(PendingAccommodation accommodation, List<Long> toDeleteImages) {
         super(accommodation);
-        this.id = accommodation.getId();
-        this.accommodationId = accommodation.getAccommodationId();
+        this.toDeleteImages = toDeleteImages;
     }
 
-    public Long getAccommodationId() {
-        return accommodationId;
+    public List<Long> getToDeleteImages() {
+        return toDeleteImages;
     }
 
-    public void setAccommodationId(Long accommodationId) {
-        this.accommodationId = accommodationId;
+    public void setToDeleteImages(List<Long> toDeleteImages) {
+        this.toDeleteImages = toDeleteImages;
     }
+
 
     @Override
     public String toString() {
-        return "PendingAccommodationWholeDTO{" +
-                "accommodationId=" + accommodationId +
+        return "PendingAccommodationWholeEditedDTO{" +
+                "toDeleteImages=" + toDeleteImages +
+                ", accommodationId=" + accommodationId +
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
@@ -45,6 +41,7 @@ public class PendingAccommodationWholeDTO extends AccommodationWholeDTO {
                 ", type='" + type + '\'' +
                 ", availability=" + availability +
                 ", price=" + price +
+                ", isPricePerGuest=" + isPricePerGuest +
                 ", seasonalRates=" + seasonalRates +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
@@ -52,6 +49,7 @@ public class PendingAccommodationWholeDTO extends AccommodationWholeDTO {
                 ", number=" + number +
                 ", deadline=" + deadline +
                 ", isAutomatic=" + isAutomatic +
+                ", hostUsername='" + hostUsername + '\'' +
                 '}';
     }
 }

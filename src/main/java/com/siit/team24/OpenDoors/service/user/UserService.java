@@ -9,6 +9,7 @@ import com.siit.team24.OpenDoors.exception.PasswordNotConfirmedException;
 import com.siit.team24.OpenDoors.exception.PasswordValidationException;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Country;
+import com.siit.team24.OpenDoors.model.enums.ImageType;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.ImageService;
@@ -84,7 +85,7 @@ public class UserService {
             imageService.delete(oldImage.getId());
         }
         if (newData.getFile() != null) {    //uploaded new image
-            Image newImage = imageService.save(new ImageFileDTO(newData.getImageId(), newData.getFile(), true, user.getId()));
+            Image newImage = imageService.save(new ImageFileDTO(newData.getImageId(), newData.getFile(), ImageType.PROFILE, user.getId()));
             user.setImage(newImage);
         }
         user.updateSimpleValues(newData); //updates all attributes except for image

@@ -3,6 +3,8 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
+import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class AccommodationWholeDTO {
     protected boolean isAutomatic;
 
     protected String hostUsername;
+  
 
     public AccommodationWholeDTO() {}
 
@@ -44,7 +47,7 @@ public class AccommodationWholeDTO {
     }
 
     public AccommodationWholeDTO(PendingAccommodation accommodation) {
-        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
+        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().getValue(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 
@@ -172,6 +175,30 @@ public class AccommodationWholeDTO {
 
     public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
+    }
+
+    public boolean isPricePerNight() {
+        return isPricePerNight;
+    }
+
+    public void setPricePerNight(boolean pricePerNight) {
+        isPricePerNight = pricePerNight;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public Host getHost() {
+        return host;
+    }
+
+    public void setHost(Host host) {
+        this.host = host;
     }
 
     public String getCity() {
