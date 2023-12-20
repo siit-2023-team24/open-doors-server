@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -24,11 +25,6 @@ public class UserController {
 
     @Autowired
     private UserService service;
-
-    @Autowired
-    private AccountService accountService;
-
-
 
     UserDTO testUserDTO = new UserDTO(
             (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
@@ -64,18 +60,8 @@ public class UserController {
 
 
 
-    @PostMapping(consumes="application/json", value = "/login")
-    public ResponseEntity<UserDTO> login(@RequestBody AccountDTO accountDTO) {
-        //todo
-        return new ResponseEntity<>(testUserDTO, HttpStatus.CREATED);
-    }
 
-    @PostMapping(consumes="application/json")
-    public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccountDTO registerDTO) {
-        //todo
-        return new ResponseEntity<>(testUserAccountDTO, HttpStatus.CREATED);
-    }
-
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
         UserEditedDTO dto = null;
@@ -93,24 +79,27 @@ public class UserController {
         }
     }
 
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
         try {
-            this.accountService.changePassword(newPasswordDTO);
+            this.service.changePassword(newPasswordDTO);
         } catch (Exception e) {
-            System.err.println("Error changing password for: " + newPasswordDTO.getEmail());
+            System.err.println("Error changing password for: " + newPasswordDTO.getUsername());
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         //todo
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
         //todo
@@ -119,6 +108,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
             Pageable pageable) {
@@ -128,7 +118,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountViewDTO> getUser(
             @PathVariable Long id) {
@@ -143,7 +133,7 @@ public class UserController {
 
     }
 
-
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         //todo
@@ -152,6 +142,7 @@ public class UserController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         //todo
@@ -159,7 +150,8 @@ public class UserController {
         // favorites.add(testAccommodationSearchDTO);
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
- 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{userId}/status")
     public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
                                                   @RequestParam boolean isBlocked){

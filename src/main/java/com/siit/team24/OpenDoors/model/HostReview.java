@@ -56,21 +56,21 @@ public class HostReview extends Review {
     }
 
     public HostReviewDTO toDTO() {
-        return new HostReviewDTO(rating, comment, author.getAccount().getEmail(),
-                host.getAccount().getEmail(), id, timestamp, reported);
+        return new HostReviewDTO(rating, comment, author.getUsername(),
+                host.getUsername(), id, timestamp, reported);
     }
 
     public HostReviewProfileDTO toProfileDTO() {
-        return new HostReviewProfileDTO(id, rating, comment, timestamp, author.getAccount().getEmail());
+        return new HostReviewProfileDTO(id, rating, comment, timestamp, author.getUsername());
     }
 
     public HostReviewForHostDTO toForHostDTO() {
-        return new HostReviewForHostDTO(id, rating, comment, timestamp, author.getAccount().getEmail(), reported);
+        return new HostReviewForHostDTO(id, rating, comment, timestamp, author.getUsername(), reported);
     }
 
     public ReportedHostReviewDTO toReportedDTO() {
-        return new ReportedHostReviewDTO(id, rating, comment, timestamp, author.getAccount().getEmail(),
-                host.getAccount().getEmail());
+        return new ReportedHostReviewDTO(id, rating, comment, timestamp, author.getUsername(),
+                host.getUsername());
     }
 
 }

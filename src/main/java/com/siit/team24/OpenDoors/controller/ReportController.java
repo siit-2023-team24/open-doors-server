@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "open-doors/user-reports")
 public class ReportController {
+    //TODO: add authorization
     UserReportDTO testUserReportDTO = new UserReportDTO(
             (long)32949273, "repo@rted.me", "plain@ant.com",
             new Timestamp(327428), "Disgusting manners", "active"

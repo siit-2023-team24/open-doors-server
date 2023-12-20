@@ -21,6 +21,7 @@ public class AccommodationReviewController {
     @Autowired
     private AccommodationReviewService accommodationReviewService;
 
+
     AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
             (long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", false, "Hotel Park", 2L
     );

@@ -3,24 +3,24 @@ package com.siit.team24.OpenDoors.model;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class Price {
-    private double amount;
+public class SeasonalRate {
+    private double price;
     private DateRange period;
 
-    public Price() {
+    public SeasonalRate() {
 
     }
-    public Price(double amount, DateRange period) {
-        this.amount = amount;
+    public SeasonalRate(double value, DateRange period) {
+        this.price = value;
         this.period = period;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getPrice() {
+        return price;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public DateRange getPeriod() {
@@ -34,7 +34,7 @@ public class Price {
     @Override
     public String toString() {
         return "Price{" +
-                "amount=" + amount +
+                "price=" + price +
                 ", period=" + period +
                 '}';
     }

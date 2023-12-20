@@ -1,16 +1,23 @@
 package com.siit.team24.OpenDoors.controller;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWithTotalPriceDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
+
+import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
+
 import com.siit.team24.OpenDoors.model.*;
-import com.siit.team24.OpenDoors.model.enums.AccommodationType;
-import com.siit.team24.OpenDoors.model.enums.Amenity;
-import com.siit.team24.OpenDoors.model.enums.UserRole;
+
 import com.siit.team24.OpenDoors.service.AccommodationService;
+
+import com.siit.team24.OpenDoors.service.PendingAccommodationService;
+import jakarta.persistence.EntityNotFoundException;
+
 import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.user.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import com.siit.team24.OpenDoors.model.enums.Country;
@@ -19,17 +26,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "open-doors/accommodations")
 public class AccommodationController {
+
     @Autowired
     private AccommodationService accommodationService;
 
+  
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
         List<Accommodation> accommodations = accommodationService.findAll();
@@ -57,6 +68,18 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(value = "editable/{id}")
+    public ResponseEntity<AccommodationWholeDTO> getAccommodationForEdit(@PathVariable Long id) {
+        try {
+            Accommodation accommodation = accommodationService.findById(id);
+            return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.OK);
+        }
+        catch (EntityNotFoundException e) {
+            System.err.println("Active accommodation not found with id: " + id);
+            return new ResponseEntity<>(new AccommodationWholeDTO(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccommodationWithTotalPriceDTO> getAccommodation(@PathVariable Long id) {
 
@@ -68,73 +91,10 @@ public class AccommodationController {
         return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
     }
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-
-        Accommodation accommodation = new Accommodation();
-
-        accommodation.setId(accommodationWholeDTO.getId());
-        accommodation.setName(accommodationWholeDTO.getName());
-        accommodation.setDescription(accommodationWholeDTO.getDescription());
-        accommodation.setLocation(accommodationWholeDTO.getLocation());
-        accommodation.setAmenities(accommodationWholeDTO.getAmenities());
-        // TODO: images
-        accommodation.setMinGuests(accommodationWholeDTO.getMinGuests());
-        accommodation.setMaxGuests(accommodationWholeDTO.getMaxGuests());
-        accommodation.setType(AccommodationType.fromString(accommodationWholeDTO.getType()));
-
-        accommodation.getAddress().setCity(accommodationWholeDTO.getCity());
-        accommodation.getAddress().setCountry(Country.fromString(accommodationWholeDTO.getCountry()));
-        accommodation.getAddress().setStreet(accommodationWholeDTO.getStreet());
-        accommodation.getAddress().setNumber(accommodationWholeDTO.getNumber());
-        accommodation.setDeadline(accommodationWholeDTO.getDeadline());
-        accommodation.setAutomatic(accommodation.isAutomatic());
-
-        // TODO: expand front-end with the following
-
-        accommodation.setAvailability(accommodationWholeDTO.getAvailability());
-        accommodation.setPrice(accommodationWholeDTO.getPrice());
-        accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
-
-        accommodationService.save(accommodation);
-
-        return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.CREATED);
-    }
-
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationWholeDTO> updateAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        ImageService imageService = new ImageService();
-
-        Optional<Accommodation> optionalAccommodation = accommodationService.findOne(accommodationWholeDTO.getId());
-
-        if (optionalAccommodation.isEmpty())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        Accommodation accommodation = new Accommodation(accommodationWholeDTO);
-
-//        for(Long imageId : accommodationWholeDTO.getImages()) {
-//            try {
-//                accommodation.addImage(imageService.findById(imageId, false));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-
-        accommodation = accommodationService.save(accommodation);
-
-        return new ResponseEntity<>(new AccommodationWholeDTO(accommodation), HttpStatus.OK);
-    }
-
+    //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
-
-        Optional<Accommodation> accommodation = accommodationService.findOne(id);
-
-        if (accommodation.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        accommodationService.remove(id);
+        accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -158,6 +118,13 @@ public class AccommodationController {
             images.add(image.toString().getBytes());
 
         return new ResponseEntity<>(images, HttpStatus.OK);
+    }
+
+//    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "/host/{hostId}")
+    public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
+        Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
     @GetMapping("/accommodationTypes")

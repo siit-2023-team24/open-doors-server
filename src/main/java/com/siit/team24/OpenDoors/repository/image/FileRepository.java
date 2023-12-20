@@ -1,7 +1,13 @@
 package com.siit.team24.OpenDoors.repository.image;
 
+import com.siit.team24.OpenDoors.dto.image.ImageBytesDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.model.Image;
+import com.siit.team24.OpenDoors.model.enums.ImageType;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
+
 
 import java.io.*;
 import java.util.Optional;
@@ -13,17 +19,8 @@ public class FileRepository {
     private final String path = "C:\\opendoors";
 
     public Image save(ImageFileDTO fileDto) throws IOException {
-        String folder = fileDto.isProfile()? "\\profile\\" : "\\accommodation\\";
-        String filepath = path + folder + fileDto.getEntityId();
-
-        //create dir if needed
-        File directory = new File(filepath);
-        if (!directory.exists()) {
-            boolean success = directory.mkdirs();
-            if (!success)
-                System.err.println("Error making directory: " + filepath);
-            else System.out.println("Success making directory: " + directory.getAbsolutePath());
-        }
+        String filepath = getFilepath(fileDto.getImageType(), fileDto.getEntityId());
+        createMissingDirectory(filepath);
 
         File file = new File(filepath + "\\" + fileDto.getFile().getOriginalFilename());
         fileDto.getFile().transferTo(file);
@@ -31,14 +28,53 @@ public class FileRepository {
         return new Image(fileDto.getImageId(), filepath, fileDto.getFile().getOriginalFilename(), fileDto.getFile().getContentType());
     }
 
+    public Image saveBytes(ImageBytesDTO dto) {
+        String filepath = getFilepath(dto.getType(), dto.getEntityId());
+        createMissingDirectory(filepath);
+
+        File file = new File(filepath + "\\" + dto.getName());
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            out.write(dto.getBytes());
+            return new Image(null, filepath, dto.getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getFilepath(ImageType type, Long entityId) {
+        String folder;
+        if (type == ImageType.PROFILE)
+            folder = "\\profile\\";
+        else if (type == ImageType.ACCOMMODATION)
+            folder = "\\accommodation\\";
+        else
+            folder = "\\pending-accommodation\\";
+
+        return path + folder + entityId;
+    }
+
+    private void createMissingDirectory(String filepath) {
+        File directory = new File(filepath);
+        if (!directory.exists()) {
+            boolean success = directory.mkdirs();
+            if (!success)
+                System.err.println("Error making directory: " + filepath);
+            else System.out.println("Success making directory: " + directory.getAbsolutePath());
+        }
+    }
+
     public byte[] getFile(Optional<Image> image, boolean isProfile) throws IOException {
         String filepath;
         if (image.isEmpty()) {
             if (isProfile)
-                filepath = ".\\src\\main\\resources\\static\\account.png";
+                filepath = "./src/main/resources/static/account.png";
             else
                 //TODO change path to the new image
-                filepath = ".\\src\\main\\resources\\static\\logo.png";
+                filepath = "./src/main/resources/static/logo.png";
         } else {
             filepath = String.join(File.separator, image.get().getPath());
         }
@@ -48,6 +84,16 @@ public class FileRepository {
         byte[] bytes = in.readAllBytes();
         in.close();
         return bytes;
+//        return new MockMultipartFile(file.getName(), new FileInputStream(file));
+    }
+
+    public MultipartFile getMultipartFile(Optional<Image> image) throws IOException {
+        if (image.isEmpty())
+            throw new EntityNotFoundException();
+
+        String filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
+        File file = new File(filepath);
+        return new MockMultipartFile(file.getName(), new FileInputStream(file));
     }
 
     public void delete(Image image) {
@@ -59,5 +105,15 @@ public class FileRepository {
             System.out.println("Deleted image with id: " + image);
         else
             System.err.println("Error deleting image: " + image + " from file system");
+
+        //delete folder if empty
+        File folder = new File(image.getPath());
+        if (folder.exists() && folder.isDirectory() && folder.listFiles() != null
+                && folder.listFiles().length == 0) {
+            if (folder.delete())
+                System.out.println("Deleted folder: " + image.getPath());
+            else
+                System.err.println("Error deleting folder: " + image.getPath());
+        }
     }
 }
