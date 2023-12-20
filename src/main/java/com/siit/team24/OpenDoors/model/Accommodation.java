@@ -31,7 +31,7 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
@@ -316,7 +316,7 @@ public class Accommodation {
         deadline = dto.getDeadline();
         isAutomatic = dto.getIsAutomatic();
         address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
-        System.err.println(this);
+        System.out.println(this);
     }
 
 }

@@ -92,7 +92,7 @@ public class PendingAccommodationController {
     }
 
     @PutMapping(consumes = "application/json")
-    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) {
+    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) throws IOException {
         pendingService.approve(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

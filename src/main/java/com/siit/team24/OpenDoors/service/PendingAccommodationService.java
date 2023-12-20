@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.image.ImageBytesDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
@@ -95,8 +96,6 @@ public class PendingAccommodationService {
     }
 
 
-
-
     public void delete(Long id) {
         PendingAccommodation pending = findById(id);
         if (pending.getAccommodationId() != null) {
@@ -114,14 +113,14 @@ public class PendingAccommodationService {
         return repo.findByHost(hostId);
     }
 
-    public void approve(PendingAccommodationHostDTO dto) {
+    public void approve(PendingAccommodationHostDTO dto) throws IOException {
         PendingAccommodation pendingAccommodation = findById(dto.getId());
         System.out.println(pendingAccommodation);
         AccommodationWholeDTO accommodationWholeDTO = new AccommodationWholeDTO(pendingAccommodation);
 
         System.out.println(accommodationWholeDTO);
 
-        this.delete(dto.getId());
+//        this.delete(dto.getId());
 
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
@@ -129,18 +128,25 @@ public class PendingAccommodationService {
         Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
         accommodation.setHost(host);
 
-        accommodation.setImages(pendingAccommodation.getImages());
-
-
+//        accommodation.setImages(pendingAccommodation.getImages());
 
         if (dto.getAccommodationId() != null) {
             Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
             accommodation.setAverageRating(oldData.getAverageRating());
+            //delete all old images
+            imageService.deleteAll(accommodation.getImages());
         }
 
+        accommodation = accommodationService.save(accommodation);
+        //save images from pending
+        Set<Image> images = new HashSet<>();
+        for (Image image: pendingAccommodation.getImages()) {
+            images.add(imageService.saveBytes(imageService.getImageBytesDTO(image.getId(), false, accommodation.getId())));
+        }
 
         Accommodation saved = accommodationService.save(accommodation);
         System.out.println("Saved to accommodations: " + saved);
 
+        this.delete(dto.getId());
     }
 }
