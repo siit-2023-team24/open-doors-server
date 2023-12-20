@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -31,6 +32,8 @@ public class ReservationRequestController {
     @Autowired
     private ReservationRequestService reservationRequestService;
 
+
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/all/guest/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> getAllForGuest(@PathVariable Long guestId) {
         List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
@@ -38,6 +41,7 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/confirmed/guest/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> getConfirmedForGuest(@PathVariable Long guestId) {
         List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
@@ -45,6 +49,7 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<List<ReservationRequestForHostDTO>> getAllForHost(@PathVariable Long hostId) {
         List<ReservationRequestForHostDTO> requests = new ArrayList<>();
@@ -81,12 +86,13 @@ public class ReservationRequestController {
 
         return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
     }
-
 //    @PutMapping(consumes = "application/json")
 //    public ResponseEntity<ReservationRequestDTO> updateReservationRequest(@RequestBody ReservationRequestDTO requestDTO){
 //        return new ResponseEntity<>(testReservationRequestForHostDTO, HttpStatus.OK);
 //    }
 
+
+    //@PreAuthorize("hasRole('GUEST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteReservationRequest(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
