@@ -27,7 +27,7 @@ public class PendingAccommodation {
     private String location;
     private List<Amenity> amenities;
 
-    @OneToMany(cascade = CascadeType.REFRESH)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Image> images;
 
     @Column(name = "minGuests", nullable = false)

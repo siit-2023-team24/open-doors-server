@@ -103,5 +103,15 @@ public class FileRepository {
             System.out.println("Deleted image with id: " + image);
         else
             System.err.println("Error deleting image: " + image + " from file system");
+
+        //delete folder if empty
+        File folder = new File(image.getPath());
+        if (folder.exists() && folder.isDirectory() && folder.listFiles() != null
+                && folder.listFiles().length == 0) {
+            if (folder.delete())
+                System.out.println("Deleted folder: " + image.getPath());
+            else
+                System.err.println("Error deleting folder: " + image.getPath());
+        }
     }
 }

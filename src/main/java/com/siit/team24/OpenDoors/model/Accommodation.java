@@ -21,7 +21,7 @@ public class Accommodation {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    @OneToMany(cascade = CascadeType.REFRESH)
+    @OneToMany(cascade = CascadeType.ALLgit )
     private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;

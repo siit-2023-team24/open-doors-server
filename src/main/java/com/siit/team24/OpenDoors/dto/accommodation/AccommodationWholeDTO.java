@@ -44,7 +44,7 @@ public class AccommodationWholeDTO {
     }
 
     public AccommodationWholeDTO(PendingAccommodation accommodation) {
-        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
+        this(accommodation.getAccommodationId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().getValue(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.isPricePerGuest(), accommodation.getSeasonalRates(),
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 

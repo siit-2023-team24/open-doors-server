@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ImageService {
@@ -70,4 +71,9 @@ public class ImageService {
         fileRepo.delete(image.get());
     }
 
+    public void deleteAll(Set<Image> images) {
+        for (Image image: images) {
+            delete(image.getId());
+        }
+    }
 }

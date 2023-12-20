@@ -78,44 +78,6 @@ public class AccommodationController {
     }
 
 
-    // @PreAuthorize("hasRole('HOST')")
-/*
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationWholeDTO> saveAccommodation(@RequestBody AccommodationWholeDTO accommodationWholeDTO) {
-        System.out.println("Old DTO: " + accommodationWholeDTO);
-        Accommodation accommodation = new Accommodation();
-
-        accommodation.setId(accommodationWholeDTO.getId());
-        accommodation.setName(accommodationWholeDTO.getName());
-        accommodation.setDescription(accommodationWholeDTO.getDescription());
-        accommodation.setLocation(accommodationWholeDTO.getLocation());
-        accommodation.setAmenities(Amenity.fromStringList(accommodationWholeDTO.getAmenities()));
-        // TODO: images
-        accommodation.setMinGuests(accommodationWholeDTO.getMinGuests());
-        accommodation.setMaxGuests(accommodationWholeDTO.getMaxGuests());
-        accommodation.setType(AccommodationType.fromString(accommodationWholeDTO.getType()));
-
-        accommodation.getAddress().setCity(accommodationWholeDTO.getCity());
-        accommodation.getAddress().setCountry(Country.fromString(accommodationWholeDTO.getCountry()));
-        accommodation.getAddress().setStreet(accommodationWholeDTO.getStreet());
-        accommodation.getAddress().setNumber(accommodationWholeDTO.getNumber());
-        accommodation.setDeadline(accommodationWholeDTO.getDeadline());
-        accommodation.setIsAutomatic(accommodationWholeDTO.getIsAutomatic());
-
-        accommodation.setAvailability(accommodationWholeDTO.getAvailability());
-        accommodation.setPrice(accommodationWholeDTO.getPrice());
-        accommodation.setIsPricePerGuest(accommodationWholeDTO.getIsPricePerGuest());
-        accommodation.setSeasonalRates(accommodationWholeDTO.getSeasonalRates());
-        accommodation.setAverageRating(0);
-
-        accommodationService.save(accommodation);
-        AccommodationWholeDTO newDto = new AccommodationWholeDTO(accommodation);
-        System.out.println("New DTO: " + newDto);
-
-        return new ResponseEntity<>(newDto, HttpStatus.CREATED);
-    }
-*/
-
     //@PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {

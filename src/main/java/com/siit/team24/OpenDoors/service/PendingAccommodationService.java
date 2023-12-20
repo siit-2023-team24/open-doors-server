@@ -99,6 +99,7 @@ public class PendingAccommodationService {
         if (pending.getAccommodationId() != null) {
             accommodationService.revive(pending.getAccommodationId());
         }
+        imageService.deleteAll(pending.getImages());
         repo.deleteById(id);
     }
 

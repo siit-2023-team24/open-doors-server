@@ -21,6 +21,9 @@ public class AccommodationService {
     @Autowired
     private ReservationRequestService reservationRequestService;
 
+    @Autowired
+    private ImageService imageService;
+
     public Accommodation findById(Long id) {
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
         if (accommodation.isEmpty()) {
@@ -43,6 +46,8 @@ public class AccommodationService {
             throw new ExistingReservationsException();
         }
         reservationRequestService.denyAllFor(id);
+        Accommodation accommodation = findById(id);
+        imageService.deleteAll(accommodation.getImages());
         accommodationRepository.deleteById(id);
     }
 
