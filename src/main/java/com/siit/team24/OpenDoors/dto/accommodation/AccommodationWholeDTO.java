@@ -236,5 +236,31 @@ public class AccommodationWholeDTO {
     public void setHostUsername(String hostUsername) {
         this.hostUsername = hostUsername;
     }
+
+    @Override
+    public String toString() {
+        return "AccommodationWholeDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", amenities=" + amenities +
+                ", images=" + images +
+                ", minGuests=" + minGuests +
+                ", maxGuests=" + maxGuests +
+                ", type='" + type + '\'' +
+                ", availability=" + availability +
+                ", price=" + price +
+                ", isPricePerGuest=" + isPricePerGuest +
+                ", seasonalRates=" + seasonalRates +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", street='" + street + '\'' +
+                ", number=" + number +
+                ", deadline=" + deadline +
+                ", isAutomatic=" + isAutomatic +
+                ", hostUsername='" + hostUsername + '\'' +
+                '}';
+    }
 }
 
