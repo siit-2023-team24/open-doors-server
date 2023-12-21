@@ -3,7 +3,9 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.Host;
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
+import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -24,6 +29,9 @@ public class PendingAccommodationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ImageService imageService;
+
 
 
     @GetMapping(value = "/{id}")
@@ -54,30 +62,55 @@ public class PendingAccommodationController {
     // @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePending(@PathVariable Long id) {
+        PendingAccommodation pending = pendingService.findById(id);
+        pendingService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "deny/{id}")
+    public ResponseEntity<Void> denyPending(@PathVariable Long id) {
+        PendingAccommodation pending = pendingService.findById(id);
         pendingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // @PreAuthorize("hasRole('HOST')")
     //create new or edit existing accommodation - active or pending
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeDTO dto) {
+    @PostMapping
+    public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeEditedDTO dto) {
         System.out.println("Received: " + dto);
+        try {
+            PendingAccommodation pendingAccommodation = pendingService.save(dto);
+            System.out.println("New: " + pendingAccommodation);
+            return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.CREATED);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
-        PendingAccommodation pendingAccommodation = new PendingAccommodation();
-        pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
+    @PostMapping(value = "/{id}/images", consumes = "multipart/form-data")
+    public ResponseEntity<PendingAccommodationWholeDTO> save(@PathVariable Long id,
+                                                             @RequestBody List<MultipartFile> images) {
+        try {
+            if (images == null) {
+                System.err.println("images is null");
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+            for (MultipartFile mf: images) {
+                System.out.println(mf.getOriginalFilename());
+            }
+            PendingAccommodation pendingAccommodation = pendingService.saveImages(images, id);
+            return new ResponseEntity<>(new PendingAccommodationWholeDTO(pendingAccommodation), HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
-        Host host = (Host)userService.findByUsername(dto.getHostUsername());
-        pendingAccommodation.setHost(host);
-
-        //TODO images
-        PendingAccommodation saved = pendingService.save(pendingAccommodation);
-        System.out.println("New: " + saved);
-        return new ResponseEntity<>(new PendingAccommodationWholeDTO(saved), HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")
-    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) {
+    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) throws IOException {
         pendingService.approve(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

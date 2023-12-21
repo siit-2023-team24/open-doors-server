@@ -4,12 +4,14 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
@@ -24,20 +26,21 @@ public class Accommodation {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REFRESH)
     private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+    @Enumerated
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
     private boolean isPricePerGuest;
-    private double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private Double averageRating;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
     private List<SeasonalRate> seasonalRates;
@@ -73,7 +76,6 @@ public class Accommodation {
     public Accommodation() {
         this.address =  new Address();
         this.images = new HashSet<>();
-        this.availability = new ArrayList<>();
         this.amenities = new ArrayList<>();
         this.availability = new ArrayList<>();
     }
@@ -308,14 +310,30 @@ public class Accommodation {
         minGuests = dto.getMinGuests();
         maxGuests = dto.getMaxGuests();
         type = AccommodationType.fromString(dto.getType());
-        availability = dto.getAvailability();
+
+        availability = new ArrayList<DateRange>();
+        if (dto.getAvailability() != null) {
+            for (DateRange dateRange: dto.getAvailability()) {
+                availability.add(new DateRange(new Timestamp(dateRange.getStartDate().getTime()),
+                        new Timestamp(dateRange.getEndDate().getTime())));
+            }
+        }
+
         price = dto.getPrice();
         isPricePerGuest = dto.getIsPricePerGuest();
-        seasonalRates = dto.getSeasonalRates();
+
+        seasonalRates = new ArrayList<>();
+        if (dto.getSeasonalRates() != null) {
+            for (SeasonalRate seasonalRate: dto.getSeasonalRates()) {
+                seasonalRates.add(new SeasonalRate(seasonalRate.getPrice(), new DateRange(new Timestamp(seasonalRate.getPeriod().getStartDate().getTime()),
+                        new Timestamp(seasonalRate.getPeriod().getEndDate().getTime()))));
+            }
+        }
+        
         deadline = dto.getDeadline();
         isAutomatic = dto.getIsAutomatic();
         address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
-        System.err.println(this);
+        System.out.println(this);
     }
 
 }
