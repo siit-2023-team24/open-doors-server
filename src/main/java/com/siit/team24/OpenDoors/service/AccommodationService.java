@@ -80,13 +80,6 @@ public class AccommodationService {
     public Optional<Accommodation> findOne(Long id) {
         return accommodationRepository.findById(id);
     }
-
-    public Accommodation findById(Long id) {
-        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
-        if(accommodation.isEmpty())
-            throw new EntityNotFoundException();
-        return accommodation.get();
-    }
     public List<Accommodation> findAll() {
         return accommodationRepository.findAll();
     }
@@ -160,6 +153,7 @@ public class AccommodationService {
     }
 
     public boolean hasAmenities(Accommodation accommodation, Set<Amenity> amenities) {
+        if(accommodation.getAmenities() == null) return false;
         return accommodation.getAmenities().containsAll(amenities);
     }
 

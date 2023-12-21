@@ -31,7 +31,7 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection

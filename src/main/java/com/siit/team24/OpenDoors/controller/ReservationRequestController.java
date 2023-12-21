@@ -32,6 +32,12 @@ public class ReservationRequestController {
     @Autowired
     private ReservationRequestService reservationRequestService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AccommodationService accommodationService;
+
 
     @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/all/guest/{guestId}")
@@ -70,8 +76,8 @@ public class ReservationRequestController {
 
     @PostMapping(consumes = "application/json", value = "/createRequest")
     public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@RequestBody MakeReservationRequestDTO requestDTO) {
-        UserService userService = new UserService();
-        AccommodationService accommodationService = new AccommodationService();
+
+        System.out.println(requestDTO);
 
         ReservationRequest request = new ReservationRequest();
         request.setGuest((Guest) userService.findById(requestDTO.getGuestId()));

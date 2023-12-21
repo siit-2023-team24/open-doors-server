@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,15 @@ public class AccommodationWithTotalPriceDTO {
     private AccommodationType accommodationType;
     private List<DateRange> availability;
     private double price;
-    private boolean isPricePerNight;
+    private boolean isPricePerGuest;
     private Double totalPrice;
     private Double averageRating;
     private Host host;
     private List<SeasonalRate> seasonalRates;
-    private Address address;
+    private Country country;
+    private String city;
+    private String street;
+    private int number;
 
     public AccommodationWithTotalPriceDTO() {}
 
@@ -50,11 +54,14 @@ public class AccommodationWithTotalPriceDTO {
         this.accommodationType = accommodationType;
         this.availability = availability;
         this.price = price;
-        this.isPricePerNight = isPricePerNight;
+        this.isPricePerGuest = isPricePerNight;
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
-        this.address = address;
+        this.city = address.getCity();
+        this.country = address.getCountry();
+        this.street = address.getStreet();
+        this.number =address.getNumber();
     }
 
     public Long getId() {
@@ -153,12 +160,12 @@ public class AccommodationWithTotalPriceDTO {
         this.seasonalRates = seasonalRates;
     }
 
-    public boolean isPricePerNight() {
-        return isPricePerNight;
+    public boolean getIsPricePerGuest() {
+        return isPricePerGuest;
     }
 
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
+    public void setIsPricePerGuest(boolean pricePerGuest) {
+        isPricePerGuest = pricePerGuest;
     }
 
     public Double getAverageRating() {
@@ -177,20 +184,44 @@ public class AccommodationWithTotalPriceDTO {
         this.host = host;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public Double getTotalPrice() {
         return totalPrice;
     }
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
 
