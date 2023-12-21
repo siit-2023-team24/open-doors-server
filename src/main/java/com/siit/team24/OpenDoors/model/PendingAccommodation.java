@@ -269,6 +269,11 @@ public class PendingAccommodation {
         deadline = dto.getDeadline();
         isAutomatic = dto.getIsAutomatic();
         address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
+    }
 
+    //sets average rating to 0
+    public Accommodation toAccommodation() {
+        return new Accommodation(accommodationId, name, description, location, amenities, images, minGuests, maxGuests,
+                availability, type, price, isPricePerGuest, 0, host, seasonalRates, address, deadline, isAutomatic);
     }
 }
