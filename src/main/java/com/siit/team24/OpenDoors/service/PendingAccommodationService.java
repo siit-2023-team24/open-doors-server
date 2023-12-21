@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
+
 @Service
 public class PendingAccommodationService {
 
@@ -30,8 +31,6 @@ public class PendingAccommodationService {
     @Autowired
     private AccommodationService accommodationService;
 
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ImageService imageService;
@@ -42,6 +41,7 @@ public class PendingAccommodationService {
             throw new EntityNotFoundException();
         return accommodation.get();
     }
+
 
     public PendingAccommodation save(PendingAccommodationWholeEditedDTO dto) throws IOException {
         if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
@@ -105,6 +105,11 @@ public class PendingAccommodationService {
         repo.deleteById(id);
     }
 
+    public void deleteAllForHost(Long hostId) {
+        List<PendingAccommodation> accommodations = repo.findAllByHostId(hostId);
+        repo.deleteAll(accommodations);
+    }
+
     public Collection<PendingAccommodationHostDTO> getAll() {
         return repo.findAllDtos();
     }
@@ -124,7 +129,9 @@ public class PendingAccommodationService {
 
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
+
         Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
+
         accommodation.setHost(host);
 
 //        accommodation.setImages(pendingAccommodation.getImages());
@@ -150,4 +157,5 @@ public class PendingAccommodationService {
         this.delete(dto.getId());
 //        imageService.deleteAll(pendingAccommodation.getImages());
     }
+
 }

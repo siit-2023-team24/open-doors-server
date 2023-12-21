@@ -9,9 +9,11 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
+import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+
 import com.siit.team24.OpenDoors.repository.AccommodationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -79,7 +82,11 @@ public class AccommodationService {
     }
 
     public Collection<AccommodationHostDTO> getForHost(Long hostId) {
-        return accommodationRepository.findByHost(hostId);
+        return accommodationRepository.findAllDtoByHostId(hostId);
+    }
+
+    public List<Accommodation> findAllByHostId(Long hostId) {
+        return accommodationRepository.findAllByHostId(hostId);
     }
 
     public Optional<Accommodation> findOne(Long id) {

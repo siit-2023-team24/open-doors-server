@@ -2,10 +2,12 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
 import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
+import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,10 @@ public class PendingAccommodationController {
     private PendingAccommodationService pendingService;
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private ImageService imageService;
+
 
 
     @GetMapping(value = "/{id}")
@@ -101,6 +106,7 @@ public class PendingAccommodationController {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+
     }
 
     @PutMapping(consumes = "application/json")
