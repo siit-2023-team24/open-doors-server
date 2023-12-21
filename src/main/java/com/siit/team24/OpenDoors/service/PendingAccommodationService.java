@@ -57,7 +57,7 @@ public class PendingAccommodationService {
         Set<Image> images = new HashSet<>();
 
         //if edit, save old images to pending folder
-        if (pendingAccommodation.getId() == null && pendingAccommodation.getAccommodationId() != null) { //if edit active
+        if (dto.getId() == null && dto.getAccommodationId() != null) { //if edit active
             boolean deleted;
             for (Long imageId: dto.getImages()) {   //old images without the deleted ones
                 deleted = false;
@@ -124,29 +124,30 @@ public class PendingAccommodationService {
 
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
-
         Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
         accommodation.setHost(host);
 
 //        accommodation.setImages(pendingAccommodation.getImages());
 
         if (dto.getAccommodationId() != null) {
+            accommodationService.revive(dto.getAccommodationId());
             Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
             accommodation.setAverageRating(oldData.getAverageRating());
             //delete all old images
-            imageService.deleteAll(accommodation.getImages());
+//            imageService.deleteAll(accommodation.getImages());
         }
 
-        accommodation = accommodationService.save(accommodation);
+        Accommodation withoutImages = accommodationService.save(accommodation);
         //save images from pending
         Set<Image> images = new HashSet<>();
         for (Image image: pendingAccommodation.getImages()) {
             images.add(imageService.saveBytes(imageService.getImageBytesDTO(image.getId(), false, accommodation.getId())));
         }
-
-        Accommodation saved = accommodationService.save(accommodation);
+        withoutImages.setImages(images);
+        Accommodation saved = accommodationService.save(withoutImages);
         System.out.println("Saved to accommodations: " + saved);
 
         this.delete(dto.getId());
+//        imageService.deleteAll(pendingAccommodation.getImages());
     }
 }

@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
@@ -25,7 +26,7 @@ public class Accommodation {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REFRESH)
     private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
@@ -309,10 +310,26 @@ public class Accommodation {
         minGuests = dto.getMinGuests();
         maxGuests = dto.getMaxGuests();
         type = AccommodationType.fromString(dto.getType());
-        availability = dto.getAvailability();
+
+        availability = new ArrayList<DateRange>();
+        if (dto.getAvailability() != null) {
+            for (DateRange dateRange: dto.getAvailability()) {
+                availability.add(new DateRange(new Timestamp(dateRange.getStartDate().getTime()),
+                        new Timestamp(dateRange.getEndDate().getTime())));
+            }
+        }
+
         price = dto.getPrice();
         isPricePerGuest = dto.getIsPricePerGuest();
-        seasonalRates = dto.getSeasonalRates();
+
+        seasonalRates = new ArrayList<>();
+        if (dto.getSeasonalRates() != null) {
+            for (SeasonalRate seasonalRate: dto.getSeasonalRates()) {
+                seasonalRates.add(new SeasonalRate(seasonalRate.getPrice(), new DateRange(new Timestamp(seasonalRate.getPeriod().getStartDate().getTime()),
+                        new Timestamp(seasonalRate.getPeriod().getEndDate().getTime()))));
+            }
+        }
+        
         deadline = dto.getDeadline();
         isAutomatic = dto.getIsAutomatic();
         address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));

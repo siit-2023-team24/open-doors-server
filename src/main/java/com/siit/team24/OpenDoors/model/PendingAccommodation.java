@@ -131,7 +131,7 @@ public class PendingAccommodation {
     }
 
     public Set<Image> getImages() {
-//        if (images == null) return new HashSet<>();
+        if (images == null) return new HashSet<>();
         return images;
     }
 

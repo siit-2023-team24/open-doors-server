@@ -10,6 +10,7 @@ import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
+import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.repository.AccommodationRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,8 +60,12 @@ public class AccommodationService {
         }
         reservationRequestService.denyAllFor(id);
         Accommodation accommodation = findById(id);
-        imageService.deleteAll(accommodation.getImages());
+        //do not delete.
+        System.out.println(accommodation);  //because of lazy fetch
+        Set<Image> images = accommodation.getImages();
         accommodationRepository.deleteById(id);
+        imageService.deleteAll(images);
+
     }
 
     public void deleteForEdit(Long id) {
