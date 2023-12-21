@@ -21,7 +21,7 @@ public class PendingAccommodation {
     @Nullable
     private Long accommodationId;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name")
     private String name;
     private String description;
     private String location;
