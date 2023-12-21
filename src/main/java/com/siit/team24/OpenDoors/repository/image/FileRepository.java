@@ -15,8 +15,8 @@ import java.util.Optional;
 public class FileRepository {
 
     //TODO move to aplication.properties
-    private final String path = "Z:\\opendoors";
-//    private final String path = "C:\\opendoors";
+//    private final String path = "Z:\\opendoors";
+    private final String path = "C:\\opendoors";
 
     public Image save(ImageFileDTO fileDto) throws IOException {
         String filepath = getFilepath(fileDto.getImageType(), fileDto.getEntityId());

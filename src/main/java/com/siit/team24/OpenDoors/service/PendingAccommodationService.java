@@ -31,6 +31,8 @@ public class PendingAccommodationService {
     @Autowired
     private AccommodationService accommodationService;
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ImageService imageService;
@@ -107,6 +109,7 @@ public class PendingAccommodationService {
 
     public void deleteAllForHost(Long hostId) {
         List<PendingAccommodation> accommodations = repo.findAllByHostId(hostId);
+        if (accommodations==null) return;
         repo.deleteAll(accommodations);
     }
 

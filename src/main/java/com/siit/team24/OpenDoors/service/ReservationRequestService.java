@@ -16,9 +16,6 @@ public class ReservationRequestService {
     @Autowired
     private ReservationRequestRepository repo;
 
-    @Autowired
-    private UserService userService;
-
     public ReservationRequest save(ReservationRequest reservationRequest) {
         return repo.save(reservationRequest);
     }

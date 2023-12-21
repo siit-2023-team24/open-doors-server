@@ -26,6 +26,7 @@ import com.siit.team24.OpenDoors.model.enums.Country;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -93,7 +94,7 @@ public class AccommodationController {
         return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         accommodationService.delete(id);
@@ -108,7 +109,7 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{accommodationId}/images") // TODO: sta je sa ovim? :(
+    @GetMapping(value = "/{accommodationId}/images")
     public ResponseEntity<List<byte[]>> getAccommodationImages(@PathVariable Long accommodationId) {
         Optional<Accommodation> accommodation = accommodationService.findOne(accommodationId);
 
@@ -122,7 +123,7 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
         Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);

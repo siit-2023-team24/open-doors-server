@@ -48,9 +48,6 @@ public class UserService {
     private AccommodationService accommodationService;
 
     @Autowired
-    private PendingAccommodationService pendingAccommodationService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -167,13 +164,13 @@ public class UserService {
     public void delete(Long id) {
         User user = findById(id);
 
-        if (user.getRole() == UserRole.GUEST) {
+        if (user.getRole() == UserRole.ROLE_GUEST) {
             if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
                 throw new ConfirmedReservationRequestsFound();
             reservationRequestService.deletePendingForGuest(user.getUsername());
         }
 
-        else if (user.getRole() == UserRole.HOST) {
+        else if (user.getRole() == UserRole.ROLE_HOST) {
             List<Accommodation> accommodations = accommodationService.findAllByHostId(user.getId());
             for (Accommodation accommodation: accommodations) {
                 if (reservationRequestService.countConfirmedFutureFor(accommodation.getId()) > 0)
@@ -181,8 +178,6 @@ public class UserService {
             }
             for (Accommodation accommodation: accommodations)
                 accommodationService.delete(accommodation.getId());
-
-            pendingAccommodationService.deleteAllForHost(user.getId());
         }
 
         else return;
