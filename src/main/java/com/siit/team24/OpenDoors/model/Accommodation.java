@@ -1,19 +1,27 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.model.enums.Country;
+
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
+@SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name")
     private String name;
     private String description;
     private String location;
@@ -24,22 +32,28 @@ public class Accommodation {
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
+    @Enumerated
     @Column(name = "accommodationType", nullable = false)
-    private AccommodationType accommodationType;
+    private AccommodationType type;
     @ElementCollection
     private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
     private double price;
-    private boolean isPricePerNight;
-    private double averageRating;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private boolean isPricePerGuest;
+    private Double averageRating;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
-    private List<Price> seasonalRates;
-
+    private List<SeasonalRate> seasonalRates;
+    private int deadline;
+    private boolean isAutomatic;
     @Embedded
     private Address address;
+  
+    private boolean deleted;
 
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerNight, double averageRating, Host host, List<Price> seasonalRates, Address address) {
+  
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests,
+                         List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,15 +63,22 @@ public class Accommodation {
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.availability = availability;
-        this.accommodationType = accommodationType;
+        this.type = accommodationType;
         this.price = price;
-        this.isPricePerNight = isPricePerNight;
+        this.isPricePerGuest = isPricePerGuest;
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
         this.address = address;
+        this.deadline = deadline;
+        this.isAutomatic = isAutomatic;
     }
-    public Accommodation() {}
+    public Accommodation() {
+        this.address =  new Address();
+        this.images = new HashSet<>();
+        this.amenities = new ArrayList<>();
+        this.availability = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -131,12 +152,12 @@ public class Accommodation {
         this.maxGuests = maxGuests;
     }
 
-    public AccommodationType getAccommodationType() {
-        return accommodationType;
+    public AccommodationType getType() {
+        return type;
     }
 
-    public void setAccommodationType(AccommodationType accommodationType) {
-        this.accommodationType = accommodationType;
+    public void setType(AccommodationType accommodationType) {
+        this.type = accommodationType;
     }
 
     public List<DateRange> getAvailability() {
@@ -159,19 +180,19 @@ public class Accommodation {
         this.price = price;
     }
 
-    public boolean isPricePerNight() {
-        return isPricePerNight;
+    public boolean getIsPricePerGuest() {
+        return isPricePerGuest;
     }
 
-    public void setIsPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
+    public void setIsPricePerGuest(boolean pricePerGuest) {
+        isPricePerGuest = pricePerGuest;
     }
 
-    public double getAverageRating() {
+    public Double getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(double averageRating) {
+    public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
     }
 
@@ -183,11 +204,12 @@ public class Accommodation {
         this.host = host;
     }
 
-    public List<Price> getSeasonalRates() {
+    public List<SeasonalRate> getSeasonalRates() {
         return seasonalRates;
     }
 
-    public void setSeasonalRates(List<Price> seasonalRates) {
+
+    public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
     }
 
@@ -203,16 +225,20 @@ public class Accommodation {
         this.availability = availability;
     }
 
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
-    }
-
     public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(int deadline) {
+        this.deadline = deadline;
     }
 
     @Override
@@ -229,6 +255,22 @@ public class Accommodation {
         return Objects.hashCode(id);
     }
 
+    public boolean getIsAutomatic() {
+        return this.isAutomatic;
+    }
+
+    public void setIsAutomatic(boolean isAutomatic) {
+        this.isAutomatic = isAutomatic;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
@@ -240,18 +282,58 @@ public class Accommodation {
                 ", images=" + images +
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
-                ", accommodationType=" + accommodationType +
+                ", accommodationType=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerNight +
+                ", isPricePerNight=" + isPricePerGuest +
                 ", averageRating=" + averageRating +
                 ", host=" + host +
                 ", seasonRates=" + seasonalRates +
                 ", address=" + address +
+                ", deadline=" + deadline +
+                ", isAutomatic=" + isAutomatic +
                 '}';
     }
 
     public String getUniqueName() {
         return this.name + " #" + this.id;
     }
+
+
+    public void setSimpleValues(AccommodationWholeDTO dto) {
+        System.err.println(dto);
+        id = dto.getId();
+        name = dto.getName();
+        description = dto.getDescription();
+        location = dto.getLocation();
+        amenities = Amenity.fromStringList(dto.getAmenities());
+        minGuests = dto.getMinGuests();
+        maxGuests = dto.getMaxGuests();
+        type = AccommodationType.fromString(dto.getType());
+
+        availability = new ArrayList<DateRange>();
+        if (dto.getAvailability() != null) {
+            for (DateRange dateRange: dto.getAvailability()) {
+                availability.add(new DateRange(new Timestamp(dateRange.getStartDate().getTime()),
+                        new Timestamp(dateRange.getEndDate().getTime())));
+            }
+        }
+
+        price = dto.getPrice();
+        isPricePerGuest = dto.getIsPricePerGuest();
+
+        seasonalRates = new ArrayList<>();
+        if (dto.getSeasonalRates() != null) {
+            for (SeasonalRate seasonalRate: dto.getSeasonalRates()) {
+                seasonalRates.add(new SeasonalRate(seasonalRate.getPrice(), new DateRange(new Timestamp(seasonalRate.getPeriod().getStartDate().getTime()),
+                        new Timestamp(seasonalRate.getPeriod().getEndDate().getTime()))));
+            }
+        }
+        
+        deadline = dto.getDeadline();
+        isAutomatic = dto.getIsAutomatic();
+        address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
+        System.out.println(this);
+    }
+
 }

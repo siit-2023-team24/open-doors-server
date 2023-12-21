@@ -1,10 +1,9 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
-import com.siit.team24.OpenDoors.model.Account;
 import com.siit.team24.OpenDoors.model.User;
 
 public class UserAccountDTO extends UserDTO {
-    private String email;
+    private String username;
     private String password;
     private String role;
 
@@ -15,20 +14,20 @@ public class UserAccountDTO extends UserDTO {
 
     public UserAccountDTO(Long id, String firstName, String lastName, String phone, String street, int number, String city, String country, Long imageId, String email, String password, String role) {
         super(id, firstName, lastName, phone, street, number, city, country, imageId);
-        this.email = email;
+        this.username = email;
         this.password = password;
         this.role = role;
     }
 
     public UserAccountDTO(User user, String email, String password, String role) {
         super(user);
-        this.email = email;
+        this.username = email;
         this.password = password;
         this.role = role;
     }
 
     public UserAccountDTO(String email, String password, String role) {
-        this.email = email;
+        this.username = email;
         this.password = password;
         this.role = role;
     }
@@ -41,12 +40,12 @@ public class UserAccountDTO extends UserDTO {
         this.role = role;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -60,7 +59,7 @@ public class UserAccountDTO extends UserDTO {
     @Override
     public String toString() {
         return "UserAccountDTO{" +
-                "email='" + email + '\'' +
+                "email='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';

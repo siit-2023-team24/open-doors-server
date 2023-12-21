@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public abstract class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
     @Min(1)

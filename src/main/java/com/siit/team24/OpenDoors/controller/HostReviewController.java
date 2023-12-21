@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "open-doors/host-review")
 public class HostReviewController {
-
+    //TODO : add authorization
     //service
 
     HostReviewForHostDTO testHostReviewForHostDTO = new HostReviewForHostDTO(

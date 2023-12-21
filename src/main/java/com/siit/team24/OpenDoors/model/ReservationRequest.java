@@ -4,9 +4,14 @@ import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
+@SQLDelete(sql = "UPDATE reservation_request SET status = 4 WHERE id = ?")
+@Where(clause = "status != 4")
 @Entity
 public class ReservationRequest {
 
@@ -27,6 +32,7 @@ public class ReservationRequest {
     private Timestamp timestamp;
 
     public ReservationRequest() {
+        this.guestNumber = 1;
     }
 
     public ReservationRequest(Long id, Guest guest, Accommodation accommodation, DateRange dateRange,
@@ -119,8 +125,17 @@ public class ReservationRequest {
                 '}';
     }
 
+    public boolean isActive() {
+        if (status != ReservationRequestStatus.CONFIRMED && status != ReservationRequestStatus.PENDING)
+            return false;
+        if (dateRange.getEndDate().before(new Timestamp(System.currentTimeMillis())))
+            return false;
+        return true;
+
+    }
+
     public ReservationRequestDTO toDTO() {
-        return new ReservationRequestDTO(id, guest.getAccount().getEmail(), accommodation.getUniqueName(),
+        return new ReservationRequestDTO(id, guest.getUsername(), accommodation.getUniqueName(),
                 dateRange, guestNumber, totalPrice, status, timestamp);
     }
 }

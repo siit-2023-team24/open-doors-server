@@ -6,16 +6,16 @@ import java.sql.Timestamp;
 
 public class UserReportDTO {
     private final Long id;
-    private String reportedEmail;
-    private String complainantEmail;
+    private String reportedUsername;
+    private String complainantUsername;
     private Timestamp timestamp;
     private String reason;
     private String status;
 
     public UserReportDTO(Long id, String reportedEmail, String complainantEmail, Timestamp timestamp, String reason, String status) {
         this.id = id;
-        this.reportedEmail = reportedEmail;
-        this.complainantEmail = complainantEmail;
+        this.reportedUsername = reportedEmail;
+        this.complainantUsername = complainantEmail;
         this.timestamp = timestamp;
         this.reason = reason;
         this.status = status;
@@ -23,8 +23,8 @@ public class UserReportDTO {
 
     public UserReportDTO(UserReport userReport) {
         this.id = userReport.getId();
-        this.reportedEmail = userReport.getReportedUser().getAccount().getEmail();
-        this.complainantEmail = userReport.getComplainant().getAccount().getEmail();
+        this.reportedUsername = userReport.getReportedUser().getUsername();
+        this.complainantUsername = userReport.getComplainant().getUsername();
         this.timestamp = userReport.getTimestamp();
         this.reason = userReport.getReason();
         this.status = userReport.getStatus().name();
@@ -34,20 +34,20 @@ public class UserReportDTO {
         return id;
     }
 
-    public String getReportedEmail() {
-        return reportedEmail;
+    public String getReportedUsername() {
+        return reportedUsername;
     }
 
-    public void setReportedEmail(String reportedEmail) {
-        this.reportedEmail = reportedEmail;
+    public void setReportedUsername(String reportedUsername) {
+        this.reportedUsername = reportedUsername;
     }
 
-    public String getComplainantEmail() {
-        return complainantEmail;
+    public String getComplainantUsername() {
+        return complainantUsername;
     }
 
-    public void setComplainantEmail(String complainantEmail) {
-        this.complainantEmail = complainantEmail;
+    public void setComplainantUsername(String complainantUsername) {
+        this.complainantUsername = complainantUsername;
     }
 
     public Timestamp getTimestamp() {
@@ -77,8 +77,8 @@ public class UserReportDTO {
     @Override
     public String toString() {
         return "UserReportDTO{" +
-                "reportedEmail='" + reportedEmail + '\'' +
-                ", complainantEmail='" + complainantEmail + '\'' +
+                "reportedEmail='" + reportedUsername + '\'' +
+                ", complainantEmail='" + complainantUsername + '\'' +
                 ", timestamp=" + timestamp +
                 ", reason='" + reason + '\'' +
                 ", status='" + status + '\'' +
