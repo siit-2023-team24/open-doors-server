@@ -7,6 +7,7 @@ import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -130,6 +131,7 @@ public class PendingAccommodation {
     }
 
     public Set<Image> getImages() {
+        if (images == null) return new HashSet<>();
         return images;
     }
 

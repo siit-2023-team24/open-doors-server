@@ -3,6 +3,8 @@ package com.siit.team24.OpenDoors.dto.accommodation;
 import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
+import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Country;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +37,12 @@ public class AccommodationWholeDTO {
     protected boolean isAutomatic;
 
     protected String hostUsername;
+  
 
     public AccommodationWholeDTO() {}
 
     public AccommodationWholeDTO(Accommodation accommodation) {
-        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().name(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), accommodation.getSeasonalRates(),
+        this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), Amenity.fromAmenityList(accommodation.getAmenities()), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType().getValue(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), accommodation.getSeasonalRates(),
                 accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getDeadline(), accommodation.getIsAutomatic(), accommodation.getHost().getUsername());
     }
 
@@ -172,6 +175,10 @@ public class AccommodationWholeDTO {
 
     public void setSeasonalRates(List<SeasonalRate> seasonalRates) {
         this.seasonalRates = seasonalRates;
+    }
+
+    public boolean isPricePerNight() {
+        return isPricePerGuest;
     }
 
     public String getCity() {

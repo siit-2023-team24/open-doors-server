@@ -1,20 +1,21 @@
 package com.siit.team24.OpenDoors.dto.image;
 
+import com.siit.team24.OpenDoors.model.enums.ImageType;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ImageFileDTO {
     private Long imageId;
     private MultipartFile file;
-    private boolean isProfile;
+    private ImageType imageType;
     private Long entityId;
 
     public ImageFileDTO() {
     }
 
-    public ImageFileDTO(Long imageId, MultipartFile file, boolean isProfile, Long entityId) {
+    public ImageFileDTO(Long imageId, MultipartFile file, ImageType imageType, Long entityId) {
         this.imageId = imageId;
         this.file = file;
-        this.isProfile = isProfile;
+        this.imageType = imageType;
         this.entityId = entityId;
     }
 
@@ -34,12 +35,12 @@ public class ImageFileDTO {
         this.file = file;
     }
 
-    public boolean isProfile() {
-        return isProfile;
+    public ImageType getImageType() {
+        return imageType;
     }
 
-    public void setProfile(boolean profile) {
-        isProfile = profile;
+    public void setImageType(ImageType imageType) {
+        this.imageType = imageType;
     }
 
     public Long getEntityId() {
@@ -55,7 +56,7 @@ public class ImageFileDTO {
         return "ImageFileDTO{" +
                 "imageId=" + imageId +
                 ", file=" + file +
-                ", isProfile=" + isProfile +
+                ", imageType=" + imageType +
                 ", entityId=" + entityId +
                 '}';
     }
