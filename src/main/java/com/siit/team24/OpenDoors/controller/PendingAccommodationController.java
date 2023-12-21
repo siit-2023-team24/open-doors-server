@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHo
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
+import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class PendingAccommodationController {
     @Autowired
     private PendingAccommodationService pendingService;
 
+    @Autowired
+    private ImageService imageService;
+
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PendingAccommodationWholeDTO> getById(@PathVariable Long id) {
@@ -36,6 +40,13 @@ public class PendingAccommodationController {
         }
     }
 
+    // @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<Collection<PendingAccommodationHostDTO>> getAllPending() {
+        Collection<PendingAccommodationHostDTO> accommodations = pendingService.getAll();
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
+
     // @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getPendingForHost(@PathVariable Long hostId) {
@@ -46,6 +57,14 @@ public class PendingAccommodationController {
     // @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePending(@PathVariable Long id) {
+        PendingAccommodation pending = pendingService.findById(id);
+        pendingService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "deny/{id}")
+    public ResponseEntity<Void> denyPending(@PathVariable Long id) {
+        PendingAccommodation pending = pendingService.findById(id);
         pendingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -82,5 +101,11 @@ public class PendingAccommodationController {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity<Void> approve(@RequestBody PendingAccommodationHostDTO dto) throws IOException {
+        pendingService.approve(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

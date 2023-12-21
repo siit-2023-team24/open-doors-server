@@ -72,6 +72,7 @@ public class ImageService {
     }
 
     public void deleteAll(Set<Image> images) {
+        if (images == null) return;
         for (Image image: images) {
             delete(image.getId());
         }

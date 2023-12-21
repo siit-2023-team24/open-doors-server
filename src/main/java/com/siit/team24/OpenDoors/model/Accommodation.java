@@ -1,14 +1,17 @@
 package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.Country;
 
+import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @SQLDelete(sql = "UPDATE accommodation SET deleted=true WHERE id=?")
@@ -23,13 +26,13 @@ public class Accommodation {
     private String description;
     private String location;
     private List<Amenity> amenities;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REFRESH)
     private Set<Image> images;
     @Column(name = "minGuests", nullable = false)
     private int minGuests;
     @Column(name = "maxGuests", nullable = false)
     private int maxGuests;
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
@@ -49,8 +52,8 @@ public class Accommodation {
     private boolean deleted;
 
   
-    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
-
+    public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests,
+                         List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -75,23 +78,6 @@ public class Accommodation {
         this.images = new HashSet<>();
         this.amenities = new ArrayList<>();
         this.availability = new ArrayList<>();
-    }
-
-    public Accommodation(AccommodationWholeDTO accommodationDTO) {
-        this.name = accommodationDTO.getName();
-        this.description = accommodationDTO.getDescription();
-        this.location = accommodationDTO.getLocation();
-        this.amenities = accommodationDTO.getAmenities();
-        this.minGuests = accommodationDTO.getMinGuests();
-        this.maxGuests = accommodationDTO.getMaxGuests();
-        this.type = AccommodationType.valueOf(accommodationDTO.getType());
-        this.availability = accommodationDTO.getAvailability();
-        this.price = accommodationDTO.getPrice();
-        this.isPricePerNight = accommodationDTO.isPricePerNight();
-        this.averageRating = accommodationDTO.getAverageRating();
-        this.host = accommodationDTO.getHost();
-        this.seasonalRates = accommodationDTO.getSeasonalRates();
-        this.address = new Address(accommodationDTO.getStreet(), accommodationDTO.getNumber(), accommodationDTO.getCity(), Country.valueOf(accommodationDTO.getCountry()));
     }
 
     public Long getId() {
@@ -311,6 +297,43 @@ public class Accommodation {
 
     public String getUniqueName() {
         return this.name + " #" + this.id;
+    }
+
+
+    public void setSimpleValues(AccommodationWholeDTO dto) {
+        System.err.println(dto);
+        id = dto.getId();
+        name = dto.getName();
+        description = dto.getDescription();
+        location = dto.getLocation();
+        amenities = Amenity.fromStringList(dto.getAmenities());
+        minGuests = dto.getMinGuests();
+        maxGuests = dto.getMaxGuests();
+        type = AccommodationType.fromString(dto.getType());
+
+        availability = new ArrayList<DateRange>();
+        if (dto.getAvailability() != null) {
+            for (DateRange dateRange: dto.getAvailability()) {
+                availability.add(new DateRange(new Timestamp(dateRange.getStartDate().getTime()),
+                        new Timestamp(dateRange.getEndDate().getTime())));
+            }
+        }
+
+        price = dto.getPrice();
+        isPricePerGuest = dto.getIsPricePerGuest();
+
+        seasonalRates = new ArrayList<>();
+        if (dto.getSeasonalRates() != null) {
+            for (SeasonalRate seasonalRate: dto.getSeasonalRates()) {
+                seasonalRates.add(new SeasonalRate(seasonalRate.getPrice(), new DateRange(new Timestamp(seasonalRate.getPeriod().getStartDate().getTime()),
+                        new Timestamp(seasonalRate.getPeriod().getEndDate().getTime()))));
+            }
+        }
+        
+        deadline = dto.getDeadline();
+        isAutomatic = dto.getIsAutomatic();
+        address = new Address(dto.getStreet(), dto.getNumber(), dto.getCity(), Country.fromString(dto.getCountry()));
+        System.out.println(this);
     }
 
 }

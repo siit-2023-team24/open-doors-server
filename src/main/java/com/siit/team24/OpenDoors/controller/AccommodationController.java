@@ -10,6 +10,8 @@ import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 
 import com.siit.team24.OpenDoors.model.*;
 
+import com.siit.team24.OpenDoors.model.enums.AccommodationType;
+import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "open-doors/accommodations")
 public class AccommodationController {
+
     @Autowired
     private AccommodationService accommodationService;
 

@@ -1,8 +1,12 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.image.ImageBytesDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
+import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
@@ -53,7 +57,7 @@ public class PendingAccommodationService {
         Set<Image> images = new HashSet<>();
 
         //if edit, save old images to pending folder
-        if (pendingAccommodation.getId() == null && pendingAccommodation.getAccommodationId() != null) { //if edit active
+        if (dto.getId() == null && dto.getAccommodationId() != null) { //if edit active
             boolean deleted;
             for (Long imageId: dto.getImages()) {   //old images without the deleted ones
                 deleted = false;
@@ -92,8 +96,6 @@ public class PendingAccommodationService {
     }
 
 
-
-
     public void delete(Long id) {
         PendingAccommodation pending = findById(id);
         if (pending.getAccommodationId() != null) {
@@ -103,8 +105,49 @@ public class PendingAccommodationService {
         repo.deleteById(id);
     }
 
+    public Collection<PendingAccommodationHostDTO> getAll() {
+        return repo.findAllDtos();
+    }
+
     public Collection<PendingAccommodationHostDTO> getForHost(Long hostId) {
         return repo.findByHost(hostId);
     }
 
+    public void approve(PendingAccommodationHostDTO dto) throws IOException {
+        PendingAccommodation pendingAccommodation = findById(dto.getId());
+        System.out.println(pendingAccommodation);
+        AccommodationWholeDTO accommodationWholeDTO = new AccommodationWholeDTO(pendingAccommodation);
+
+        System.out.println(accommodationWholeDTO);
+
+//        this.delete(dto.getId());
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setSimpleValues(accommodationWholeDTO);
+        Host host = (Host)userService.findByUsername(accommodationWholeDTO.getHostUsername());
+        accommodation.setHost(host);
+
+//        accommodation.setImages(pendingAccommodation.getImages());
+
+        if (dto.getAccommodationId() != null) {
+            accommodationService.revive(dto.getAccommodationId());
+            Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
+            accommodation.setAverageRating(oldData.getAverageRating());
+            //delete all old images
+//            imageService.deleteAll(accommodation.getImages());
+        }
+
+        Accommodation withoutImages = accommodationService.save(accommodation);
+        //save images from pending
+        Set<Image> images = new HashSet<>();
+        for (Image image: pendingAccommodation.getImages()) {
+            images.add(imageService.saveBytes(imageService.getImageBytesDTO(image.getId(), false, accommodation.getId())));
+        }
+        withoutImages.setImages(images);
+        Accommodation saved = accommodationService.save(withoutImages);
+        System.out.println("Saved to accommodations: " + saved);
+
+        this.delete(dto.getId());
+//        imageService.deleteAll(pendingAccommodation.getImages());
+    }
 }

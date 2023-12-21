@@ -29,7 +29,7 @@ public class AccommodationReviewDetailsDTO {
             accommodationReview.getRating(),
             accommodationReview.getComment(),
             accommodationReview.getTimestamp(),
-            accommodationReview.getAuthor().getAccount().getEmail(),
+            accommodationReview.getAuthor().getUsername(),
             accommodationReview.getAuthor().getId());
     }
 
