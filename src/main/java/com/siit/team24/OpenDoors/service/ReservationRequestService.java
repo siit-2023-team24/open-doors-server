@@ -1,10 +1,11 @@
 package com.siit.team24.OpenDoors.service;
 
 import com.siit.team24.OpenDoors.model.ReservationRequest;
+import com.siit.team24.OpenDoors.service.user.UserService;
+import org.springframework.stereotype.Service;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import com.siit.team24.OpenDoors.repository.ReservationRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,6 +15,13 @@ public class ReservationRequestService {
 
     @Autowired
     private ReservationRequestRepository repo;
+
+    @Autowired
+    private UserService userService;
+
+    public ReservationRequest save(ReservationRequest reservationRequest) {
+        return repo.save(reservationRequest);
+    }
 
     public boolean foundActiveFor(Long accommodationId) {
         return !repo.getActiveFor(accommodationId).isEmpty();

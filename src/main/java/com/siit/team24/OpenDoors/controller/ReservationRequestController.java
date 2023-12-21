@@ -1,11 +1,18 @@
 package com.siit.team24.OpenDoors.controller;
 
 
+import com.siit.team24.OpenDoors.dto.reservation.MakeReservationRequestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForGuestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForHostDTO;
 import com.siit.team24.OpenDoors.model.DateRange;
+import com.siit.team24.OpenDoors.model.Guest;
+import com.siit.team24.OpenDoors.model.ReservationRequest;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
+import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.ReservationRequestService;
+import com.siit.team24.OpenDoors.service.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +24,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "open-doors/reservations")
 public class ReservationRequestController {
 
-    //service
+    @Autowired
+    private ReservationRequestService reservationRequestService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AccommodationService accommodationService;
 
 
     @PreAuthorize("hasRole('GUEST')")
@@ -59,12 +74,24 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
+    @PostMapping(consumes = "application/json", value = "/createRequest")
+    public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@RequestBody MakeReservationRequestDTO requestDTO) {
 
-//    @PostMapping(consumes = "application/json")
-//    public ResponseEntity<ReservationRequestDTO> createReservationRequest(@RequestBody ReservationRequestDTO requestDTO) {
-//        return new ResponseEntity<>(testReservationRequestDTO, HttpStatus.CREATED);
-//    }
-//
+        System.out.println(requestDTO);
+
+        ReservationRequest request = new ReservationRequest();
+        request.setGuest((Guest) userService.findById(requestDTO.getGuestId()));
+        request.setAccommodation(accommodationService.findById(requestDTO.getAccommodationId()));
+        request.setDateRange(new DateRange(requestDTO.getStartDate(), requestDTO.getEndDate()));
+        request.setStatus(ReservationRequestStatus.PENDING);
+        request.setGuestNumber(request.getGuestNumber());
+        request.setTimestamp(new Timestamp(System.currentTimeMillis()));
+        request.setTotalPrice(requestDTO.getTotalPrice());
+
+        reservationRequestService.save(request);
+
+        return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
+    }
 //    @PutMapping(consumes = "application/json")
 //    public ResponseEntity<ReservationRequestDTO> updateReservationRequest(@RequestBody ReservationRequestDTO requestDTO){
 //        return new ResponseEntity<>(testReservationRequestForHostDTO, HttpStatus.OK);

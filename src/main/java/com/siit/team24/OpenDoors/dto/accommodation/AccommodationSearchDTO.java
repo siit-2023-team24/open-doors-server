@@ -1,7 +1,6 @@
 package com.siit.team24.OpenDoors.dto.accommodation;
 
 import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
 
 import java.util.Set;
@@ -11,7 +10,7 @@ public class AccommodationSearchDTO {
     private String name;
     private Double averageRating;
     private double price;
-    private boolean isPricePerNight;
+    private boolean isPricePerGuest;
     private Double totalPrice;
     private String city;
     private String country;
@@ -29,7 +28,7 @@ public class AccommodationSearchDTO {
         this.name = name;
         this.averageRating = averageRating;
         this.price = price;
-        this.isPricePerNight = isPricePerNight;
+        this.isPricePerGuest = isPricePerNight;
         this.totalPrice = totalPrice;
         this.city = city;
         this.country = country;
@@ -41,7 +40,7 @@ public class AccommodationSearchDTO {
         this.name = accommodation.getName();
         this.averageRating = accommodation.getAverageRating();
         this.price = accommodation.getPrice();
-        this.isPricePerNight = accommodation.getIsPricePerGuest();
+        this.isPricePerGuest = accommodation.getIsPricePerGuest();
         this.totalPrice = 0.0;
         this.city = accommodation.getAddress().getCity();
         this.country = accommodation.getAddress().getCountry().getCountryName();
@@ -90,12 +89,12 @@ public class AccommodationSearchDTO {
         this.price = price;
     }
 
-    public boolean isPricePerNight() {
-        return isPricePerNight;
+    public boolean getIsPricePerGuest() {
+        return isPricePerGuest;
     }
 
-    public void setPricePerNight(boolean pricePerNight) {
-        isPricePerNight = pricePerNight;
+    public void setIsPricePerGuest(boolean pricePerGuest) {
+        isPricePerGuest = pricePerGuest;
     }
 
     public double getTotalPrice() {
@@ -130,7 +129,7 @@ public class AccommodationSearchDTO {
                 ", name='" + name + '\'' +
                 ", averageRating=" + averageRating +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerNight +
+                ", isPricePerNight=" + isPricePerGuest +
                 ", totalPrice=" + totalPrice +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +

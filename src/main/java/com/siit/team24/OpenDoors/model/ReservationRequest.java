@@ -32,6 +32,7 @@ public class ReservationRequest {
     private Timestamp timestamp;
 
     public ReservationRequest() {
+        this.guestNumber = 1;
     }
 
     public ReservationRequest(Long id, Guest guest, Accommodation accommodation, DateRange dateRange,
