@@ -5,11 +5,14 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
-
+@SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class Guest extends User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)

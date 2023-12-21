@@ -5,6 +5,8 @@ import com.siit.team24.OpenDoors.dto.userManagement.UserAccountViewDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +17,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "users")
@@ -41,6 +45,7 @@ public class User implements UserDetails {
 //    private Account account;
     private boolean enabled;
 
+    private boolean deleted;
 
 
     public Long getId() {
@@ -159,6 +164,14 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public User(){

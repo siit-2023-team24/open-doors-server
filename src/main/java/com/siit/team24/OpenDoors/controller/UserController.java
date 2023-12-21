@@ -92,10 +92,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        //todo
+        service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

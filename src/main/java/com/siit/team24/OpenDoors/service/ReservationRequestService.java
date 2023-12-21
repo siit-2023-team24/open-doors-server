@@ -16,13 +16,11 @@ public class ReservationRequestService {
     private ReservationRequestRepository repo;
 
     public boolean foundActiveFor(Long accommodationId) {
-        Timestamp today = new Timestamp(System.currentTimeMillis());
-        return !repo.getActiveFor(accommodationId, today).isEmpty();
+        return !repo.getActiveFor(accommodationId).isEmpty();
     }
 
     public int countConfirmedFutureFor(Long accommodationId) {
-        Timestamp today = new Timestamp(System.currentTimeMillis());
-        List<ReservationRequest> confirmed = repo.getConfirmedFutureFor(accommodationId, today);
+        List<ReservationRequest> confirmed = repo.getConfirmedFutureFor(accommodationId);
         return confirmed.size();
     }
 
@@ -32,5 +30,14 @@ public class ReservationRequestService {
             request.setStatus(ReservationRequestStatus.DENIED);
             repo.save(request);
         }
+    }
+
+    public List<ReservationRequest> findByUsernameAndStatus(String guestUsername, ReservationRequestStatus status) {
+        return repo.getFutureForGuestWithStatus(guestUsername, status);
+    }
+
+    public void deletePendingForGuest(String username) {
+        List<ReservationRequest> requests = findByUsernameAndStatus(username, ReservationRequestStatus.PENDING);
+        repo.deleteAll(requests);
     }
 }
