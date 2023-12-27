@@ -1,13 +1,11 @@
 package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @SQLDelete(sql = "UPDATE reservation_request SET status = 4 WHERE id = ?")
@@ -132,10 +130,5 @@ public class ReservationRequest {
             return false;
         return true;
 
-    }
-
-    public ReservationRequestDTO toDTO() {
-        return new ReservationRequestDTO(id, guest.getUsername(), accommodation.getUniqueName(),
-                dateRange, guestNumber, totalPrice, status, timestamp);
     }
 }
