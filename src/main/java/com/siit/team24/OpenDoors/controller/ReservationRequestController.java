@@ -47,10 +47,13 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = "application/json", value = "/search")
-    public ResponseEntity<List<ReservationRequestForGuestDTO>> searchReservationRequests(@RequestBody ReservationRequestSearchAndFilterDTO requestSearchAndFilterDTO) {
+    @PostMapping(consumes = "application/json", value = "/search/{guestId}")
+    public ResponseEntity<List<ReservationRequestForGuestDTO>> searchReservationRequests(
+            @PathVariable Long guestId,
+            @RequestBody ReservationRequestSearchAndFilterDTO requestSearchAndFilterDTO) {
 
-        List<ReservationRequestForGuestDTO> requests = reservationRequestService.searchRequests(requestSearchAndFilterDTO);
+        System.out.println(requestSearchAndFilterDTO);
+        List<ReservationRequestForGuestDTO> requests = reservationRequestService.searchRequests(guestId, requestSearchAndFilterDTO);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 

@@ -49,4 +49,14 @@ public class ReservationRequestSearchAndFilterDTO {
     public void setStatus(ReservationRequestStatus status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationRequestSearchAndFilterDTO{" +
+                "accommodationName='" + accommodationName + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", status=" + status +
+                '}';
+    }
 }

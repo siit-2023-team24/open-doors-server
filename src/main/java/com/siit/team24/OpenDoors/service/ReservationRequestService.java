@@ -64,34 +64,33 @@ public class ReservationRequestService {
         return dtos;
     }
 
-    public List<ReservationRequestForGuestDTO> searchRequests(ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
-        List<ReservationRequest> allRequests = repo.findAll();
-        List<ReservationRequestForGuestDTO> dtos = new ArrayList<>();
+    public List<ReservationRequestForGuestDTO> searchRequests(Long guestId, ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
+        List<ReservationRequestForGuestDTO> guestRequests = findByGuestId(guestId);
+        List<ReservationRequestForGuestDTO> filteredRequests = new ArrayList<>();
 
-        for(ReservationRequest r: allRequests) {
-            if(searchAndFilterDTO.getAccommodationName() != null && !r.getAccommodation().getName().equals(searchAndFilterDTO.getAccommodationName()))
+        for(ReservationRequestForGuestDTO r: guestRequests) {
+            if(searchAndFilterDTO.getAccommodationName() != null && !r.getAccommodationName().equals(searchAndFilterDTO.getAccommodationName()))
                 continue;
             if(!isInDateRange(r, searchAndFilterDTO.getStartDate(), searchAndFilterDTO.getEndDate()))
                 continue;
             if(searchAndFilterDTO.getStatus() != null && !r.getStatus().equals(searchAndFilterDTO.getStatus()))
                 continue;
 
-            dtos.add(new ReservationRequestForGuestDTO(r));
+            filteredRequests.add(r);
         }
 
-        return dtos;
+        return filteredRequests;
     }
 
-    private boolean isInDateRange(ReservationRequest request, Timestamp startDate, Timestamp endDate) {
+    private boolean isInDateRange(ReservationRequestForGuestDTO request, Timestamp startDate, Timestamp endDate) {
         if(startDate != null && endDate != null) {
-            DateRange dateRange = new DateRange(startDate, endDate);
-            if(DateRangeService.areOverlapping(dateRange, request.getDateRange()))
+            if(request.getStartDate().before(startDate) || request.getEndDate().after(endDate))
                 return false;
         } else if(startDate != null) {
-            if(request.getDateRange().getStartDate().before(startDate))
+            if(request.getStartDate().before(startDate))
                 return false;
         } else if(endDate != null) {
-            if(request.getDateRange().getEndDate().after(endDate))
+            if(request.getEndDate().after(endDate))
                 return false;
         }
 
