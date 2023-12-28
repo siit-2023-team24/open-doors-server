@@ -62,7 +62,24 @@ public class ReservationRequestController {
         List<String> statuses = Arrays.stream(ReservationRequestStatus.values())
                 .map(type -> type.name().toUpperCase())
                 .collect(Collectors.toList());
+        statuses.remove("DELETED");
         return ResponseEntity.ok(statuses);
+    }
+
+    @PostMapping(value = "cancelRequest/{requestId}")
+    public ResponseEntity<Void> cancelRequest(@PathVariable Long requestId) {
+        ReservationRequest request = reservationRequestService.findById(requestId);
+        request.setStatus(ReservationRequestStatus.CANCELLED);
+        reservationRequestService.save(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "deleteRequest/{requestId}")
+    public ResponseEntity<Void> deleteRequest(@PathVariable Long requestId) {
+        ReservationRequest request = reservationRequestService.findById(requestId);
+        request.setStatus(ReservationRequestStatus.DELETED);
+        reservationRequestService.save(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('GUEST')")

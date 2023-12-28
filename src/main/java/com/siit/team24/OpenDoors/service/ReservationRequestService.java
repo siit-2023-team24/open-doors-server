@@ -21,6 +21,12 @@ public class ReservationRequestService {
     @Autowired
     private ReservationRequestRepository repo;
 
+    public ReservationRequest findById(Long requestId) {
+        if(repo.findById(requestId).isPresent())
+            return repo.findById(requestId).get();
+        return null;
+    }
+
     public ReservationRequest save(ReservationRequest reservationRequest) {
         return repo.save(reservationRequest);
     }
