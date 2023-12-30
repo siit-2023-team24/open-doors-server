@@ -94,7 +94,7 @@ public class AccommodationController {
         return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         accommodationService.delete(id);
@@ -123,7 +123,7 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
         Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
