@@ -110,7 +110,7 @@ public class ReservationRequestController {
 
         if(accommodation.getIsAutomatic()) {
             request.setStatus(ReservationRequestStatus.CONFIRMED);
-            //TODO: delete the dates from accommodation.availability
+            accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
             //TODO: implement denyOtherRequestsForThisDateRange()
         } else {
             request.setStatus(ReservationRequestStatus.PENDING);

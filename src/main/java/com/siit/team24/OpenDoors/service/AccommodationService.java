@@ -221,6 +221,28 @@ public class AccommodationService {
 
         return date.after(startDate) && date.before(endDate);
     }
+
+    public void removeDatesFromAccommodationAvailability(Long accommodationId, DateRange desiredDates) {
+        List<DateRange> availability = findById(accommodationId).getAvailability();
+
+        Timestamp startDate = null;
+        Timestamp endDate = null;
+        for(DateRange range : availability) {
+            if(range.contains(desiredDates)) {
+                availability.remove(range); // we remove the whole range
+                startDate = range.getStartDate();
+                endDate = range.getEndDate();
+                break;
+            }
+        }
+
+        if(!startDate.equals(desiredDates.getStartDate()))
+            availability.add(new DateRange(startDate, desiredDates.getStartDate()));
+        if(!endDate.equals(desiredDates.getEndDate()))
+            availability.add(new DateRange(desiredDates.getEndDate(), endDate));
+
+        findById(accommodationId).setAvailability(availability);
+    }
 }
 
 
