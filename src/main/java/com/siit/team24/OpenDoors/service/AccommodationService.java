@@ -2,16 +2,15 @@ package com.siit.team24.OpenDoors.service;
 
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
+import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
+import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
 import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
 import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Host;
-import com.siit.team24.OpenDoors.model.DateRange;
-import com.siit.team24.OpenDoors.model.Image;
+import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 
 import com.siit.team24.OpenDoors.repository.AccommodationRepository;
@@ -21,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -180,4 +180,57 @@ public class AccommodationService {
         DateRange dateRange = new DateRange(dto.getStartDate(), dto.getEndDate());
         return dateRange.getNumberOfNights() * accommodation.getPrice();
     }
+
+    public List<SeasonalRatesPricingDTO> getSeasonalRatePricingsForAccommodation(
+            AccommodationSeasonalRateDTO accommodationSeasonalRateDTO) {
+
+        Accommodation accommodation = findById(accommodationSeasonalRateDTO.getAccommodationId());
+
+        List<SeasonalRate> seasonalRates = accommodation.getSeasonalRates();
+
+        List<SeasonalRatesPricingDTO> dtos = new ArrayList<>();
+        List<SeasonalRatesPricingDTO> result = new ArrayList<>();
+
+        DateRange reservationDates = new DateRange(accommodationSeasonalRateDTO.getStartDate(), accommodationSeasonalRateDTO.getEndDate());
+
+        for(Timestamp date : reservationDates.getTimestampRange()) {
+            for(SeasonalRate seasonalRate : seasonalRates) {
+                if(isDateWithinSeasonalRate(date, seasonalRate)) {
+                    dtos.add(new SeasonalRatesPricingDTO(seasonalRate.getPrice(), date, date));
+                } else {
+                    dtos.add(new SeasonalRatesPricingDTO(accommodation.getPrice(), date, date));
+                }
+            }
+        }
+
+        if(!dtos.isEmpty()) {
+            SeasonalRatesPricingDTO firstDTO = dtos.get(0);
+            for(int i = 0; i < dtos.size(); i++) {
+                if(!dtos.get(i).getPrice().equals(firstDTO.getPrice())) {
+                    Timestamp endDate = dtos.get(i-1).getEndDate();
+                    LocalDateTime endLocalDate = endDate.toLocalDateTime().plusDays(1);
+                    result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), Timestamp.valueOf(endLocalDate)));
+                    firstDTO = dtos.get(i);
+                }
+                if(i == dtos.size()-1) {
+                    result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), dtos.get(i).getEndDate()));
+                }
+            }
+        } else {
+            result.add(new SeasonalRatesPricingDTO(accommodation.getPrice(), accommodationSeasonalRateDTO.getStartDate(), accommodationSeasonalRateDTO.getEndDate()));
+        }
+
+        return result;
+    }
+
+    private boolean isDateWithinSeasonalRate(Timestamp date, SeasonalRate seasonalRate) {
+        Timestamp startDate = seasonalRate.getPeriod().getStartDate();
+        Timestamp endDate = seasonalRate.getPeriod().getEndDate();
+
+        if(date.equals(startDate) || date.equals(endDate)) return true;
+
+        return date.after(startDate) && date.before(endDate);
+    }
 }
+
+

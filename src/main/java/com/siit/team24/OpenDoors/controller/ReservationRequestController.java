@@ -1,9 +1,8 @@
 package com.siit.team24.OpenDoors.controller;
 
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.reservation.*;
-import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
@@ -12,14 +11,12 @@ import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -104,11 +101,19 @@ public class ReservationRequestController {
 
         System.out.println(requestDTO);
 
+        Accommodation accommodation = accommodationService.findById(requestDTO.getAccommodationId());
+
         ReservationRequest request = new ReservationRequest();
         request.setGuest((Guest) userService.findById(requestDTO.getGuestId()));
-        request.setAccommodation(accommodationService.findById(requestDTO.getAccommodationId()));
+        request.setAccommodation(accommodation);
         request.setDateRange(new DateRange(requestDTO.getStartDate(), requestDTO.getEndDate()));
+
+        if(accommodation.getIsAutomatic()) {
+            request.setStatus(ReservationRequestStatus.CONFIRMED);
+            //TODO: implement denyOtherRequestsForThisDateRange()
+        }
         request.setStatus(ReservationRequestStatus.PENDING);
+
         request.setGuestNumber(request.getGuestNumber());
         request.setTimestamp(new Timestamp(System.currentTimeMillis()));
         request.setTotalPrice(requestDTO.getTotalPrice());
