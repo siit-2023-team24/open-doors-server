@@ -212,7 +212,7 @@ public class AccommodationService {
                     result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), Timestamp.valueOf(endLocalDate)));
                     firstDTO = dtos.get(i);
                 }
-                if(i == dtos.size()-1) {
+                else if(i == dtos.size()-1) {
                     result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), dtos.get(i).getEndDate()));
                 }
             }
