@@ -155,15 +155,20 @@ public class AccommodationService {
     }
 
     public Double calculateTotalPrice(Accommodation accommodation, SearchAndFilterDTO dto) {
-        if(dto.getStartDate() == null && dto.getEndDate() == null) {
+        if(dto.getGuestNumber() == null) dto.setGuestNumber(1);
+        if(dto.getStartDate() == null && dto.getEndDate() == null)
             return 0.0;
-        } else if(dto.getStartDate() == null) {
-            return accommodation.getPrice();
-        } else if(dto.getEndDate() == null) {
-            return accommodation.getPrice();
+        if(dto.getStartDate() == null)
+            return accommodation.getPrice() * dto.getGuestNumber();
+        if(dto.getEndDate() == null)
+            return accommodation.getPrice() * dto.getGuestNumber();
+
+        double totalPrice = 0.0;
+        List<SeasonalRatesPricingDTO> seasonalRatesPricingDTOs = getSeasonalRatePricingsForAccommodation(new AccommodationSeasonalRateDTO(accommodation.getId(), dto.getStartDate(), dto.getEndDate()));
+        for(SeasonalRatesPricingDTO pricing : seasonalRatesPricingDTOs) {
+            totalPrice += pricing.getPrice() * pricing.getNumberOfNights() * dto.getGuestNumber();
         }
-        DateRange dateRange = new DateRange(dto.getStartDate(), dto.getEndDate());
-        return dateRange.getNumberOfNights() * accommodation.getPrice();
+        return totalPrice;
     }
 
     public List<SeasonalRatesPricingDTO> getSeasonalRatePricingsForAccommodation(
