@@ -69,6 +69,13 @@ public class DateRange {
         return range;
     }
 
+    public boolean contains(DateRange other) {
+        boolean isStartDateBeforeOrEqual = this.startDate.equals(other.startDate) || this.startDate.before(other.startDate);
+        boolean isEndDateAfterOrEqual = this.endDate.equals(other.endDate) || this.endDate.after(other.endDate);
+
+        return isStartDateBeforeOrEqual && isEndDateAfterOrEqual;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

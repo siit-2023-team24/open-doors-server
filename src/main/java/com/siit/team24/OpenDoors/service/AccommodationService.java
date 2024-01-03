@@ -105,13 +105,6 @@ public class AccommodationService {
 
         System.out.println(searchAndFilterDTO);
 
-//        if(searchAndFilterDTO.getGuestNumber() == 0)
-//            searchAndFilterDTO.setGuestNumber(null);
-//        if(searchAndFilterDTO.getStartPrice() == 0.0)
-//            searchAndFilterDTO.setStartPrice(null);
-//        if(searchAndFilterDTO.getEndPrice() == 0.0)
-//            searchAndFilterDTO.setEndPrice(null);
-
         List<Accommodation> allAccommodations = findAll();
         List<Accommodation> appropriateAccommodations = new ArrayList<>();
         List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
@@ -144,24 +137,16 @@ public class AccommodationService {
     }
 
     public boolean isAvailable(Accommodation accommodation, Timestamp startDate, Timestamp endDate) {
-        if(startDate != null && endDate != null) {
-            DateRange dateRange = new DateRange(startDate, endDate);
-            for(DateRange dr : accommodation.getAvailability()) {
-                if(DateRangeService.areOverlapping(dateRange, dr))
-                    return false;
-            }
-        } else if (startDate != null) {
-            for(DateRange dr : accommodation.getAvailability()) {
-                if(DateRangeService.isDateWithinRange(startDate, dr))
-                    return false;
-            }
-        } else if (endDate != null) {
-            for(DateRange dr : accommodation.getAvailability()) {
-                if(DateRangeService.isDateWithinRange(endDate, dr))
-                    return false;
-            }
+        if(startDate == null && endDate == null) return true;
+        if(startDate == null) startDate = Timestamp.valueOf(endDate.toLocalDateTime().minusDays(1));
+        if(endDate == null) endDate = Timestamp.valueOf(startDate.toLocalDateTime().plusDays(1));
+
+        DateRange desiredRange = new DateRange(startDate, endDate);
+        for(DateRange dr : accommodation.getAvailability()) {
+            if(dr.contains(desiredRange))
+                return true;
         }
-        return true;
+        return false;
     }
 
     public boolean hasAmenities(Accommodation accommodation, Set<Amenity> amenities) {
