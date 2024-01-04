@@ -14,6 +14,7 @@ public class AccommodationSearchDTO {
     private Double totalPrice;
     private String city;
     private String country;
+    private boolean isFavoriteForGuest;
 
     public AccommodationSearchDTO() {}
 
@@ -32,6 +33,7 @@ public class AccommodationSearchDTO {
         this.totalPrice = totalPrice;
         this.city = city;
         this.country = country;
+        this.isFavoriteForGuest = false;
     }
 
     public AccommodationSearchDTO(Accommodation accommodation) {
@@ -121,6 +123,13 @@ public class AccommodationSearchDTO {
         this.country = country;
     }
 
+    public boolean getIsFavoriteForGuest() {
+        return isFavoriteForGuest;
+    }
+
+    public void setIsFavoriteForGuest(boolean isFavorite) {
+        this.isFavoriteForGuest = isFavorite;
+    }
     @Override
     public String toString() {
         return "AccommodationSearchDTO{" +
@@ -133,6 +142,7 @@ public class AccommodationSearchDTO {
                 ", totalPrice=" + totalPrice +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
+                ", isFavorite=" + isFavoriteForGuest + '\'' +
                 '}';
     }
 }

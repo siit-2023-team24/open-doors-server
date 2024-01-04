@@ -30,6 +30,7 @@ public class AccommodationWithTotalPriceDTO {
     private String city;
     private String street;
     private int number;
+    private boolean isFavoriteForGuest;
 
     public AccommodationWithTotalPriceDTO() {}
 
@@ -62,6 +63,7 @@ public class AccommodationWithTotalPriceDTO {
         this.country = address.getCountry();
         this.street = address.getStreet();
         this.number =address.getNumber();
+        this.isFavoriteForGuest = false;
     }
 
     public Long getId() {
@@ -222,6 +224,14 @@ public class AccommodationWithTotalPriceDTO {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public boolean getIsFavoriteForGuest() {
+        return isFavoriteForGuest;
+    }
+
+    public void setIsFavoriteForGuest(boolean isFavoriteForGuest) {
+        this.isFavoriteForGuest = isFavoriteForGuest;
     }
 }
 

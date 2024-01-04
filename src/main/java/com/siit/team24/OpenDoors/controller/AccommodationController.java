@@ -1,9 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWithTotalPriceDTO;
+import com.siit.team24.OpenDoors.dto.accommodation.*;
 import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
 import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
@@ -14,6 +11,7 @@ import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 
+import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,9 @@ public class AccommodationController {
     @Autowired
     private AccommodationService accommodationService;
 
+    @Autowired
+    private UserService userService;
+
   
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
@@ -49,18 +50,10 @@ public class AccommodationController {
         return new ResponseEntity<>(AccommodationSearchDTOS, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsSearchPage(Pageable page) {
-        Page<Accommodation> accommodations = accommodationService.findAll(page);
-
-        List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
-
-        for (Accommodation a : accommodations)
-            accommodationSearchDTOS.add(new AccommodationSearchDTO(a));
-
-        for (AccommodationSearchDTO dto : accommodationSearchDTOS)
-            System.out.println(dto);
-
+    @GetMapping(value = "/all/{guestId}")
+    public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsSearchPage(@PathVariable Long guestId) {
+        Guest guest = (Guest) userService.findById(guestId);
+        List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
@@ -143,6 +136,36 @@ public class AccommodationController {
     public ResponseEntity<List<SeasonalRatesPricingDTO>> getSeasonalRatesForAccommodation(@RequestBody AccommodationSeasonalRateDTO accommodationSeasonalRateDTO) {
         List<SeasonalRatesPricingDTO> dtos = accommodationService.getSeasonalRatePricingsForAccommodation(accommodationSeasonalRateDTO);
         return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping("/addToFavorites")
+    public ResponseEntity<Void> addToFavorites(@RequestBody AccommodationFavoritesDTO dto) {
+        Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
+        Guest guest = (Guest) userService.findById(dto.getGuestId());
+        guest.addFavoriteAccommodation(accommodation);
+        userService.save(guest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/removeFromFavorites")
+    public ResponseEntity<Void> removeFromFavorites(@RequestBody AccommodationFavoritesDTO dto) {
+        Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
+        Guest guest = (Guest) userService.findById(dto.getGuestId());
+        guest.removeFavoriteAccommodation(accommodation);
+        userService.save(guest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/favorites/{guestId}")
+    public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsFavoritesPage(@PathVariable Long guestId) {
+        Guest guest = (Guest) userService.findById(guestId);
+        List<AccommodationSearchDTO> accommodationSearchDTOS = new ArrayList<>();
+        for(Accommodation a: guest.getFavorites()) {
+            AccommodationSearchDTO dto = new AccommodationSearchDTO(a);
+            dto.setIsFavoriteForGuest(true);
+            accommodationSearchDTOS.add(dto);
+        }
+        return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
 }
