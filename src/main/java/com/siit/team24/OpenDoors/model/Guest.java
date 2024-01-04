@@ -37,4 +37,12 @@ public class Guest extends User {
     public void setFavorites(Set<Accommodation> favorites) {
         this.favorites = favorites;
     }
+
+    public void addFavoriteAccommodation(Accommodation accommodation) {
+        this.favorites.add(accommodation);
+    }
+
+    public void removeFavoriteAccommodation(Accommodation accommodation) {
+        this.favorites.remove(accommodation);
+    }
 }

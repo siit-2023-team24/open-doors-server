@@ -210,5 +210,7 @@ public class UserService {
         repo.save(user.get());
     }
 
-
+    public void save(User user) {
+        repo.save(user);
+    }
 }

@@ -36,7 +36,7 @@ public class Accommodation {
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
-    private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
+    private List<DateRange> availability;
     private double price;
     private boolean isPricePerGuest;
     private Double averageRating;
