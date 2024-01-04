@@ -22,6 +22,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +58,9 @@ public class UserService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     public User findById(Long id) {
         Optional<User> user = repo.findById(id);
         if (user.isEmpty()){
@@ -68,22 +76,29 @@ public class UserService {
         return repo.findByUsername(username);
     }
 
-    public void changePassword(NewPasswordDTO dto) throws AccountNotFoundException {
+    public void changePassword(NewPasswordDTO dto) {
+
+        System.err.println(dto);
         //TODO: change validation to annotation
         if (!dto.getNewPassword().equals(dto.getRepeatPassword()))
             throw new PasswordNotConfirmedException();
-        if (!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,20}$"))
+//        if (!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,20}$"))
+        if (dto.getNewPassword().length() < 3)
             throw new PasswordValidationException();
 
         User user = repo.findByUsername(dto.getUsername());
         if (user == null)
-            throw new AccountNotFoundException();
+            throw new EntityNotFoundException();
 
-        String encodedPassword = passwordEncoder.encode(dto.getOldPassword());
-        if (!user.getPassword().equals(encodedPassword))
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getOldPassword()));
+        } catch (BadCredentialsException e) {
+            e.printStackTrace();
             throw new CredentialsNotValidException();
+        }
 
-        user.setPassword(dto.getNewPassword());
+        String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+        user.setPassword(encodedPassword);
         repo.save(user);
     }
 
