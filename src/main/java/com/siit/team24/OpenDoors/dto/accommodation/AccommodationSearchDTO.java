@@ -22,13 +22,13 @@ public class AccommodationSearchDTO {
 
     }
 
-    public AccommodationSearchDTO(Long id, Long image, String name, Double averageRating, double price, boolean isPricePerNight, Double totalPrice, String city, String country) {
+    public AccommodationSearchDTO(Long id, Long image, String name, Double averageRating, double price, boolean isPricePerGuest, Double totalPrice, String city, String country) {
         this.id = id;
         this.image = image;
         this.name = name;
         this.averageRating = averageRating;
         this.price = price;
-        this.isPricePerGuest = isPricePerNight;
+        this.isPricePerGuest = isPricePerGuest;
         this.totalPrice = totalPrice;
         this.city = city;
         this.country = country;
@@ -129,7 +129,7 @@ public class AccommodationSearchDTO {
                 ", name='" + name + '\'' +
                 ", averageRating=" + averageRating +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerGuest +
+                ", isPricePerGuest=" + isPricePerGuest +
                 ", totalPrice=" + totalPrice +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +

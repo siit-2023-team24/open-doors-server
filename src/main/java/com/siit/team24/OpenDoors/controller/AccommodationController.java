@@ -4,9 +4,9 @@ import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWithTotalPriceDTO;
+import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
+import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
-
-import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 
 import com.siit.team24.OpenDoors.model.*;
 
@@ -14,23 +14,16 @@ import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 
-import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import jakarta.persistence.EntityNotFoundException;
-
-import com.siit.team24.OpenDoors.service.ImageService;
-import com.siit.team24.OpenDoors.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import com.siit.team24.OpenDoors.model.enums.Country;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -144,6 +137,12 @@ public class AccommodationController {
                 .map(type -> type.name().toUpperCase())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(amenities);
+    }
+
+    @PostMapping("/seasonalRate")
+    public ResponseEntity<List<SeasonalRatesPricingDTO>> getSeasonalRatesForAccommodation(@RequestBody AccommodationSeasonalRateDTO accommodationSeasonalRateDTO) {
+        List<SeasonalRatesPricingDTO> dtos = accommodationService.getSeasonalRatePricingsForAccommodation(accommodationSeasonalRateDTO);
+        return ResponseEntity.ok(dtos);
     }
 
 }

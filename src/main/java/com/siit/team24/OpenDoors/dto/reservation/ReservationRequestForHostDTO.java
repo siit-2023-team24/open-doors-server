@@ -5,7 +5,7 @@ import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 
 import java.sql.Timestamp;
 
-public class ReservationRequestForHostDTO extends ReservationRequestDTO {
+public class ReservationRequestForHostDTO{
     private int cancelledNumber;
 
     public ReservationRequestForHostDTO() {
@@ -14,7 +14,6 @@ public class ReservationRequestForHostDTO extends ReservationRequestDTO {
     public ReservationRequestForHostDTO(Long id, String guestUsername, String accommodationName, DateRange dateRange,
                                         int guestNumber, double totalPrice, ReservationRequestStatus status,
                                         Timestamp timestamp, int cancelledNumber) {
-        super(id, guestUsername, accommodationName, dateRange, guestNumber, totalPrice, status, timestamp);
         this.cancelledNumber = cancelledNumber;
     }
 
