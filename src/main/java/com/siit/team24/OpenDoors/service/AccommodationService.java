@@ -243,6 +243,20 @@ public class AccommodationService {
 
         findById(accommodationId).setAvailability(availability);
     }
+
+    public List<AccommodationSearchDTO> findAllWithFavorites(Guest guest) {
+        List<AccommodationSearchDTO> dtos = new ArrayList<>();
+        for(Accommodation accommodation : findAll()) {
+            AccommodationSearchDTO dto = new AccommodationSearchDTO(accommodation);
+            if(guest.getFavorites().contains(accommodation)) {
+                dto.setIsFavoriteForGuest(true);
+            }
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+
 }
 
 
