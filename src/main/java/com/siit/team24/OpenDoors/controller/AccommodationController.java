@@ -179,4 +179,11 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "/names/{hostId}")
+    public ResponseEntity<Collection<AccommodationNameDTO>> getHostAccommodations(@PathVariable Long hostId) {
+        Collection<AccommodationNameDTO> accommodations = accommodationService.getHostAccommodations(hostId);
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
+
 }
