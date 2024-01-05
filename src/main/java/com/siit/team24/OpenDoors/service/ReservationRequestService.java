@@ -21,6 +21,8 @@ public class ReservationRequestService {
     @Autowired
     private ReservationRequestRepository repo;
 
+    public List<ReservationRequest> findAll() { return repo.findAll(); }
+
     public ReservationRequest findById(Long requestId) {
         if(repo.findById(requestId).isPresent())
             return repo.findById(requestId).get();
