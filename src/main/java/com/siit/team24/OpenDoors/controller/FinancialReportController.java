@@ -1,6 +1,6 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.financialReport.AccommodationFinancialReportItemDTO;
+import com.siit.team24.OpenDoors.dto.financialReport.AccommodationIdReportDTO;
 import com.siit.team24.OpenDoors.dto.financialReport.DateRangeReportDTO;
 import com.siit.team24.OpenDoors.dto.financialReport.DateRangeReportParamsDTO;
 import com.siit.team24.OpenDoors.service.FinancialReportService;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -22,19 +21,16 @@ public class FinancialReportController {
     FinancialReportService financialReportService;
 
     @PreAuthorize("hasRole('HOST')")
-    @PostMapping(value = "/dateRangeReports")
+    @PostMapping(value = "/dateRangeReport")
     public ResponseEntity<List<DateRangeReportDTO>> getDateRangeReport(@RequestBody DateRangeReportParamsDTO reportParams) {
-        List<DateRangeReportDTO> reports = financialReportService.getDateRangeReports(reportParams.getHostId(), reportParams.getStartDate(), reportParams.getEndDate());
+        List<DateRangeReportDTO> report = financialReportService.getDateRangeReports(reportParams.getHostId(), reportParams.getStartDate(), reportParams.getEndDate());
 
-        return new ResponseEntity<>(reports, HttpStatus.OK);
+        return new ResponseEntity<>(report, HttpStatus.OK);
     }
     @PreAuthorize("hasRole('HOST')")
-    @GetMapping(value = "/accommodation/{accommodationId}")
-    public ResponseEntity<List<AccommodationFinancialReportItemDTO>> getAccommodationReport(
-            @PathVariable Long accommodationId,
-            @RequestParam(name = "year", required = true) int year) {
-
-        List<AccommodationFinancialReportItemDTO> items = new ArrayList<>();
-        return new ResponseEntity<>(items, HttpStatus.OK);
+    @GetMapping(value = "/accommodationIdReport/{accommodationId}")
+    public ResponseEntity<List<AccommodationIdReportDTO>> getAccommodationIdReport(@PathVariable Long accommodationId) {
+        List<AccommodationIdReportDTO> report = financialReportService.getAccommodationIdReport(accommodationId);
+        return new ResponseEntity<>(report, HttpStatus.OK);
     }
 }

@@ -185,5 +185,4 @@ public class AccommodationController {
         Collection<AccommodationNameDTO> accommodations = accommodationService.getHostAccommodations(hostId);
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
-
 }
