@@ -125,7 +125,7 @@ public class ReservationRequestService {
     }
 
     private boolean passedFilter(ReservationRequest request, ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
-        if (searchAndFilterDTO.getAccommodationName() != null && !request.getAccommodation().getName().contains(searchAndFilterDTO.getAccommodationName()))
+        if (searchAndFilterDTO.getAccommodationName() != null && !request.getAccommodation().getName().toLowerCase().contains(searchAndFilterDTO.getAccommodationName().toLowerCase()))
             return false;
 
         if (searchAndFilterDTO.getStartDate() != null && searchAndFilterDTO.getEndDate() != null) {
@@ -133,10 +133,10 @@ public class ReservationRequestService {
             if (!searchRange.overlapsWith(request.getDateRange())) return false;
 
         } else if (searchAndFilterDTO.getStartDate() != null) {
-            if (request.getDateRange().getStartDate().before(searchAndFilterDTO.getStartDate())) return false;
+            if (!request.getDateRange().contains(searchAndFilterDTO.getStartDate())) return false;
 
         } else if(searchAndFilterDTO.getEndDate() != null) {
-            if (request.getDateRange().getEndDate().after(searchAndFilterDTO.getEndDate())) return false;
+            if (!request.getDateRange().contains(searchAndFilterDTO.getEndDate())) return false;
         }
 
         if(searchAndFilterDTO.getStatus() != null && !request.getStatus().equals(searchAndFilterDTO.getStatus()))
