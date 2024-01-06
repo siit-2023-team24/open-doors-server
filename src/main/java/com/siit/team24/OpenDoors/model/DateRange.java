@@ -76,6 +76,14 @@ public class DateRange {
         return isStartDateBeforeOrEqual && isEndDateAfterOrEqual;
     }
 
+    public boolean overlapsWith(DateRange other) {
+        if (other.startDate.compareTo(this.startDate) >= 0 && other.startDate.compareTo(this.endDate) <= 0)
+            return true;
+        if (startDate.compareTo(other.startDate) >= 0 && startDate.compareTo(other.endDate) <= 0)
+            return true;
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -36,13 +36,15 @@ public class ReservationRequestForGuestDTO {
 
     public ReservationRequestForGuestDTO(ReservationRequest request) {
         this(   request.getId(),
-                ((Image)request.getAccommodation().getImages().toArray()[0]).getId(),
+                null,
                 request.getAccommodation().getName(),
                 request.getDateRange(),
                 request.getGuestNumber(),
                 request.getTotalPrice(),
                 request.getStatus(),
                 request.getTimestamp());
+        if (!request.getAccommodation().getImages().isEmpty())
+            imageId = ((Image)request.getAccommodation().getImages().toArray()[0]).getId();
     }
 
     public Long getId() {

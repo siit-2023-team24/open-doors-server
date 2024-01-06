@@ -1,9 +1,8 @@
 package com.siit.team24.OpenDoors.service;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForGuestDTO;
+import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForHostDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestSearchAndFilterDTO;
-import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -101,5 +101,53 @@ public class ReservationRequestService {
         }
 
         return true;
+    }
+
+    public List<ReservationRequestForHostDTO> searchRequestsForHost(Long hostId, ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
+        List<ReservationRequest> requests = repo.findByHost(hostId);
+        List<ReservationRequestForHostDTO> filteredRequests = new ArrayList<>();
+
+        for(ReservationRequest request: requests) {
+            if (passedFilter(request, searchAndFilterDTO))
+                filteredRequests.add(convertToHostDTO(request));
+        }
+        return filteredRequests;
+    }
+
+    public List<ReservationRequestForHostDTO> getAllForHost(Long hostId) {
+        List<ReservationRequest> requests = repo.findByHost(hostId);
+        List<ReservationRequestForHostDTO> dtos = new ArrayList<>();
+        for (ReservationRequest request: requests) {
+            dtos.add(convertToHostDTO(request));
+        }
+        dtos.sort(Comparator.comparing(ReservationRequestForHostDTO::getTimestamp));
+        return dtos;
+    }
+
+    private boolean passedFilter(ReservationRequest request, ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
+        if (searchAndFilterDTO.getAccommodationName() != null && !request.getAccommodation().getName().contains(searchAndFilterDTO.getAccommodationName()))
+            return false;
+
+        if (searchAndFilterDTO.getStartDate() != null && searchAndFilterDTO.getEndDate() != null) {
+            DateRange searchRange = new DateRange(searchAndFilterDTO.getStartDate(), searchAndFilterDTO.getEndDate());
+            if (!searchRange.overlapsWith(request.getDateRange())) return false;
+
+        } else if (searchAndFilterDTO.getStartDate() != null) {
+            if (request.getDateRange().getStartDate().before(searchAndFilterDTO.getStartDate())) return false;
+
+        } else if(searchAndFilterDTO.getEndDate() != null) {
+            if (request.getDateRange().getEndDate().after(searchAndFilterDTO.getEndDate())) return false;
+        }
+
+        if(searchAndFilterDTO.getStatus() != null && !request.getStatus().equals(searchAndFilterDTO.getStatus()))
+            return false;
+
+        return true;
+    }
+
+    private ReservationRequestForHostDTO convertToHostDTO(ReservationRequest request) {
+        ReservationRequestForHostDTO dto = new ReservationRequestForHostDTO(request);
+        dto.setCancelledNumber(repo.countCancelledBy(request.getGuest().getId()));
+        return dto;
     }
 }

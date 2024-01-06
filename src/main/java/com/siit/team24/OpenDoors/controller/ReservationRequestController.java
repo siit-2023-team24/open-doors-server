@@ -44,6 +44,15 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "/host/{hostId}")
+    public ResponseEntity<List<ReservationRequestForHostDTO>> getAllForHost(@PathVariable Long hostId) {
+        //TODO test
+        List<ReservationRequestForHostDTO> requests = reservationRequestService.getAllForHost(hostId);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+
     @PostMapping(consumes = "application/json", value = "/search/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> searchReservationRequests(
             @PathVariable Long guestId,
@@ -51,6 +60,16 @@ public class ReservationRequestController {
 
         System.out.println(requestSearchAndFilterDTO);
         List<ReservationRequestForGuestDTO> requests = reservationRequestService.searchRequests(guestId, requestSearchAndFilterDTO);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+    @PostMapping(consumes = "application/json", value = "/host-search/{hostId}")
+    public ResponseEntity<List<ReservationRequestForHostDTO>> searchReservationRequestsForHost(
+            @PathVariable Long hostId,
+            @RequestBody ReservationRequestSearchAndFilterDTO requestSearchAndFilterDTO) {
+
+        System.out.println(requestSearchAndFilterDTO);
+        List<ReservationRequestForHostDTO> requests = reservationRequestService.searchRequestsForHost(hostId, requestSearchAndFilterDTO);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
@@ -63,6 +82,8 @@ public class ReservationRequestController {
         return ResponseEntity.ok(statuses);
     }
 
+    //maybe change to put, since it's an update
+    //the logic should be moved to the service
     @PostMapping(value = "cancelRequest/{requestId}")
     public ResponseEntity<Void> cancelRequest(@PathVariable Long requestId) {
         ReservationRequest request = reservationRequestService.findById(requestId);
@@ -71,6 +92,8 @@ public class ReservationRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //should be changed to delete mapping (the signature is down already)
+    //the logic should be moved to the service
     @PostMapping(value = "deleteRequest/{requestId}")
     public ResponseEntity<Void> deleteRequest(@PathVariable Long requestId) {
         ReservationRequest request = reservationRequestService.findById(requestId);
@@ -79,22 +102,17 @@ public class ReservationRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('GUEST')")
-    @GetMapping(value = "/confirmed/guest/{guestId}")
-    public ResponseEntity<List<ReservationRequestForGuestDTO>> getConfirmedForGuest(@PathVariable Long guestId) {
-        List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
-        //requests.add(testReservationRequestForGuestDTO);
-        return new ResponseEntity<>(requests, HttpStatus.OK);
-    }
+//    @PreAuthorize("hasRole('GUEST')")
+//    @GetMapping(value = "/confirmed/guest/{guestId}")
+//    public ResponseEntity<List<ReservationRequestForGuestDTO>> getConfirmedForGuest(@PathVariable Long guestId) {
+//        List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
+//        //requests.add(testReservationRequestForGuestDTO);
+//        return new ResponseEntity<>(requests, HttpStatus.OK);
+//    }
 
-    @PreAuthorize("hasRole('HOST')")
-    @GetMapping(value = "/host/{hostId}")
-    public ResponseEntity<List<ReservationRequestForHostDTO>> getAllForHost(@PathVariable Long hostId) {
-        List<ReservationRequestForHostDTO> requests = new ArrayList<>();
-        //requests.add(testReservationRequestForHostDTO);
-        return new ResponseEntity<>(requests, HttpStatus.OK);
-    }
 
+
+    //the logic should be moved to the service
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json", value = "/createRequest")
     public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@RequestBody MakeReservationRequestDTO requestDTO) {
@@ -124,6 +142,7 @@ public class ReservationRequestController {
 
         return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
     }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteReservationRequest(@PathVariable Long id) {

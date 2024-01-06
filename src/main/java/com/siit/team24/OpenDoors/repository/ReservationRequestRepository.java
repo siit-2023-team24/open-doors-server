@@ -5,7 +5,6 @@ import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface ReservationRequestRepository extends JpaRepository<ReservationRequest, Long> {
@@ -24,4 +23,10 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     @Query("select r from ReservationRequest r where r.guest.username = :guestUsername and r.status = :status " +
             "and r.dateRange.endDate > current_timestamp ")
     List<ReservationRequest> getFutureForGuestWithStatus(String guestUsername, ReservationRequestStatus status);
+
+    @Query("select r from ReservationRequest r where r.accommodation.host.id = :hostId")
+    List<ReservationRequest> findByHost(Long hostId);
+
+    @Query("select count(r) from ReservationRequest r where r.guest.id = :guestId and r.status = 3")
+    int countCancelledBy(Long guestId);
 }

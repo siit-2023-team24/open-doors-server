@@ -28,11 +28,6 @@ public class PendingAccommodationController {
     @Autowired
     private PendingAccommodationService pendingService;
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ImageService imageService;
-
 
 //    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @GetMapping(value = "/{id}")
