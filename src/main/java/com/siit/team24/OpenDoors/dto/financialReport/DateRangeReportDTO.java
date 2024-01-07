@@ -1,19 +1,19 @@
 package com.siit.team24.OpenDoors.dto.financialReport;
 
-public class FinancialReportDateRangeItemDTO {
+public class DateRangeReportDTO {
 
-    private String accommodationName;
     private Long accommodationId;
-    private int reservationsNumber;
+    private String accommodationName;
+    private int numOfReservations;
     private double profit;
 
-    public FinancialReportDateRangeItemDTO() {
+    public DateRangeReportDTO() {
     }
 
-    public FinancialReportDateRangeItemDTO(String accommodationName, Long accommodationId, int reservationsNumber, double profit) {
+    public DateRangeReportDTO(Long accommodationId, String accommodationName, int numOfReservations, double profit) {
         this.accommodationName = accommodationName;
         this.accommodationId = accommodationId;
-        this.reservationsNumber = reservationsNumber;
+        this.numOfReservations = numOfReservations;
         this.profit = profit;
     }
 
@@ -33,12 +33,12 @@ public class FinancialReportDateRangeItemDTO {
         this.accommodationId = accommodationId;
     }
 
-    public int getReservationsNumber() {
-        return reservationsNumber;
+    public int getNumOfReservations() {
+        return numOfReservations;
     }
 
-    public void setReservationsNumber(int reservationsNumber) {
-        this.reservationsNumber = reservationsNumber;
+    public void setNumOfReservations(int numOfReservations) {
+        this.numOfReservations = numOfReservations;
     }
 
     public double getProfit() {
