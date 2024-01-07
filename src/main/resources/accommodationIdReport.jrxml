@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dateRangeReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843bdfb8-85cb-4ec4-9c5b-650c1747d7b7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="accommodationIdReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843bdfb8-85cb-4ec4-9c5b-650c1747d7b7">
 
-    <field name="accommodationId" class="java.lang.Long">
-    </field>
-    <field name="accommodationName" class="java.lang.String">
+    <field name="month" class="java.lang.String">
     </field>
     <field name="numOfReservations" class="java.lang.Integer">
     </field>
@@ -29,7 +27,7 @@
                     <textElement textAlignment="Right">
                         <font size="14" isBold="false"/>
                     </textElement>
-                    <text><![CDATA[Date Range Report]]></text>
+                    <text><![CDATA[Accommodation ID Report]]></text>
                 </staticText>
             </frame>
         </band>
@@ -92,16 +90,7 @@
                 <textElement>
                     <font size="14"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{accommodationId}]]></textFieldExpression>
-            </textField>
-            <textField textAdjust="StretchHeight">
-                <reportElement x="138" y="0" width="138" height="20" uuid="c18ee634-5abf-4932-931c-76ad7405e4ca">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b71833a5-136e-4069-beef-6553815e7d73"/>
-                </reportElement>
-                <textElement>
-                    <font size="14"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$F{accommodationName}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{month}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
                 <reportElement x="276" y="0" width="138" height="20" uuid="0d25248b-c5df-4fd5-b69d-d9cac020b633">

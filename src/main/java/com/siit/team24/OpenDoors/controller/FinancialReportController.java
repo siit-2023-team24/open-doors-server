@@ -41,4 +41,12 @@ public class FinancialReportController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('HOST')")
+    @PostMapping(value = "/accommodationIdReport/export")
+    public ResponseEntity<Void> getAccommodationIdReportExport(@RequestBody Long accommodationId) {
+        financialReportService.exportAccommodationIdReport(accommodationId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

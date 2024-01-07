@@ -116,7 +116,43 @@ public class FinancialReportService {
         }
 
         try {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "C:\\Users\\milic\\Downloads\\dateRangeReport.pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint,
+            "C:\\Users\\milic\\Downloads\\dateRangeReport_" + hostId + "_" +
+                    startDate.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "_" +
+                    endDate.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) +  ".pdf");
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void exportAccommodationIdReport(Long accommodationId) {
+        List<AccommodationIdReportDTO> report = getAccommodationIdReport(accommodationId);
+        File file;
+        try {
+            file = ResourceUtils.getFile("classpath:accommodationIdReport.jrxml");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        JasperReport jasperReport;
+        try {
+            jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(report);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Open Doors");
+        JasperPrint jasperPrint;
+        try {
+            jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            JasperExportManager.exportReportToPdfFile(jasperPrint,
+                    "C:\\Users\\milic\\Downloads\\accommodationIdReport_" + accommodationId +  ".pdf");
         } catch (JRException e) {
             throw new RuntimeException(e);
         }
