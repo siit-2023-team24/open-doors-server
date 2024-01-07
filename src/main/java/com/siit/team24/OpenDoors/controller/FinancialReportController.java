@@ -33,4 +33,12 @@ public class FinancialReportController {
         List<AccommodationIdReportDTO> report = financialReportService.getAccommodationIdReport(accommodationId);
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('HOST')")
+    @PostMapping(value = "/dateRangeReport/export")
+    public ResponseEntity<Void> getDateRangeReportExport(@RequestBody DateRangeReportParamsDTO reportParams) {
+        financialReportService.exportDateRangeReport(reportParams.getHostId(), reportParams.getStartDate(), reportParams.getEndDate());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

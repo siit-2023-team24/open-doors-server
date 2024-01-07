@@ -5,15 +5,19 @@ import com.siit.team24.OpenDoors.dto.financialReport.DateRangeReportDTO;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FinancialReportService {
@@ -62,10 +66,6 @@ public class FinancialReportService {
     }
 
     public List<AccommodationIdReportDTO> getAccommodationIdReport(Long accommodationId) {
-        List<String> months = new ArrayList<>(Arrays.asList(
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-        ));
 
         List<AccommodationIdReportDTO> report = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
@@ -88,5 +88,37 @@ public class FinancialReportService {
         }
 
         return report;
+    }
+
+    public void exportDateRangeReport(Long hostId, Timestamp startDate, Timestamp endDate) {
+        List<DateRangeReportDTO> report = getDateRangeReports(hostId, startDate, endDate);
+        File file;
+        try {
+            file = ResourceUtils.getFile("classpath:dateRangeReport.jrxml");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        JasperReport jasperReport;
+        try {
+            jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(report);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Open Doors");
+        JasperPrint jasperPrint;
+        try {
+            jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "C:\\Users\\milic\\Downloads\\dateRangeReport.pdf");
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
