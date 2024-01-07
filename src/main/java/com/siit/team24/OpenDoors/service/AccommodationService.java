@@ -248,10 +248,11 @@ public class AccommodationService {
         List<AccommodationSearchDTO> dtos = new ArrayList<>();
         for(Accommodation accommodation : findAll()) {
             AccommodationSearchDTO dto = new AccommodationSearchDTO(accommodation);
+            dtos.add(dto);
+            if(guest == null) continue;
             if(guest.getFavorites().contains(accommodation)) {
                 dto.setIsFavoriteForGuest(true);
             }
-            dtos.add(dto);
         }
 
         return dtos;

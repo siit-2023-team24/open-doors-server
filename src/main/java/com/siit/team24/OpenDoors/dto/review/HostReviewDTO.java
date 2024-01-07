@@ -1,4 +1,4 @@
-package com.siit.team24.OpenDoors.dto.hostReview;
+package com.siit.team24.OpenDoors.dto.review;
 
 import java.sql.Timestamp;
 

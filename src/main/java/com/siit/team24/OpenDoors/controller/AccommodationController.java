@@ -52,7 +52,10 @@ public class AccommodationController {
 
     @GetMapping(value = "/all/{guestId}")
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsSearchPage(@PathVariable Long guestId) {
-        Guest guest = (Guest) userService.findById(guestId);
+        Guest guest = null;
+        if (guestId != 0) {
+            guest = (Guest) userService.findById(guestId);
+        }
         List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
@@ -76,11 +79,13 @@ public class AccommodationController {
 
         if (accommodation.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0);
 
-        return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
+        System.out.println(dto.getCountry());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         accommodationService.delete(id);
@@ -109,7 +114,7 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
         Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);

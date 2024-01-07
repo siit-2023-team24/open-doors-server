@@ -1,6 +1,8 @@
 package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.dto.hostReview.*;
+import com.siit.team24.OpenDoors.dto.review.HostReviewDTO;
+import com.siit.team24.OpenDoors.dto.review.HostReviewForHostDTO;
+import com.siit.team24.OpenDoors.dto.review.ReportedHostReviewDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,22 +57,22 @@ public class HostReview extends Review {
                 '}';
     }
 
-    public HostReviewDTO toDTO() {
-        return new HostReviewDTO(rating, comment, author.getUsername(),
-                host.getUsername(), id, timestamp, reported);
-    }
+//    public HostReviewDTO toDTO() {
+//        return new HostReviewDTO(rating, comment, author.getUsername(),
+//                host.getUsername(), id, timestamp, reported);
+//    }
 
-    public HostReviewProfileDTO toProfileDTO() {
-        return new HostReviewProfileDTO(id, rating, comment, timestamp, author.getUsername());
-    }
+//    public HostReviewProfileDTO toProfileDTO() {
+//        return new HostReviewProfileDTO(id, rating, comment, timestamp, author.getUsername());
+//    }
 
-    public HostReviewForHostDTO toForHostDTO() {
-        return new HostReviewForHostDTO(id, rating, comment, timestamp, author.getUsername(), reported);
-    }
+//    public HostReviewForHostDTO toForHostDTO() {
+//        return new HostReviewForHostDTO(id, rating, comment, timestamp, author.getUsername(), reported);
+//    }
 
-    public ReportedHostReviewDTO toReportedDTO() {
-        return new ReportedHostReviewDTO(id, rating, comment, timestamp, author.getUsername(),
-                host.getUsername());
-    }
+//    public ReportedHostReviewDTO toReportedDTO() {
+//        return new ReportedHostReviewDTO(id, rating, comment, timestamp, author.getUsername(),
+//                host.getUsername());
+//    }
 
 }
