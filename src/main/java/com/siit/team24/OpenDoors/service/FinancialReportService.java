@@ -80,7 +80,7 @@ public class FinancialReportService {
             double[] results = getNumOfSuccessfulAndProfitForAccommodationInDateRange(accommodationId, startDate, endDate);
 
             int numOfReservations = (int) results[0];
-            int profit = (int) results[1];
+            double profit = results[1];
 
             String month = monthStart.format(DateTimeFormatter.ofPattern("MMMM"));
             AccommodationIdReportDTO reportDTO = new AccommodationIdReportDTO(month, numOfReservations, profit);

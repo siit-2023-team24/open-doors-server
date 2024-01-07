@@ -3,9 +3,9 @@ package com.siit.team24.OpenDoors.dto.financialReport;
 public class AccommodationIdReportDTO {
     private String month;
     private int numOfReservations;
-    private int profit;
+    private double profit;
 
-    public AccommodationIdReportDTO(String month, int numOfReservations, int profit) {
+    public AccommodationIdReportDTO(String month, int numOfReservations, double profit) {
         this.month = month;
         this.numOfReservations = numOfReservations;
         this.profit = profit;
@@ -27,11 +27,11 @@ public class AccommodationIdReportDTO {
         this.numOfReservations = numOfReservations;
     }
 
-    public int getProfit() {
+    public double getProfit() {
         return profit;
     }
 
-    public void setProfit(int profit) {
+    public void setProfit(double profit) {
         this.profit = profit;
     }
 
