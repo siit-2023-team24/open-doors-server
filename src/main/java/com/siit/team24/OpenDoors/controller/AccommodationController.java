@@ -51,11 +51,9 @@ public class AccommodationController {
     }
 
     @GetMapping(value = "/all/{guestId}")
-    public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsSearchPage(@PathVariable Long guestId) {
-        Guest guest = null;
-        if (guestId != 0) {
-            guest = (Guest) userService.findById(guestId);
-        }
+
+    public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsWhenGuest(@PathVariable Long guestId) {
+        Guest guest = (Guest) userService.findById(guestId);
         List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
@@ -82,6 +80,17 @@ public class AccommodationController {
         AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0);
 
         System.out.println(dto.getCountry());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{accommodationId}/{guestId}")
+    public ResponseEntity<AccommodationWithTotalPriceDTO> getAccommodationWhenGuest(@PathVariable Long accommodationId, @PathVariable Long guestId) {
+        Guest guest = (Guest) userService.findById(guestId);
+        Accommodation accommodation = accommodationService.findById(accommodationId);
+        AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation, 0.0);
+        if(guest.getFavorites().contains(accommodation))
+            dto.setIsFavoriteForGuest(true);
+
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -173,4 +182,10 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "/names/{hostId}")
+    public ResponseEntity<Collection<AccommodationNameDTO>> getHostAccommodations(@PathVariable Long hostId) {
+        Collection<AccommodationNameDTO> accommodations = accommodationService.getHostAccommodations(hostId);
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
 }

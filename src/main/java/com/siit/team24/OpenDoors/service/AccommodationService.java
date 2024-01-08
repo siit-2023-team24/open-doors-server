@@ -2,6 +2,7 @@ package com.siit.team24.OpenDoors.service;
 
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationNameDTO;
 import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
 import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
 import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
@@ -258,6 +259,16 @@ public class AccommodationService {
         return dtos;
     }
 
+    public Collection<AccommodationNameDTO> getHostAccommodations(Long hostId) {
+        List<Accommodation> accommodations = findAll();
+        List<AccommodationNameDTO> hostAccommodations = new ArrayList<>();
+        for(Accommodation a: accommodations) {
+            if(a.getHost().getId().equals(hostId))
+                hostAccommodations.add(new AccommodationNameDTO(a));
+        }
+
+        return hostAccommodations;
+    }
 }
 
 
