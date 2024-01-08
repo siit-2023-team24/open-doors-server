@@ -1,6 +1,9 @@
 package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.review.*;
+import com.siit.team24.OpenDoors.model.Guest;
+import com.siit.team24.OpenDoors.model.Host;
+import com.siit.team24.OpenDoors.model.HostReview;
 import com.siit.team24.OpenDoors.service.HostReviewService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +34,8 @@ public class HostReviewController {
 //            (long)1485622, 4, "Solid indeed!", new Timestamp(37283472), "howmany@arethere.com", "another@one.com"
 //    );
 
-    HostReviewDTO testHostReviewDTO = new HostReviewDTO(
-            1, "Worst place EVER", "ireally@hate.it", "sorry@bro.com", (long)1234567123, new Timestamp(349834534), true
+    HostReviewWholeDTO testHostHostReviewWholeDTO = new HostReviewWholeDTO(
+            1, "Worst place EVER", (long)2379423, (long)1231241, (long)1234567123, new Timestamp(349834534), true
     );
 
     @GetMapping(value = "/my/{hostId}")
@@ -63,13 +66,18 @@ public class HostReviewController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<HostReviewDTO> createHostReview(@RequestBody NewHostReviewDTO reviewDTO) {
-        return new ResponseEntity<>(testHostReviewDTO, HttpStatus.CREATED);
+    public ResponseEntity<HostReviewWholeDTO> createHostReview(@RequestBody NewReviewDTO reviewDTO) {
+        HostReview review = new HostReview(reviewDTO);
+        review.setHost((Host) userService.findById(reviewDTO.getRecipientId()));
+        review.setAuthor((Guest) userService.findById(reviewDTO.getAuthorId()));
+        hostReviewService.save(review);
+        HostReviewWholeDTO returnDto = new HostReviewWholeDTO(review);
+        return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = "application/json")
-    public ResponseEntity<HostReviewDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
-        return new ResponseEntity<>(testHostReviewDTO, HttpStatus.OK);
+    public ResponseEntity<HostReviewWholeDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
+        return new ResponseEntity<>(testHostHostReviewWholeDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

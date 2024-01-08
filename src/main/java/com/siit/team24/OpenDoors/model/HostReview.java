@@ -1,8 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.dto.review.HostReviewDTO;
-import com.siit.team24.OpenDoors.dto.review.HostReviewForHostDTO;
-import com.siit.team24.OpenDoors.dto.review.ReportedHostReviewDTO;
+import com.siit.team24.OpenDoors.dto.review.NewReviewDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,6 +24,13 @@ public class HostReview extends Review {
         super(id, rating, comment, timestamp, author);
         this.host = host;
         this.reported = reported;
+    }
+
+    public HostReview(NewReviewDTO dto) {
+        this.rating = dto.getRating();
+        this.comment = dto.getComment();
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.reported = false;
     }
 
     public Host getHost() {

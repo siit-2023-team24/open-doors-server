@@ -30,27 +30,8 @@ public class UserController {
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
 
-    UserDTO testUserDTO = new UserDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1
-    );
-
-    AccountDTO testAccountDTO = new AccountDTO(
-            "steve@testnmail.me", "St3v3St3v3ns"
-    );
-
-    UserAccountDTO testUserAccountDTO = new UserAccountDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "St3v3St3v3ns", "guest"
-    );
-
     UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
             "bob@testmail.me", "Bob", "Roberts", "host"
-    );
-
-    UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "guest"
     );
 
     NotificationDTO testNotificationDTO = new NotificationDTO(

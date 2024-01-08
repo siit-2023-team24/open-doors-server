@@ -32,4 +32,8 @@ public class HostReviewService {
         boolean hasStayed = reservationRequestService.hasStayed(guestId, hostId);
         return (!hasAlreadyReviewed && hasStayed);
     }
+
+    public void save(HostReview review) {
+        this.hostReviewRepository.save(review);
+    }
 }
