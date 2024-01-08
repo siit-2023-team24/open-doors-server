@@ -188,7 +188,7 @@ public class UserService {
         else if (user.getRole() == UserRole.ROLE_HOST) {
             List<Accommodation> accommodations = accommodationService.findAllByHostId(user.getId());
             for (Accommodation accommodation: accommodations) {
-                if (reservationRequestService.countConfirmedFutureFor(accommodation.getId()) > 0)
+                if (!reservationRequestService.isAccommodationReadyForDelete(accommodation.getId()))
                     throw new ConfirmedReservationRequestsFound();
             }
             for (Accommodation accommodation: accommodations)

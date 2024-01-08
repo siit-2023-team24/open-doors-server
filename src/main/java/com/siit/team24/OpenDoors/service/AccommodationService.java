@@ -4,8 +4,6 @@ package com.siit.team24.OpenDoors.service;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
 import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
-import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
-import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
@@ -37,16 +35,11 @@ public class AccommodationService {
     private AccommodationRepository accommodationRepository;
 
     @Autowired
-    private ReservationRequestService reservationRequestService;
-
-    @Autowired
     private ImageService imageService;
 
     public Accommodation findById(Long id) {
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
-        if (accommodation.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
+        if (accommodation.isEmpty()) throw new EntityNotFoundException();
         return accommodation.get();
     }
 
@@ -57,13 +50,8 @@ public class AccommodationService {
     }
 
     public void delete(Long id) {
-        int reservationsNumber = reservationRequestService.countConfirmedFutureFor(id);
-        if (reservationsNumber != 0) {
-            throw new ExistingReservationsException();
-        }
-        reservationRequestService.denyAllFor(id);
         Accommodation accommodation = findById(id);
-        //do not delete.
+        //do not delete this println.
         System.out.println(accommodation);  //because of lazy fetch
         Set<Image> images = accommodation.getImages();
         accommodationRepository.deleteById(id);
@@ -72,16 +60,16 @@ public class AccommodationService {
     }
 
     public void deleteForEdit(Long id) {
-        boolean found = reservationRequestService.foundActiveFor(id);
-        if (found) throw new ActiveReservationRequestsFoundException();
-        accommodationRepository.deleteById(id);
+        Accommodation accommodation = findById(id);
+        accommodation.setDeleted(true);
+        accommodationRepository.save(accommodation);
     }
 
     public void revive(Long id) {
         accommodationRepository.revive(id);
     }
 
-    public Collection<AccommodationHostDTO> getForHost(Long hostId) {
+    public Collection<AccommodationHostDTO> getDTOsForHost(Long hostId) {
         return accommodationRepository.findAllDtoByHostId(hostId);
     }
 
@@ -198,11 +186,10 @@ public class AccommodationService {
             for(int i = 0; i < dtos.size(); i++) {
                 if(!dtos.get(i).getPrice().equals(firstDTO.getPrice())) {
                     Timestamp endDate = dtos.get(i-1).getEndDate();
-                    LocalDateTime endLocalDate = endDate.toLocalDateTime().plusDays(1);
-                    result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), Timestamp.valueOf(endLocalDate)));
+                    result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), endDate));
                     firstDTO = dtos.get(i);
                 }
-                else if(i == dtos.size()-1) {
+                if(i == dtos.size()-1) {
                     result.add(new SeasonalRatesPricingDTO(firstDTO.getPrice(), firstDTO.getStartDate(), dtos.get(i).getEndDate()));
                 }
             }
@@ -223,7 +210,8 @@ public class AccommodationService {
     }
 
     public void removeDatesFromAccommodationAvailability(Long accommodationId, DateRange desiredDates) {
-        List<DateRange> availability = findById(accommodationId).getAvailability();
+        Accommodation accommodation = findById(accommodationId);
+        List<DateRange> availability = accommodation.getAvailability();
 
         Timestamp startDate = null;
         Timestamp endDate = null;
@@ -236,12 +224,38 @@ public class AccommodationService {
             }
         }
 
-        if(!startDate.equals(desiredDates.getStartDate()))
-            availability.add(new DateRange(startDate, desiredDates.getStartDate()));
-        if(!endDate.equals(desiredDates.getEndDate()))
-            availability.add(new DateRange(desiredDates.getEndDate(), endDate));
+        if(!startDate.equals(desiredDates.getStartDate())) {
+            LocalDateTime dayBefore = desiredDates.getStartDate().toLocalDateTime().minusDays(1);
+            availability.add(new DateRange(startDate, Timestamp.valueOf(dayBefore)));
+        }
+        if(!endDate.equals(desiredDates.getEndDate())) {
+            LocalDateTime dayAfter = desiredDates.getEndDate().toLocalDateTime().plusDays(1);
+            availability.add(new DateRange(Timestamp.valueOf(dayAfter), endDate));
+        }
 
-        findById(accommodationId).setAvailability(availability);
+        accommodation.setAvailability(availability);
+        accommodationRepository.save(accommodation);
+    }
+
+    public void addToAvailability(Long id, DateRange range) {
+        Accommodation accommodation = findById(id);
+        List<DateRange> newAvailability = new ArrayList<>();
+
+        Timestamp startLimit = Timestamp.valueOf(range.getStartDate().toLocalDateTime().minusDays(1));
+        Timestamp endLimit = Timestamp.valueOf(range.getEndDate().toLocalDateTime().plusDays(1));
+
+        for (DateRange availableRange: accommodation.getAvailability()) {
+            if (startLimit.equals(availableRange.getEndDate()))
+                range.setStartDate(availableRange.getStartDate());
+
+            else if (endLimit.equals(availableRange.getStartDate()))
+                range.setEndDate(availableRange.getEndDate());
+
+            else newAvailability.add(availableRange);
+        }
+        newAvailability.add(range);
+        accommodation.setAvailability(newAvailability);
+        accommodationRepository.save(accommodation);
     }
 
     public List<AccommodationSearchDTO> findAllWithFavorites(Guest guest) {

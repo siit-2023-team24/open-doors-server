@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,12 +46,11 @@ public class ReservationRequestController {
     @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<List<ReservationRequestForHostDTO>> getAllForHost(@PathVariable Long hostId) {
-        //TODO test
         List<ReservationRequestForHostDTO> requests = reservationRequestService.getAllForHost(hostId);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json", value = "/search/{guestId}")
     public ResponseEntity<List<ReservationRequestForGuestDTO>> searchReservationRequests(
             @PathVariable Long guestId,
@@ -63,6 +61,7 @@ public class ReservationRequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST')")
     @PostMapping(consumes = "application/json", value = "/host-search/{hostId}")
     public ResponseEntity<List<ReservationRequestForHostDTO>> searchReservationRequestsForHost(
             @PathVariable Long hostId,
@@ -82,23 +81,17 @@ public class ReservationRequestController {
         return ResponseEntity.ok(statuses);
     }
 
-    //maybe change to put, since it's an update
-    //the logic should be moved to the service
-    @PostMapping(value = "cancelRequest/{requestId}")
-    public ResponseEntity<Void> cancelRequest(@PathVariable Long requestId) {
-        ReservationRequest request = reservationRequestService.findById(requestId);
-        request.setStatus(ReservationRequestStatus.CANCELLED);
-        reservationRequestService.save(request);
+    @PreAuthorize("hasRole('GUEST')")
+    @GetMapping(value = "cancel/{id}")
+    public ResponseEntity<Void> cancelRequest(@PathVariable Long id) {
+        reservationRequestService.cancel(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //should be changed to delete mapping (the signature is down already)
-    //the logic should be moved to the service
-    @PostMapping(value = "deleteRequest/{requestId}")
-    public ResponseEntity<Void> deleteRequest(@PathVariable Long requestId) {
-        ReservationRequest request = reservationRequestService.findById(requestId);
-        request.setStatus(ReservationRequestStatus.DELETED);
-        reservationRequestService.save(request);
+    @PreAuthorize("hasRole('GUEST')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reservationRequestService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -110,9 +103,21 @@ public class ReservationRequestController {
 //        return new ResponseEntity<>(requests, HttpStatus.OK);
 //    }
 
+    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "confirm/{id}")
+    public ResponseEntity<Void> confirm(@PathVariable Long id) {
+        reservationRequestService.confirm(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('HOST')")
+    @GetMapping(value = "deny/{id}")
+    public ResponseEntity<Void> deny(@PathVariable Long id) {
+        reservationRequestService.deny(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
-    //the logic should be moved to the service
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json", value = "/createRequest")
     public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@RequestBody MakeReservationRequestDTO requestDTO) {
@@ -129,7 +134,9 @@ public class ReservationRequestController {
         if(accommodation.getIsAutomatic()) {
             request.setStatus(ReservationRequestStatus.CONFIRMED);
             accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
-            //TODO: implement denyOtherRequestsForThisDateRange()
+
+            //implement denyOtherRequestsForThisDateRange()
+            reservationRequestService.denyAllOverlappingRequests(request.getAccommodation().getId(), request.getDateRange());
         } else {
             request.setStatus(ReservationRequestStatus.PENDING);
         }
@@ -141,12 +148,6 @@ public class ReservationRequestController {
         reservationRequestService.save(request);
 
         return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
-    }
-
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteReservationRequest(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
