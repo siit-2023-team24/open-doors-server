@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HostReviewService {
@@ -15,6 +16,8 @@ public class HostReviewService {
     @Autowired
     private HostReviewRepository hostReviewRepository;
 
+    @Autowired
+    private ReservationRequestService reservationRequestService;
     public List<ReviewDetailsDTO> findAllForHost(Long hostId) {
         List<HostReview> reviews = hostReviewRepository.findAllByHostId(hostId);
         List<ReviewDetailsDTO> dtos = new ArrayList<>();
@@ -22,5 +25,11 @@ public class HostReviewService {
             dtos.add(new ReviewDetailsDTO(hr));
         }
         return dtos;
+    }
+
+    public boolean isReviewable(Long hostId, Long guestId) {
+        boolean hasAlreadyReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isPresent();
+        boolean hasStayed = reservationRequestService.hasStayed(guestId, hostId);
+        return (!hasAlreadyReviewed && hasStayed);
     }
 }

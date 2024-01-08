@@ -11,6 +11,7 @@ public class HostPublicDataDTO {
 
     public Long imageId;
 
+    public boolean isReviewable;
     public Long getImageId() {
         return imageId;
     }
@@ -27,14 +28,24 @@ public class HostPublicDataDTO {
             return;
         }
         this.imageId = null;
+        this.isReviewable = false;
     }
 
-    public HostPublicDataDTO(String username, String firstName, String lastName, Long imageId, List<ReviewDetailsDTO> reviews) {
+    public HostPublicDataDTO(String username, String firstName, String lastName, Long imageId, List<ReviewDetailsDTO> reviews, boolean isReviewable) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.imageId = imageId;
         this.reviews = reviews;
+        this.isReviewable = isReviewable;
+    }
+
+    public boolean getIsReviewable() {
+        return isReviewable;
+    }
+
+    public void setIsReviewable(boolean isReviewable) {
+        this.isReviewable = isReviewable;
     }
 
     public void setImageId(Long imageId) {

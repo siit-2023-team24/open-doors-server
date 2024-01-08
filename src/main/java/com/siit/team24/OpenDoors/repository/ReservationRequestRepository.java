@@ -24,4 +24,8 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     @Query("select r from ReservationRequest r where r.guest.username = :guestUsername and r.status = :status " +
             "and r.dateRange.endDate > current_timestamp ")
     List<ReservationRequest> getFutureForGuestWithStatus(String guestUsername, ReservationRequestStatus status);
+
+    @Query("select r from ReservationRequest r where r.guest.id = ?1 and r.accommodation.host.id = ?2 and r.status = 1 " +
+            "and r.dateRange.endDate < current_timestamp ")
+    List<ReservationRequest> getPastForGuestAndHostConfirmed(Long guestId, Long hostId);
 }

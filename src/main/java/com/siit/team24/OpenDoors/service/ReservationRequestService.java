@@ -102,4 +102,9 @@ public class ReservationRequestService {
 
         return true;
     }
+
+    boolean hasStayed(Long guestId, Long hostId) {
+        List<ReservationRequest> stays = repo.getPastForGuestAndHostConfirmed(guestId, hostId);
+        return (!stays.isEmpty());
+    }
 }
