@@ -50,8 +50,6 @@ public class HostReviewController {
         HostPublicDataDTO host = userService.getPublicData(hostId);
         if (guestId != 0) {
             host.setIsReviewable(hostReviewService.isReviewable(hostId, guestId));
-            System.out.println(hostReviewService.isReviewable((long)54, (long)53));
-            System.out.println(hostReviewService.isReviewable((long)102, (long)53));
         }
         List<ReviewDetailsDTO> reviews = hostReviewService.findAllForHost(hostId);
         host.setReviews(reviews);
