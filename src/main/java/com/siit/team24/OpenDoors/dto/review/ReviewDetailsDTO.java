@@ -11,18 +11,19 @@ public class ReviewDetailsDTO {
     protected String comment;
     protected Timestamp timestamp;
     protected String authorUsername;
-    protected Long authorId;
+
+    protected Long imageId;
 
     public ReviewDetailsDTO() {
     }
 
-    public ReviewDetailsDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long authorId) {
+    public ReviewDetailsDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long imageId) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.timestamp = timestamp;
         this.authorUsername = authorUsername;
-        this.authorId = authorId;
+        this.imageId = imageId;
     }
 
     public ReviewDetailsDTO(Review review) {
@@ -31,7 +32,10 @@ public class ReviewDetailsDTO {
             review.getComment(),
             review.getTimestamp(),
             review.getAuthor().getUsername(),
-            review.getAuthor().getId());
+            null);
+        if (review.getAuthor().getImage()!=null) {
+            imageId = review.getAuthor().getImage().getId();
+        }
     }
 
     public Long getId() {
@@ -70,11 +74,15 @@ public class ReviewDetailsDTO {
         this.authorUsername = authorUsername;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 }

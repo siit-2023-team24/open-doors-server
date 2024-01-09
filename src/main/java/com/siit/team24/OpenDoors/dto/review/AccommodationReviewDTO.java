@@ -10,8 +10,8 @@ public class AccommodationReviewDTO extends ReviewDetailsDTO {
 
     }
 
-    public AccommodationReviewDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, boolean approved, String accommodationUniqueName, Long authorId) {
-        super(id, rating, comment, timestamp, authorUsername, authorId);
+    public AccommodationReviewDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long imageId, boolean approved, String accommodationUniqueName) {
+        super(id, rating, comment, timestamp, authorUsername, imageId);
         this.approved = approved;
         this.accommodationUniqueName = accommodationUniqueName;
     }

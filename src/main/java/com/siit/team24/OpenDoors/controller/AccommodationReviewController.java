@@ -23,7 +23,7 @@ public class AccommodationReviewController {
 
 
     AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
-            (long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", false, "Hotel Park", 2L
+            (long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
     );
 
     @GetMapping(value = "/accommodation/{accommodationId}")
