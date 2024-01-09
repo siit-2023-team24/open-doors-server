@@ -1,9 +1,9 @@
 package com.siit.team24.OpenDoors.controller;
 
 
-import com.siit.team24.OpenDoors.dto.accommodationReview.AccommodationReviewDTO;
-import com.siit.team24.OpenDoors.dto.accommodationReview.AccommodationReviewDetailsDTO;
-import com.siit.team24.OpenDoors.dto.hostReview.HostReviewForHostDTO;
+import com.siit.team24.OpenDoors.dto.review.AccommodationReviewDTO;
+import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
+import com.siit.team24.OpenDoors.dto.review.HostReviewForHostDTO;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +27,8 @@ public class AccommodationReviewController {
     );
 
     @GetMapping(value = "/accommodation/{accommodationId}")
-    public ResponseEntity<List<AccommodationReviewDetailsDTO>> getAccommodationReviewsForDetails(@PathVariable Long accommodationId) {
-        List<AccommodationReviewDetailsDTO> reviews = accommodationReviewService.findAllForAccommodation(accommodationId);
+    public ResponseEntity<List<ReviewDetailsDTO>> getAccommodationReviewsForDetails(@PathVariable Long accommodationId) {
+        List<ReviewDetailsDTO> reviews = accommodationReviewService.findAllForAccommodation(accommodationId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 

@@ -24,6 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 
 @RestController
@@ -73,7 +75,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(consumes="application/json", value = "/register")
-    public ResponseEntity<User> register(@RequestBody UserAccountDTO userAccountDTO) {
+    public ResponseEntity<User> register(@RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
 
         User existUser = this.userService.findByUsername(userAccountDTO.getUsername());
 
@@ -84,11 +86,10 @@ public class AuthenticationController {
         User user = this.userService.create(userAccountDTO);
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://localhost:4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
+        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://" + InetAddress.getLocalHost().getHostAddress() + ":4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-
     @PostMapping("/activate-user/{id}")
     public ResponseEntity<String> activateUser(@PathVariable("id") Long id) {
         this.userService.activateUser(id);

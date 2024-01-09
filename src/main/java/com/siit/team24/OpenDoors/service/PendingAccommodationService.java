@@ -139,9 +139,9 @@ public class PendingAccommodationService {
 
 //        accommodation.setImages(pendingAccommodation.getImages());
 
-        if (dto.getAccommodationId() != null) {
-            accommodationService.revive(dto.getAccommodationId());
-            Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
+        if (pendingAccommodation.getAccommodationId() != null) {
+            accommodationService.revive(pendingAccommodation.getAccommodationId());
+            Accommodation oldData = accommodationService.findById(pendingAccommodation.getAccommodationId());
             accommodation.setAverageRating(oldData.getAverageRating());
             //delete all old images
 //            imageService.deleteAll(accommodation.getImages());

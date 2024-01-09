@@ -51,6 +51,7 @@ public class AccommodationController {
     }
 
     @GetMapping(value = "/all/{guestId}")
+
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsWhenGuest(@PathVariable Long guestId) {
         Guest guest = (Guest) userService.findById(guestId);
         List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
@@ -76,8 +77,10 @@ public class AccommodationController {
 
         if (accommodation.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0);
 
-        return new ResponseEntity<>(new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0), HttpStatus.OK);
+        System.out.println(dto.getCountry());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{accommodationId}/{guestId}")

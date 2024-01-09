@@ -30,27 +30,8 @@ public class UserController {
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
 
-    UserDTO testUserDTO = new UserDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1
-    );
-
-    AccountDTO testAccountDTO = new AccountDTO(
-            "steve@testnmail.me", "St3v3St3v3ns"
-    );
-
-    UserAccountDTO testUserAccountDTO = new UserAccountDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "St3v3St3v3ns", "guest"
-    );
-
     UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
             "bob@testmail.me", "Bob", "Roberts", "host"
-    );
-
-    UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "guest"
     );
 
     NotificationDTO testNotificationDTO = new NotificationDTO(
@@ -138,7 +119,7 @@ public class UserController {
 
     }
 
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         //todo
@@ -147,7 +128,7 @@ public class UserController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('GUEST')")
+//    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         //todo
@@ -156,7 +137,7 @@ public class UserController {
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{userId}/status")
     public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
                                                   @RequestParam boolean isBlocked){

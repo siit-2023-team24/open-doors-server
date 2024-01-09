@@ -76,7 +76,7 @@ public class FileRepository {
                 //TODO change path to the new image
                 filepath = "./src/main/resources/static/logo.png";
         } else {
-            filepath = String.join(File.separator, image.get().getPath());
+            filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
         }
         System.out.println(filepath);
         File file = new File(filepath);

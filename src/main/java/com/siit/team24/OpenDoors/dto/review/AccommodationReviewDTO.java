@@ -1,8 +1,8 @@
-package com.siit.team24.OpenDoors.dto.accommodationReview;
+package com.siit.team24.OpenDoors.dto.review;
 
 import java.sql.Timestamp;
 
-public class AccommodationReviewDTO extends AccommodationReviewDetailsDTO {
+public class AccommodationReviewDTO extends ReviewDetailsDTO {
     private boolean approved;
     private String accommodationUniqueName;
 
