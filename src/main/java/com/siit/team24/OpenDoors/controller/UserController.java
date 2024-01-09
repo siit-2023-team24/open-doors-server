@@ -30,8 +30,7 @@ public class UserController {
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
 
-
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
         UserEditedDTO dto = null;
@@ -49,7 +48,7 @@ public class UserController {
         }
     }
 
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
         this.service.changePassword(newPasswordDTO);
@@ -71,7 +70,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
             Pageable pageable) {
@@ -80,7 +79,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserAccountViewDTO> getUser(
             @PathVariable Long id) {
@@ -95,7 +94,7 @@ public class UserController {
 
     }
 
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         //todo
@@ -103,7 +102,7 @@ public class UserController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         //todo
@@ -111,7 +110,7 @@ public class UserController {
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{userId}/status")
     public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
                                                   @RequestParam boolean isBlocked){

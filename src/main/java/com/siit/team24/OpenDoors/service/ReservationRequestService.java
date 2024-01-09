@@ -23,8 +23,12 @@ public class ReservationRequestService {
     @Autowired
     private ReservationRequestRepository repo;
 
+
     @Autowired
     private AccommodationService accommodationService;
+
+    public List<ReservationRequest> findAll() { return repo.findAll(); }
+
 
     public ReservationRequest findById(Long requestId) {
         if(repo.findById(requestId).isPresent())
@@ -107,6 +111,7 @@ public class ReservationRequestService {
 
         return true;
     }
+
 
     public List<ReservationRequestForHostDTO> searchRequestsForHost(Long hostId, ReservationRequestSearchAndFilterDTO searchAndFilterDTO) {
         List<ReservationRequest> requests = repo.findByHost(hostId);
@@ -211,5 +216,10 @@ public class ReservationRequestService {
         accommodationService.removeDatesFromAccommodationAvailability(request.getAccommodation().getId(), request.getDateRange());
     }
 
+
+    boolean hasStayed(Long guestId, Long hostId) {
+        List<ReservationRequest> stays = repo.getPastForGuestAndHostConfirmed(guestId, hostId);
+        return (!stays.isEmpty());
+    }
 
 }

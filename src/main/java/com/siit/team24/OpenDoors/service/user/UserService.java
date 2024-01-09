@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.service.user;
 
+import com.siit.team24.OpenDoors.dto.review.HostPublicDataDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.NewPasswordDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
@@ -16,7 +17,6 @@ import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ImageService;
-import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -212,5 +211,11 @@ public class UserService {
 
     public void save(User user) {
         repo.save(user);
+    }
+
+    public HostPublicDataDTO getPublicData(Long hostId) {
+        Host host = (Host) repo.findById(hostId).get();
+        HostPublicDataDTO dto = new HostPublicDataDTO(host);
+        return dto;
     }
 }

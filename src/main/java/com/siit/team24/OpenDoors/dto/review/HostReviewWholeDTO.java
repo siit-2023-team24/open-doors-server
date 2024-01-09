@@ -1,18 +1,24 @@
-package com.siit.team24.OpenDoors.dto.hostReview;
+package com.siit.team24.OpenDoors.dto.review;
+
+import com.siit.team24.OpenDoors.model.HostReview;
 
 import java.sql.Timestamp;
 
-public class HostReviewDTO extends NewHostReviewDTO {
+public class HostReviewWholeDTO extends NewReviewDTO {
     private Long id;
     private Timestamp timestamp;
 
     private boolean reported;
 
-    public HostReviewDTO() {
+    public HostReviewWholeDTO() {
     }
 
-    public HostReviewDTO(int rating, String comment, String authorUsername, String hostUsername, Long id, Timestamp timestamp, boolean reported) {
-        super(rating, comment, authorUsername, hostUsername);
+    public HostReviewWholeDTO(HostReview review) {
+        this(review.getRating(), review.getComment(), review.getAuthor().getId(), review.getHost().getId(), review.getId(), review.getTimestamp(), review.isReported());
+    }
+
+    public HostReviewWholeDTO(int rating, String comment, Long authorId, Long recipientId, Long id, Timestamp timestamp, boolean reported) {
+        super(rating, comment, authorId, recipientId);
         this.id = id;
         this.timestamp = timestamp;
         this.reported = reported;

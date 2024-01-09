@@ -14,7 +14,7 @@ public class AccommodationWithTotalPriceDTO {
     private String name;
     private String description;
     private String location;
-    private List<Amenity> amenities;
+    private List<String> amenities;
     private List<Long> images;
     private int minGuests;
     private int maxGuests;
@@ -24,27 +24,28 @@ public class AccommodationWithTotalPriceDTO {
     private boolean isPricePerGuest;
     private Double totalPrice;
     private Double averageRating;
-    private Host host;
+    private String host;
     private List<SeasonalRate> seasonalRates;
-    private Country country;
+    private String country;
     private String city;
     private String street;
     private int number;
     private boolean isFavoriteForGuest;
+    private Long hostId;
 
     public AccommodationWithTotalPriceDTO() {}
 
     public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAverageRating(), accommodation.getHost(), accommodation.getAddress());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAverageRating(), accommodation.getHost().getFirstName() + " " + accommodation.getHost().getLastName(), accommodation.getHost().getId());
     }
 
-    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, Host host, Address address) {
+    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, String host, Long hostId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
-        this.amenities = amenities;
+        this.amenities = Amenity.fromAmenityList(amenities);
         this.totalPrice = totalPrice;
         this.images = new ArrayList<Long>();
         for (Image image : images){
@@ -59,11 +60,20 @@ public class AccommodationWithTotalPriceDTO {
         this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
-        this.city = address.getCity();
-        this.country = address.getCountry();
-        this.street = address.getStreet();
-        this.number =address.getNumber();
+        this.city = city;
+        this.country = country;
+        this.street = street;
+        this.number = number;
         this.isFavoriteForGuest = false;
+        this.hostId = hostId;
+    }
+
+    public Long getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(Long hostId) {
+        this.hostId = hostId;
     }
 
     public Long getId() {
@@ -98,11 +108,11 @@ public class AccommodationWithTotalPriceDTO {
         this.location = location;
     }
 
-    public List<Amenity> getAmenities() {
+    public List<String> getAmenities() {
         return amenities;
     }
 
-    public void setAmenities(List<Amenity> amenities) {
+    public void setAmenities(List<String> amenities) {
         this.amenities = amenities;
     }
 
@@ -178,11 +188,11 @@ public class AccommodationWithTotalPriceDTO {
         this.averageRating = averageRating;
     }
 
-    public Host getHost() {
+    public String getHost() {
         return host;
     }
 
-    public void setHost(Host host) {
+    public void setHost(String host) {
         this.host = host;
     }
 
@@ -194,11 +204,11 @@ public class AccommodationWithTotalPriceDTO {
         this.totalPrice = totalPrice;
     }
 
-    public Country getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
