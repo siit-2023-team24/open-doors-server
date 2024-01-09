@@ -36,4 +36,6 @@ public class HostReviewService {
     public void save(HostReview review) {
         this.hostReviewRepository.save(review);
     }
+
+    public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
 }

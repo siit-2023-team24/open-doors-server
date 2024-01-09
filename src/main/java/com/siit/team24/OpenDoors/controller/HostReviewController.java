@@ -80,6 +80,7 @@ public class HostReviewController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteHostReview(@PathVariable Long id) {
+        this.hostReviewService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
