@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserFormDataDTO {
@@ -13,6 +14,7 @@ public class UserFormDataDTO {
     private String city;
     private String country;
     private String imageId;
+    @Nullable
     private MultipartFile file;
 
 
@@ -131,7 +133,19 @@ public class UserFormDataDTO {
     }
 
     public UserEditedDTO toEditedDTO() {
-        Long imgId = (imageId.isEmpty())? null : Long.parseLong(imageId);
+        id = id.replaceAll("\"", "");
+        firstName = firstName.replaceAll("\"", "");
+        lastName = lastName.replaceAll("\"", "");
+        phone = phone.replaceAll("\"", "");
+        street = street.replaceAll("\"", "");
+        number = number.replaceAll("\"", "");
+        city = city.replaceAll("\"", "");
+        country = country.replaceAll("\"", "");
+        Long imgId = null;
+        if (imageId != null && !imageId.isEmpty()) {
+            imageId = imageId.replaceAll("\"", "");
+            imgId = Long.parseLong(imageId);
+        }
         return new UserEditedDTO(Long.parseLong(id), firstName, lastName, phone, street, Integer.parseInt(number),
                 city, country, imgId, file);
     }
