@@ -38,4 +38,10 @@ public class HostReviewService {
     }
 
     public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
+
+    public void changeReportedStatus(Long id) {
+        HostReview review = hostReviewRepository.findById(id).get();
+        review.setReported(!review.isReported());
+        hostReviewRepository.save(review);
+    }
 }
