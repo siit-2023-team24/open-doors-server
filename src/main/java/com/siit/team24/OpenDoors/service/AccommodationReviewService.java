@@ -15,6 +15,9 @@ public class AccommodationReviewService {
     @Autowired
     private AccommodationReviewRepository accommodationReviewRepository;
 
+    @Autowired
+    private ReservationRequestService reservationRequestService;
+
     public List<ReviewDetailsDTO> findAllForAccommodation(Long accommodationId) {
         List<AccommodationReview> reviews =  accommodationReviewRepository.findAllByAccommodationId(accommodationId);
         List<ReviewDetailsDTO> dtos = new ArrayList<>();
@@ -24,5 +27,11 @@ public class AccommodationReviewService {
         }
 
         return dtos;
+    }
+
+    public boolean isReviewable(Long accommodationId, Long guestId) {
+        boolean hasNotYetReviewed = accommodationReviewRepository.findByAccommodationAndAuthor(accommodationId, guestId).isEmpty();
+        boolean hasStayed = reservationRequestService.hasStayed(guestId, accommodationId);
+        return (hasNotYetReviewed && hasStayed);
     }
 }

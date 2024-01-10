@@ -29,8 +29,8 @@ public class HostReviewService {
 
     public boolean isReviewable(Long hostId, Long guestId) {
         boolean hasNotYetReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isEmpty();
-        boolean hasStayed = reservationRequestService.hasStayed(guestId, hostId);
-        return (hasNotYetReviewed && hasStayed);
+        boolean wasHosted = reservationRequestService.wasHosted(guestId, hostId);
+        return (hasNotYetReviewed && wasHosted);
     }
 
     public void save(HostReview review) {

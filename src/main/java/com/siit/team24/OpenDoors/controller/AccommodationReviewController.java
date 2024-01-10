@@ -2,6 +2,7 @@ package com.siit.team24.OpenDoors.controller;
 
 
 import com.siit.team24.OpenDoors.dto.review.AccommodationReviewDTO;
+import com.siit.team24.OpenDoors.dto.review.AccommodationReviewsDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ public class AccommodationReviewController {
             //(long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
     );
 
-    @GetMapping(value = "/accommodation/{accommodationId}")
-    public ResponseEntity<List<ReviewDetailsDTO>> getAccommodationReviewsForDetails(@PathVariable Long accommodationId) {
-        List<ReviewDetailsDTO> reviews = accommodationReviewService.findAllForAccommodation(accommodationId);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    @GetMapping(value = "/{accommodationId}")
+    public ResponseEntity<AccommodationReviewsDTO> getAccommodationReviewsForDetails(@PathVariable Long accommodationId, @RequestParam Long guestId) {
+        AccommodationReviewsDTO dto = new AccommodationReviewsDTO(accommodationReviewService.findAllForAccommodation(accommodationId), false);
+        if (guestId != 0) {
+            dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId));
+        }
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/reported")

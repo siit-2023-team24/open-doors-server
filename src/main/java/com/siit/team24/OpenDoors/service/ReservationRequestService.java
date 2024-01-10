@@ -105,8 +105,19 @@ public class ReservationRequestService {
         return true;
     }
 
-    boolean hasStayed(Long guestId, Long hostId) {
+    boolean wasHosted(Long guestId, Long hostId) {
         List<ReservationRequest> stays = repo.getPastForGuestAndHostConfirmed(guestId, hostId);
+        return (!stays.isEmpty());
+    }
+
+    //    For testing purposes, replace the deadline for reviewing an accommodation
+    //    (7 days = 1000 * 60 * 60 * 24 * 7) with 7 minutes:
+    //    1000 * 60 * 7
+    boolean hasStayed(Long guestId, Long accommodationId) {
+        Timestamp deadline = new Timestamp(System.currentTimeMillis() -
+                1000 * 60 * 60 * 24 * 20
+        );
+        List<ReservationRequest> stays = repo.getPastForGuestAndAccommodationConfirmed(guestId, accommodationId, deadline);
         return (!stays.isEmpty());
     }
 }
