@@ -55,11 +55,11 @@ public class ReviewDetailsDTO {
         }
     }
 
-    public boolean GetIsProcessed() {
+    public boolean getIsProcessed() {
         return isProcessed;
     }
 
-    public void SetIsProcessed(boolean isProcessed) {
+    public void setIsProcessed(boolean isProcessed) {
         this.isProcessed = isProcessed;
     }
 
