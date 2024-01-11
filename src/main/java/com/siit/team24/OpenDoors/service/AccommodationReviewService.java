@@ -45,4 +45,6 @@ public class AccommodationReviewService {
         if (reviews.isEmpty()) return null;
         return new ReviewDetailsDTO(reviews.get(0));
     }
+
+    public void delete(Long id) { accommodationReviewRepository.deleteById(id); }
 }
