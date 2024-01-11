@@ -38,12 +38,12 @@ public class HostReviewController {
             1, "Worst place EVER", (long)2379423, (long)1231241, (long)1234567123, new Timestamp(349834534), true
     );
 
-    @GetMapping(value = "/my/{hostId}")
-    public ResponseEntity<List<HostReviewForHostDTO>> getHostReviewsForHost(@PathVariable Long hostId) {
-        List<HostReviewForHostDTO> reviews = new ArrayList<>();
-//        reviews.add(testHostReviewForHostDTO);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
-    }
+//    @GetMapping(value = "/my/{hostId}")
+//    public ResponseEntity<List<HostReviewForHostDTO>> getHostReviewsForHost(@PathVariable Long hostId) {
+//        List<HostReviewForHostDTO> reviews = new ArrayList<>();
+////        reviews.add(testHostReviewForHostDTO);
+//        return new ResponseEntity<>(reviews, HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/{hostId}")
     public ResponseEntity<HostPublicDataDTO> getHostReviewsForProfile(@PathVariable Long hostId, @RequestParam Long guestId) {
@@ -73,10 +73,10 @@ public class HostReviewController {
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<HostReviewWholeDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
-        return new ResponseEntity<>(testHostHostReviewWholeDTO, HttpStatus.OK);
-    }
+//    @PutMapping(consumes = "application/json")
+//    public ResponseEntity<HostReviewWholeDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
+//        return new ResponseEntity<>(testHostHostReviewWholeDTO, HttpStatus.OK);
+//    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteHostReview(@PathVariable Long id) {
@@ -85,8 +85,8 @@ public class HostReviewController {
     }
 
     @PutMapping(value = "/{reviewId}/status")
-    public ResponseEntity<Void> changeReviewStatus(@PathVariable Long reviewId,
-                                                  @RequestParam boolean isReported){
+    public ResponseEntity<Void> changeReportedStatus(@PathVariable Long reviewId){
+        hostReviewService.changeReportedStatus(reviewId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

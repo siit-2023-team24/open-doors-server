@@ -3,14 +3,12 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.review.AccommodationReviewDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
-import com.siit.team24.OpenDoors.dto.review.HostReviewForHostDTO;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin
@@ -23,7 +21,7 @@ public class AccommodationReviewController {
 
 
     AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
-            (long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
+            //(long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
     );
 
     @GetMapping(value = "/accommodation/{accommodationId}")
@@ -44,10 +42,10 @@ public class AccommodationReviewController {
         return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationReviewDTO> updateAccommodationReview(@RequestBody HostReviewForHostDTO reviewDTO) {
-        return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.OK);
-    }
+//    @PutMapping(consumes = "application/json")
+//    public ResponseEntity<AccommodationReviewDTO> updateAccommodationReview(@RequestBody HostReviewForHostDTO reviewDTO) {
+//        return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.OK);
+//    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodationReview(@PathVariable Long id) {
