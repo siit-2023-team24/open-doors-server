@@ -28,12 +28,14 @@ public class HostReviewService {
     }
 
     public boolean isReviewable(Long hostId, Long guestId) {
-        boolean hasAlreadyReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isPresent();
+        boolean hasNotYetReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isEmpty();
         boolean hasStayed = reservationRequestService.hasStayed(guestId, hostId);
-        return (!hasAlreadyReviewed && hasStayed);
+        return (hasNotYetReviewed && hasStayed);
     }
 
     public void save(HostReview review) {
         this.hostReviewRepository.save(review);
     }
+
+    public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
 }

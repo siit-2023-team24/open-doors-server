@@ -12,5 +12,5 @@ public interface HostReviewRepository extends JpaRepository<HostReview, Long> {
     public List<HostReview> findAllByHostId(Long hostId);
 
     @Query("select hr from HostReview hr where hr.host.id = ?1 and hr.author.id = ?2")
-    public Optional<HostReview> findByHostAndAuthor(Long hostId, Long guestId);
+    public List<HostReview> findByHostAndAuthor(Long hostId, Long guestId);
 }
