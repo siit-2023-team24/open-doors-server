@@ -39,7 +39,6 @@ public class Accommodation {
     private List<DateRange> availability;
     private double price;
     private boolean isPricePerGuest;
-    private Double averageRating;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
@@ -66,7 +65,6 @@ public class Accommodation {
         this.type = accommodationType;
         this.price = price;
         this.isPricePerGuest = isPricePerGuest;
-        this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
         this.address = address;
@@ -188,14 +186,6 @@ public class Accommodation {
         isPricePerGuest = pricePerGuest;
     }
 
-    public Double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(Double averageRating) {
-        this.averageRating = averageRating;
-    }
-
     public Host getHost() {
         return host;
     }
@@ -286,7 +276,6 @@ public class Accommodation {
                 ", availability=" + availability +
                 ", price=" + price +
                 ", isPricePerNight=" + isPricePerGuest +
-                ", averageRating=" + averageRating +
                 ", host=" + host +
                 ", seasonRates=" + seasonalRates +
                 ", address=" + address +

@@ -37,6 +37,9 @@ public class PendingAccommodationService {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private AccommodationReviewService accommodationReviewService;
+
     public PendingAccommodation findById(Long id) {
         Optional<PendingAccommodation> accommodation = repo.findById(id);
         if (accommodation.isEmpty())
@@ -142,7 +145,6 @@ public class PendingAccommodationService {
         if (pendingAccommodation.getAccommodationId() != null) {
             accommodationService.revive(pendingAccommodation.getAccommodationId());
             Accommodation oldData = accommodationService.findById(pendingAccommodation.getAccommodationId());
-            accommodation.setAverageRating(oldData.getAverageRating());
             //delete all old images
 //            imageService.deleteAll(accommodation.getImages());
         }

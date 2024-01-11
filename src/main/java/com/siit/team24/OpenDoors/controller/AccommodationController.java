@@ -9,6 +9,7 @@ import com.siit.team24.OpenDoors.model.*;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
+import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 
 import com.siit.team24.OpenDoors.service.user.UserService;
@@ -37,6 +38,8 @@ public class AccommodationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AccommodationReviewService accommodationReviewService;
   
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
@@ -44,8 +47,11 @@ public class AccommodationController {
 
         List<AccommodationSearchDTO> AccommodationSearchDTOS = new ArrayList<>();
 
-        for (Accommodation a : accommodations)
-            AccommodationSearchDTOS.add(new AccommodationSearchDTO(a));
+        for (Accommodation a : accommodations) {
+            AccommodationSearchDTO as = new AccommodationSearchDTO(a);
+            as.setAverageRating(accommodationReviewService.getAverageRating(a.getId()));
+            AccommodationSearchDTOS.add(as);
+        }
 
         return new ResponseEntity<>(AccommodationSearchDTOS, HttpStatus.OK);
     }
@@ -55,6 +61,9 @@ public class AccommodationController {
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsWhenGuest(@PathVariable Long guestId) {
         Guest guest = (Guest) userService.findById(guestId);
         List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
+        for (AccommodationSearchDTO as : accommodationSearchDTOS) {
+            as.setAverageRating(accommodationReviewService.getAverageRating(as.getId()));
+        }
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
@@ -78,8 +87,8 @@ public class AccommodationController {
         if (accommodation.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation.get(), 0.0);
+        dto.setAverageRating(accommodationReviewService.getAverageRating(id));
 
-        System.out.println(dto.getCountry());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -90,7 +99,7 @@ public class AccommodationController {
         AccommodationWithTotalPriceDTO dto = new AccommodationWithTotalPriceDTO(accommodation, 0.0);
         if(guest.getFavorites().contains(accommodation))
             dto.setIsFavoriteForGuest(true);
-
+        dto.setAverageRating(accommodationReviewService.getAverageRating(accommodationId));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -105,7 +114,10 @@ public class AccommodationController {
     public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@RequestBody SearchAndFilterDTO searchAndFilterDTO) {
 
         List<AccommodationSearchDTO> accommodations = accommodationService.searchAndFilter(searchAndFilterDTO);
-        
+        for (AccommodationSearchDTO as : accommodations) {
+            as.setAverageRating(accommodationReviewService.getAverageRating(as.getId()));
+        }
+
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
@@ -177,6 +189,7 @@ public class AccommodationController {
         for(Accommodation a: guest.getFavorites()) {
             AccommodationSearchDTO dto = new AccommodationSearchDTO(a);
             dto.setIsFavoriteForGuest(true);
+            dto.setAverageRating(accommodationReviewService.getAverageRating(a.getId()));
             accommodationSearchDTOS.add(dto);
         }
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
