@@ -5,6 +5,7 @@ import com.siit.team24.OpenDoors.dto.reservation.AccommodationSeasonalRateDTO;
 import com.siit.team24.OpenDoors.dto.reservation.SeasonalRatesPricingDTO;
 import com.siit.team24.OpenDoors.dto.searchAndFilter.SearchAndFilterDTO;
 
+import com.siit.team24.OpenDoors.exception.ExistingReservationsException;
 import com.siit.team24.OpenDoors.model.*;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
@@ -12,15 +13,13 @@ import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 
+import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -40,6 +39,9 @@ public class AccommodationController {
 
     @Autowired
     private AccommodationReviewService accommodationReviewService;
+    
+    @Autowired
+    private ReservationRequestService reservationRequestService;
   
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationSearchDTO>> getAllAccommodations() {
@@ -103,9 +105,13 @@ public class AccommodationController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
+        if (!reservationRequestService.isAccommodationReadyForDelete(id))
+            throw new ExistingReservationsException();
+
+        reservationRequestService.denyAllFor(id);
         accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -135,10 +141,10 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
-        Collection<AccommodationHostDTO> accommodations = accommodationService.getForHost(hostId);
+        Collection<AccommodationHostDTO> accommodations = accommodationService.getDTOsForHost(hostId);
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 

@@ -30,22 +30,6 @@ public class UserController {
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
 
-    UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
-            "bob@testmail.me", "Bob", "Roberts", "host"
-    );
-
-    NotificationDTO testNotificationDTO = new NotificationDTO(
-            "You have a new review.", "Excellent", new Timestamp(98423)
-    );
-
-//    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-//            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
-//            "Novi Sad", "Serbia"
-//    );
-
-
-
-
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
@@ -67,13 +51,7 @@ public class UserController {
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
-        try {
-            this.service.changePassword(newPasswordDTO);
-        } catch (Exception e) {
-            System.err.println("Error changing password for: " + newPasswordDTO.getUsername());
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        this.service.changePassword(newPasswordDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -89,9 +67,7 @@ public class UserController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
         //todo
-        List<UserSummaryDTO> users = new ArrayList<>();
-        users.add(testUserSummaryDTO);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -100,7 +76,6 @@ public class UserController {
             Pageable pageable) {
         //todo
         List<UserSummaryDTO> users = new ArrayList<>();
-        users.add(testUserSummaryDTO);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -119,25 +94,23 @@ public class UserController {
 
     }
 
-//    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         //todo
         List<NotificationDTO> notifications = new ArrayList<>();
-        notifications.add(testNotificationDTO);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value="/{userId}/favorites")
     public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
         //todo
         List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        // favorites.add(testAccommodationSearchDTO);
         return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{userId}/status")
     public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
                                                   @RequestParam boolean isBlocked){

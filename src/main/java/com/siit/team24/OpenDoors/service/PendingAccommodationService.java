@@ -6,6 +6,7 @@ import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHo
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.Image;
@@ -40,6 +41,10 @@ public class PendingAccommodationService {
     @Autowired
     private AccommodationReviewService accommodationReviewService;
 
+    @Autowired
+    private ReservationRequestService reservationRequestService;
+  
+
     public PendingAccommodation findById(Long id) {
         Optional<PendingAccommodation> accommodation = repo.findById(id);
         if (accommodation.isEmpty())
@@ -50,6 +55,8 @@ public class PendingAccommodationService {
 
     public PendingAccommodation save(PendingAccommodationWholeEditedDTO dto) throws IOException {
         if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
+            if (reservationRequestService.foundActiveFor(dto.getAccommodationId()))
+                throw new ActiveReservationRequestsFoundException();
             accommodationService.deleteForEdit(dto.getAccommodationId());
         }
         PendingAccommodation pendingAccommodation = new PendingAccommodation();
