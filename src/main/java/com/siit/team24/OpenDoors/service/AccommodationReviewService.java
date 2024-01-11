@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccommodationReviewService {
@@ -18,8 +19,8 @@ public class AccommodationReviewService {
     @Autowired
     private ReservationRequestService reservationRequestService;
 
-    public List<ReviewDetailsDTO> findAllForAccommodation(Long accommodationId) {
-        List<AccommodationReview> reviews =  accommodationReviewRepository.findAllByAccommodationId(accommodationId);
+    public List<ReviewDetailsDTO> findApprovedForAccommodation(Long accommodationId) {
+        List<AccommodationReview> reviews =  accommodationReviewRepository.findAllByAccommodationIdApproved(accommodationId);
         List<ReviewDetailsDTO> dtos = new ArrayList<>();
 
         for(AccommodationReview ar : reviews) {
@@ -36,4 +37,12 @@ public class AccommodationReviewService {
     }
 
     public void save(AccommodationReview review) { accommodationReviewRepository.save(review); }
+
+    public Double getAverageRating(Long accommodationId) { return accommodationReviewRepository.getAverageRating(accommodationId); }
+
+    public ReviewDetailsDTO findUnapprovedForGuest(Long guestId) {
+        List<AccommodationReview> reviews = accommodationReviewRepository.findByGuestId(guestId);
+        if (reviews.isEmpty()) return null;
+        return new ReviewDetailsDTO(reviews.get(0));
+    }
 }

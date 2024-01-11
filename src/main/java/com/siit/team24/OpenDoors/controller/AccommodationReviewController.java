@@ -34,9 +34,13 @@ public class AccommodationReviewController {
 
     @GetMapping(value = "/{accommodationId}")
     public ResponseEntity<AccommodationReviewsDTO> getAccommodationReviewsForDetails(@PathVariable Long accommodationId, @RequestParam Long guestId) {
-        AccommodationReviewsDTO dto = new AccommodationReviewsDTO(accommodationReviewService.findAllForAccommodation(accommodationId), false);
+        AccommodationReviewsDTO dto = new AccommodationReviewsDTO(
+                accommodationReviewService.findApprovedForAccommodation(accommodationId),
+                false,
+                null);
         if (guestId != 0) {
             dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId));
+            dto.setUnapprovedReview(accommodationReviewService.findUnapprovedForGuest(guestId));
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
