@@ -54,7 +54,7 @@ public class SeasonalRatesPricingDTO {
         long startMillis = startDate.getTime();
         long endMillis = endDate.getTime();
 
-        return (int) ((endMillis - startMillis) / millisPerDay);
+        return (int) ((endMillis - startMillis) / millisPerDay + 1);
     }
     @Override
     public String toString() {

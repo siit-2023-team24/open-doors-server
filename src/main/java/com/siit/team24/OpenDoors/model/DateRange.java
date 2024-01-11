@@ -47,7 +47,7 @@ public class DateRange {
         long startMillis = startDate.getTime();
         long endMillis = endDate.getTime();
 
-        return (int) ((endMillis - startMillis) / millisPerDay);
+        return (int) ((endMillis - startMillis) / millisPerDay + 1);
     }
 
     public List<Timestamp> getTimestampRange() {
@@ -74,6 +74,18 @@ public class DateRange {
         boolean isEndDateAfterOrEqual = this.endDate.equals(other.endDate) || this.endDate.after(other.endDate);
 
         return isStartDateBeforeOrEqual && isEndDateAfterOrEqual;
+    }
+
+    public boolean contains(Timestamp date) {
+        return !date.before(this.startDate) && !date.after(this.endDate);
+    }
+
+    public boolean overlapsWith(DateRange other) {
+        if (other.startDate.compareTo(this.startDate) >= 0 && other.startDate.compareTo(this.endDate) <= 0)
+            return true;
+        if (startDate.compareTo(other.startDate) >= 0 && startDate.compareTo(other.endDate) <= 0)
+            return true;
+        return false;
     }
 
     @Override
