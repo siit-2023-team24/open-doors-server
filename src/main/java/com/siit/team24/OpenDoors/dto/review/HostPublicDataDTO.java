@@ -11,6 +11,7 @@ public class HostPublicDataDTO {
 
     public Long imageId;
 
+    public List<ReviewDetailsDTO> reviews;
     public boolean isReviewable;
     public Long getImageId() {
         return imageId;
@@ -52,7 +53,6 @@ public class HostPublicDataDTO {
         this.imageId = imageId;
     }
 
-    public List<ReviewDetailsDTO> reviews;
 
     public String getUsername() {
         return username;

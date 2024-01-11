@@ -9,8 +9,8 @@ public class HostReviewForHostDTO extends ReviewDetailsDTO {
     public HostReviewForHostDTO() {
     }
 
-    public HostReviewForHostDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long authorId, boolean reported) {
-        super(id, rating, comment, timestamp, authorUsername, authorId);
+    public HostReviewForHostDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, Long imageId, boolean reported) {
+        super(id, rating, comment, timestamp, authorUsername, imageId);
         this.reported = reported;
     }
 
