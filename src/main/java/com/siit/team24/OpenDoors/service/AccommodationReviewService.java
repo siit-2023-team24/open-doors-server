@@ -34,4 +34,6 @@ public class AccommodationReviewService {
         boolean hasStayed = reservationRequestService.hasStayed(guestId, accommodationId);
         return (hasNotYetReviewed && hasStayed);
     }
+
+    public void save(AccommodationReview review) { accommodationReviewRepository.save(review); }
 }

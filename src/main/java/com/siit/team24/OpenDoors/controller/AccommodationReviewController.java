@@ -1,10 +1,12 @@
 package com.siit.team24.OpenDoors.controller;
 
 
-import com.siit.team24.OpenDoors.dto.review.AccommodationReviewDTO;
-import com.siit.team24.OpenDoors.dto.review.AccommodationReviewsDTO;
-import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
+import com.siit.team24.OpenDoors.dto.review.*;
+import com.siit.team24.OpenDoors.model.AccommodationReview;
+import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
+import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,11 @@ public class AccommodationReviewController {
     @Autowired
     private AccommodationReviewService accommodationReviewService;
 
+    @Autowired
+    private AccommodationService accommodationService;
+
+    @Autowired
+    private UserService userService;
 
     AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
             //(long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
@@ -42,9 +49,15 @@ public class AccommodationReviewController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<AccommodationReviewDTO> createAccommodationReview(@RequestBody AccommodationReviewDTO reviewDTO) {
-        return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.CREATED);
+    public ResponseEntity<AccommodationReviewWholeDTO> createAccommodationReview(@RequestBody NewReviewDTO reviewDTO) {
+        AccommodationReview review = new AccommodationReview(reviewDTO);
+        review.setAccommodation(accommodationService.findById(reviewDTO.getRecipientId()));
+        review.setAuthor((Guest) userService.findById(reviewDTO.getAuthorId()));
+        accommodationReviewService.save(review);
+        AccommodationReviewWholeDTO returnDto = new AccommodationReviewWholeDTO(review);
+        return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
+
 
 //    @PutMapping(consumes = "application/json")
 //    public ResponseEntity<AccommodationReviewDTO> updateAccommodationReview(@RequestBody HostReviewForHostDTO reviewDTO) {
