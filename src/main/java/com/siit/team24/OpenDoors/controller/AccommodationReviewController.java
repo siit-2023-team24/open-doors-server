@@ -70,6 +70,7 @@ public class AccommodationReviewController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodationReview(@PathVariable Long id) {
+        accommodationReviewService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
