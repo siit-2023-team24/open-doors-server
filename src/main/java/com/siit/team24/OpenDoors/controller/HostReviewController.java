@@ -84,7 +84,7 @@ public class HostReviewController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{reviewId}/status")
+    @PostMapping(value = "/{reviewId}/status")
     public ResponseEntity<Void> changeReportedStatus(@PathVariable Long reviewId){
         hostReviewService.changeReportedStatus(reviewId);
         return new ResponseEntity<>(HttpStatus.OK);

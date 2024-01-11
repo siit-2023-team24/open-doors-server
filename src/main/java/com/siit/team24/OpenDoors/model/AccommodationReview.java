@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.review.NewReviewDTO;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -21,6 +22,13 @@ public class AccommodationReview extends Review {
         super(id, rating, comment, timestamp, author);
         this.accommodation = accommodation;
         this.approved = approved;
+    }
+
+    public AccommodationReview(NewReviewDTO dto) {
+        this.rating = dto.getRating();
+        this.comment = dto.getComment();
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.approved = false;
     }
 
     public Accommodation getAccommodation() {
