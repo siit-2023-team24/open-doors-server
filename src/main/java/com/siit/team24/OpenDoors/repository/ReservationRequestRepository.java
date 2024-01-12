@@ -5,6 +5,7 @@ import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface ReservationRequestRepository extends JpaRepository<ReservationRequest, Long> {
@@ -38,4 +39,12 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     @Query("select r from ReservationRequest r where r.guest.id = ?1 and r.accommodation.id = ?2 and r.status = 1 " +
             "and r.dateRange.endDate < current_timestamp and r.dateRange.endDate > ?3")
     List<ReservationRequest> getPastForGuestAndAccommodationConfirmed(Long guestId, Long hostId, Timestamp deadline);
+
+    @Query("select r.guest.id from ReservationRequest r where r.accommodation.host.id = ?1 and r.status = 1 " +
+            "and r.dateRange.endDate < current_timestamp ")
+    public List<Long> getGuestsByHostId(Long hostId);
+
+    @Query("select r.accommodation.host.id from ReservationRequest r where r.guest.id = ?1 and r.status = 1 " +
+            "and r.dateRange.endDate < current_timestamp ")
+    public List<Long> getHostsByGuestId(Long guestId);
 }
