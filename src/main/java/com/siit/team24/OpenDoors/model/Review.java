@@ -3,9 +3,13 @@ package com.siit.team24.OpenDoors.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 
+@SQLDelete(sql = "UPDATE accommodation_review SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Review {
@@ -22,6 +26,8 @@ public abstract class Review {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     protected Guest author;
+
+    protected boolean deleted;
 
     public Review() {
     }

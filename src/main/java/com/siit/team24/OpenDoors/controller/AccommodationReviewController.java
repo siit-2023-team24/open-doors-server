@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.controller;
 
 
+import com.siit.team24.OpenDoors.dto.accommodation.AccommodationReviewsDTO;
 import com.siit.team24.OpenDoors.dto.review.*;
 import com.siit.team24.OpenDoors.model.AccommodationReview;
 import com.siit.team24.OpenDoors.model.Guest;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin
 @RestController
@@ -45,12 +45,6 @@ public class AccommodationReviewController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/reported")
-    public ResponseEntity<List<AccommodationReviewDTO>> getAccommodationReviewsForDetails() {
-        List<AccommodationReviewDTO> reviews = new ArrayList<>();
-        reviews.add(testAccommodationReviewDTO);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
-    }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationReviewWholeDTO> createAccommodationReview(@RequestBody NewReviewDTO reviewDTO) {
@@ -74,4 +68,21 @@ public class AccommodationReviewController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping(value = "/pending")
+    public ResponseEntity<List<PendingAccommodationReviewDetailsDTO>> getAllPending() {
+        List<PendingAccommodationReviewDetailsDTO> result = accommodationReviewService.findAllPending();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/approve/{id}")
+    public ResponseEntity<Void> approve(@PathVariable("id") Long id) {
+        accommodationReviewService.approve(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/deny/{id}")
+    public ResponseEntity<Void> deny(@PathVariable("id") Long id) {
+        accommodationReviewService.deny(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

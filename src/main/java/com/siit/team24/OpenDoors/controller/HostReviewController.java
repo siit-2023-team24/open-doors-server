@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.review.*;
+import com.siit.team24.OpenDoors.dto.userManagement.HostPublicDataDTO;
 import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.HostReview;

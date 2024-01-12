@@ -5,12 +5,16 @@ import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Amenity;
 import com.siit.team24.OpenDoors.model.enums.Country;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SQLDelete(sql = "UPDATE pending_accommodation SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class PendingAccommodation {
 
@@ -54,6 +58,8 @@ public class PendingAccommodation {
 
     @Embedded
     private Address address;
+
+    private boolean deleted;
 
 
     public PendingAccommodation() {

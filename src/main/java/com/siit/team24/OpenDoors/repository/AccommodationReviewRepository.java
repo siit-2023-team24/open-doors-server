@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.repository;
 
+import com.siit.team24.OpenDoors.dto.review.PendingAccommodationReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.AccommodationReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,7 @@ public interface AccommodationReviewRepository extends JpaRepository<Accommodati
 
     @Query("select ar from AccommodationReview ar where ar.author.id=?1 and ar.approved=false")
     public List<AccommodationReview> findByGuestId(Long guestId);
+
+    @Query("select new com.siit.team24.OpenDoors.dto.review.PendingAccommodationReviewDetailsDTO(r) from AccommodationReview r where r.approved=false")
+    List<PendingAccommodationReviewDetailsDTO> findAllPending();
 }

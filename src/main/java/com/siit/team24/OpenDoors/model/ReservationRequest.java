@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @SQLDelete(sql = "UPDATE reservation_request SET status = 4 WHERE id = ?")
 @Where(clause = "status != 4")
@@ -130,5 +131,12 @@ public class ReservationRequest {
             return false;
         return true;
 
+    }
+
+    public boolean isCancellable() {
+        LocalDate today = LocalDate.now();
+        LocalDate limit = today.plusDays(this.accommodation.getDeadline());
+        Timestamp timestampLimit = Timestamp.valueOf(limit.atStartOfDay());
+        return timestampLimit.before(this.dateRange.getStartDate());
     }
 }
