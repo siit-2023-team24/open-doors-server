@@ -1,8 +1,11 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.review.AccommodationReviewWholeDTO;
+import com.siit.team24.OpenDoors.dto.review.PendingAccommodationReviewDetailsDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.AccommodationReview;
 import com.siit.team24.OpenDoors.repository.AccommodationReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,13 @@ public class AccommodationReviewService {
 
     @Autowired
     private ReservationRequestService reservationRequestService;
+
+    public AccommodationReview findById(Long id) {
+        Optional<AccommodationReview> review = accommodationReviewRepository.findById(id);
+        if (review.isEmpty())
+            throw new EntityNotFoundException();
+        return review.get();
+    }
 
     public List<ReviewDetailsDTO> findApprovedForAccommodation(Long accommodationId) {
         List<AccommodationReview> reviews =  accommodationReviewRepository.findAllByAccommodationIdApproved(accommodationId);
@@ -47,4 +57,23 @@ public class AccommodationReviewService {
     }
 
     public void delete(Long id) { accommodationReviewRepository.deleteById(id); }
+
+    public List<PendingAccommodationReviewDetailsDTO> findAllPending() {
+        return accommodationReviewRepository.findAllPending();
+    }
+
+    public void approve(Long id) {
+        AccommodationReview review = findById(id);
+        if (review.isApproved())
+            throw new IllegalArgumentException("Accommodation review already approved.");
+        review.setApproved(true);
+        accommodationReviewRepository.save(review);
+    }
+
+    public void deny(Long id) {
+        AccommodationReview review = findById(id);
+        if (review.isApproved())
+            throw new IllegalArgumentException("Accommodation review is already approved.");
+        accommodationReviewRepository.deleteById(id);
+    }
 }

@@ -1,5 +1,6 @@
-package com.siit.team24.OpenDoors.dto.review;
+package com.siit.team24.OpenDoors.dto.userManagement;
 
+import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.Host;
 
 import java.util.List;

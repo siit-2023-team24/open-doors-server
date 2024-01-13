@@ -1,4 +1,6 @@
-package com.siit.team24.OpenDoors.dto.review;
+package com.siit.team24.OpenDoors.dto.accommodation;
+
+import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 
 import java.util.List;
 

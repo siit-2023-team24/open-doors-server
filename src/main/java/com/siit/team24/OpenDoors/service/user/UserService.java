@@ -1,6 +1,6 @@
 package com.siit.team24.OpenDoors.service.user;
 
-import com.siit.team24.OpenDoors.dto.review.HostPublicDataDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.HostPublicDataDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.NewPasswordDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
@@ -25,12 +25,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
