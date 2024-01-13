@@ -2,9 +2,13 @@ package com.siit.team24.OpenDoors.model;
 
 import com.siit.team24.OpenDoors.dto.review.NewReviewDTO;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 
+@SQLDelete(sql = "UPDATE accommodation_review SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class AccommodationReview extends Review {
 

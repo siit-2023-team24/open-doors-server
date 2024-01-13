@@ -238,9 +238,10 @@ public class AccommodationService {
         accommodationRepository.save(accommodation);
     }
 
-    public void addToAvailability(Long id, DateRange range) {
+    public void addToAvailability(Long id, DateRange reservationRange) {
         Accommodation accommodation = findById(id);
         List<DateRange> newAvailability = new ArrayList<>();
+        DateRange range = new DateRange(reservationRange.getStartDate(), reservationRange.getEndDate());
 
         Timestamp startLimit = Timestamp.valueOf(range.getStartDate().toLocalDateTime().minusDays(1));
         Timestamp endLimit = Timestamp.valueOf(range.getEndDate().toLocalDateTime().plusDays(1));

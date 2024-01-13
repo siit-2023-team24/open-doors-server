@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.service;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForGuestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForHostDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestSearchAndFilterDTO;
+import com.siit.team24.OpenDoors.exception.CancelRequestException;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +13,7 @@ import com.siit.team24.OpenDoors.repository.ReservationRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
+
 import java.util.*;
 
 @Service
@@ -171,6 +173,9 @@ public class ReservationRequestService {
         ReservationRequest request = findById(id);
         if (request.getStatus() != ReservationRequestStatus.CONFIRMED)
             throw new IllegalArgumentException("Tried to cancel a reservation request that was not confirmed.");
+        if (!request.isCancellable())
+            throw new CancelRequestException();
+
         accommodationService.addToAvailability(request.getAccommodation().getId(), request.getDateRange());
         request.setStatus(ReservationRequestStatus.CANCELLED);
         repo.save(request);

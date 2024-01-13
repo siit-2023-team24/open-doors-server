@@ -1,36 +1,37 @@
 package com.siit.team24.OpenDoors.dto.review;
 
-import com.siit.team24.OpenDoors.model.HostReview;
+import com.siit.team24.OpenDoors.model.AccommodationReview;
 
 import java.sql.Timestamp;
 
-public class ReportedHostReviewDTO {
+public class PendingAccommodationReviewDetailsDTO {
 
     protected Long id;
     protected int rating;
     protected String comment;
     protected Timestamp timestamp;
     protected String authorUsername;
-    private String hostUsername;
+    protected String accommodationName;
 
-    public ReportedHostReviewDTO() {}
+    public PendingAccommodationReviewDetailsDTO() {
+    }
 
-    public ReportedHostReviewDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, String hostUsername) {
+    public PendingAccommodationReviewDetailsDTO(Long id, int rating, String comment, Timestamp timestamp, String authorUsername, String accommodationName) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.timestamp = timestamp;
         this.authorUsername = authorUsername;
-        this.hostUsername = hostUsername;
+        this.accommodationName = accommodationName;
     }
 
-    public ReportedHostReviewDTO(HostReview review) {
+    public PendingAccommodationReviewDetailsDTO(AccommodationReview review) {
         this.id = review.getId();
         this.rating = review.getRating();
         this.comment = review.getComment();
         this.timestamp = review.getTimestamp();
         this.authorUsername = review.getAuthor().getUsername();
-        this.hostUsername = review.getHost().getUsername();
+        this.accommodationName = review.getAccommodation().getName();
     }
 
     public Long getId() {
@@ -73,23 +74,23 @@ public class ReportedHostReviewDTO {
         this.authorUsername = authorUsername;
     }
 
-    public String getHostUsername() {
-        return hostUsername;
+    public String getAccommodationName() {
+        return accommodationName;
     }
 
-    public void setHostUsername(String hostUsername) {
-        this.hostUsername = hostUsername;
+    public void setAccommodationName(String accommodationName) {
+        this.accommodationName = accommodationName;
     }
 
     @Override
     public String toString() {
-        return "ReportedHostReviewDTO{" +
+        return "PendingAccommodationReviewDetailsDTO{" +
                 "id=" + id +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
                 ", timestamp=" + timestamp +
                 ", authorUsername='" + authorUsername + '\'' +
-                ", hostUsername='" + hostUsername + '\'' +
+                ", accommodationName='" + accommodationName + '\'' +
                 '}';
     }
 }

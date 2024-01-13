@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.review.*;
+import com.siit.team24.OpenDoors.dto.userManagement.HostPublicDataDTO;
 import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.HostReview;
@@ -25,25 +26,6 @@ public class HostReviewController {
     @Autowired
     private UserService userService;
 
-//    HostReviewForHostDTO testHostReviewForHostDTO = new HostReviewForHostDTO(
-//            (long)34793983, 3, "It's pretty rough", new Timestamp(32864682), "teston@testhoo.co.uk", true
-//    );
-//
-//
-//    ReportedHostReviewDTO testReportedHostReviewDTO = new ReportedHostReviewDTO(
-//            (long)1485622, 4, "Solid indeed!", new Timestamp(37283472), "howmany@arethere.com", "another@one.com"
-//    );
-
-    HostReviewWholeDTO testHostHostReviewWholeDTO = new HostReviewWholeDTO(
-            1, "Worst place EVER", (long)2379423, (long)1231241, (long)1234567123, new Timestamp(349834534), true
-    );
-
-//    @GetMapping(value = "/my/{hostId}")
-//    public ResponseEntity<List<HostReviewForHostDTO>> getHostReviewsForHost(@PathVariable Long hostId) {
-//        List<HostReviewForHostDTO> reviews = new ArrayList<>();
-////        reviews.add(testHostReviewForHostDTO);
-//        return new ResponseEntity<>(reviews, HttpStatus.OK);
-//    }
 
     @GetMapping(value = "/{hostId}")
     public ResponseEntity<HostPublicDataDTO> getHostReviewsForProfile(@PathVariable Long hostId, @RequestParam Long guestId) {
@@ -57,9 +39,8 @@ public class HostReviewController {
     }
 
     @GetMapping(value = "/reported")
-    public ResponseEntity<List<ReportedHostReviewDTO>> getReportedHostReviews() {
-        List<ReportedHostReviewDTO> reviews = new ArrayList<>();
-//        reviews.add(testReportedHostReviewDTO);
+    public ResponseEntity<List<ReportedHostReviewDTO>> getAllReported() {
+        List<ReportedHostReviewDTO> reviews = hostReviewService.findAllReported();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
@@ -72,11 +53,6 @@ public class HostReviewController {
         HostReviewWholeDTO returnDto = new HostReviewWholeDTO(review);
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
-
-//    @PutMapping(consumes = "application/json")
-//    public ResponseEntity<HostReviewWholeDTO> updateHostReview(@RequestBody HostReviewForHostDTO reviewDTO) {
-//        return new ResponseEntity<>(testHostHostReviewWholeDTO, HttpStatus.OK);
-//    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteHostReview(@PathVariable Long id) {
