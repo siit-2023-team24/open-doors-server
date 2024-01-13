@@ -10,7 +10,7 @@ import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 
-@SQLDelete(sql = "UPDATE host_reviews SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE host_review SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
 @Entity
 public class HostReview extends Review {

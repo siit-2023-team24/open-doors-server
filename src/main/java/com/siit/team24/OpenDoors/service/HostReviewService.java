@@ -1,8 +1,10 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.review.ReportedHostReviewDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.HostReview;
 import com.siit.team24.OpenDoors.repository.HostReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class HostReviewService {
 
     @Autowired
     private ReservationRequestService reservationRequestService;
+
     public List<ReviewDetailsDTO> findAllForHost(Long hostId) {
         List<HostReview> reviews = hostReviewRepository.findAllByHostId(hostId);
         List<ReviewDetailsDTO> dtos = new ArrayList<>();
@@ -25,6 +28,10 @@ public class HostReviewService {
             dtos.add(new ReviewDetailsDTO(hr));
         }
         return dtos;
+    }
+
+    public List<ReportedHostReviewDTO> findAllReported() {
+        return hostReviewRepository.findAllReported();
     }
 
     public boolean isReviewable(Long hostId, Long guestId) {
@@ -40,7 +47,10 @@ public class HostReviewService {
     public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
 
     public void changeReportedStatus(Long id) {
-        HostReview review = hostReviewRepository.findById(id).get();
+        Optional<HostReview> foundReview = hostReviewRepository.findById(id);
+        if (foundReview.isEmpty())
+            throw new EntityNotFoundException();
+        HostReview review = foundReview.get();
         review.setReported(!review.isReported());
         hostReviewRepository.save(review);
     }
