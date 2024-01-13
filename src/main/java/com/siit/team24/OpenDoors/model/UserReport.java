@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.userManagement.NewUserReportDTO;
 import com.siit.team24.OpenDoors.model.enums.UserReportStatus;
 import jakarta.persistence.*;
 
@@ -16,7 +17,7 @@ public class UserReport {
     @Enumerated
     private UserReportStatus status;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<ReservationRequest> evidence;
 
     @ManyToOne
@@ -36,6 +37,13 @@ public class UserReport {
         this.complainant = complainant;
         this.recipient = recipient;
         this.isComplainantGuest = isComplainantGuest;
+    }
+
+    public UserReport(NewUserReportDTO dto) {
+        this.reason = dto.getReason();
+        this.isComplainantGuest = dto.getIsComplainantGuest();
+        this.status = UserReportStatus.ACTIVE;
+        this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     public Long getId() {

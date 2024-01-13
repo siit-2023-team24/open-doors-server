@@ -45,6 +45,9 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     List<Long> getGuestsByHostId(Long hostId, List<Long> evidencedReservationIds);
 
     @Query("select distinct r.accommodation.host.id from ReservationRequest r where r.guest.id = ?1 and r.id not in ?2 and r.status = 1 " +
-            "and r.dateRange.endDate < current_timestamp ")
+            "and r.dateRange.endDate < current_timestamp")
     List<Long> getHostsByGuestId(Long guestId, List<Long> evidencedReservationIds);
+
+    @Query("select r from ReservationRequest r where r.accommodation.host.id = ?1 and r.guest.id = ?2")
+    List<ReservationRequest> findByHostAndGuest(Long hostId, Long guestId);
 }

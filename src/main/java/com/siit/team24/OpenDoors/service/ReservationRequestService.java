@@ -233,4 +233,6 @@ public class ReservationRequestService {
         if (isGuestComplainant) return repo.getHostsByGuestId(userId, evidencedReservationIds);
         return repo.getGuestsByHostId(userId, evidencedReservationIds);
     }
+
+    public List<ReservationRequest> findByHostAndGuest(Long hostId, Long guestId) { return this.repo.findByHostAndGuest(hostId, guestId); }
 }
