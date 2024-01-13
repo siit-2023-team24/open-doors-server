@@ -86,7 +86,8 @@ public class AuthenticationController {
         User user = this.userService.create(userAccountDTO);
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://" + InetAddress.getLocalHost().getHostAddress() + ":4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
+        userService.sendActivationEmail(userAccountDTO.getUsername(), "http://" +
+                InetAddress.getLocalHost().getHostAddress() + ":4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }

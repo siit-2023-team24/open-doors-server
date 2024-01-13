@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.model.enums.UserReportStatus;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 public class UserReport {
@@ -14,10 +15,28 @@ public class UserReport {
     private Timestamp timestamp;
     @Enumerated
     private UserReportStatus status;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private Set<ReservationRequest> evidence;
+
     @ManyToOne
     private User complainant;
+
     @ManyToOne
-    private User reportedUser;
+    private User recipient;
+
+    private boolean isComplainantGuest;
+
+    public UserReport(Long id, String reason, Timestamp timestamp, UserReportStatus status, Set<ReservationRequest> evidence, User complainant, User recipient, boolean isComplainantGuest) {
+        this.id = id;
+        this.reason = reason;
+        this.timestamp = timestamp;
+        this.status = status;
+        this.evidence = evidence;
+        this.complainant = complainant;
+        this.recipient = recipient;
+        this.isComplainantGuest = isComplainantGuest;
+    }
 
     public Long getId() {
         return id;
@@ -51,6 +70,14 @@ public class UserReport {
         this.status = status;
     }
 
+    public Set<ReservationRequest> getEvidence() {
+        return evidence;
+    }
+
+    public void setEvidence(Set<ReservationRequest> evidence) {
+        this.evidence = evidence;
+    }
+
     public User getComplainant() {
         return complainant;
     }
@@ -59,12 +86,20 @@ public class UserReport {
         this.complainant = complainant;
     }
 
-    public User getReportedUser() {
-        return reportedUser;
+    public User getRecipient() {
+        return recipient;
     }
 
-    public void setReportedUser(User reportedUser) {
-        this.reportedUser = reportedUser;
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
+    }
+
+    public boolean getIsComplainantGuest() {
+        return isComplainantGuest;
+    }
+
+    public void setIsComplainantGuest(boolean isComplainantGuest) {
+        this.isComplainantGuest = isComplainantGuest;
     }
 
     @Override
@@ -74,8 +109,10 @@ public class UserReport {
                 ", reason='" + reason + '\'' +
                 ", timestamp=" + timestamp +
                 ", status=" + status +
+                ", evidence=" + evidence +
                 ", complainant=" + complainant +
-                ", reportedUser=" + reportedUser +
+                ", recipient=" + recipient +
+                ", isComplainantGuest=" + isComplainantGuest +
                 '}';
     }
 

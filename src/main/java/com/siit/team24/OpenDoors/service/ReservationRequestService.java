@@ -12,10 +12,7 @@ import com.siit.team24.OpenDoors.repository.ReservationRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReservationRequestService {
@@ -216,7 +213,7 @@ public class ReservationRequestService {
     }
 
 
-    boolean wasHosted(Long guestId, Long hostId) {
+    public boolean wasHosted(Long guestId, Long hostId) {
         List<ReservationRequest> stays = repo.getPastForGuestAndHostConfirmed(guestId, hostId);
         return (!stays.isEmpty());
     }
@@ -224,11 +221,16 @@ public class ReservationRequestService {
     //    For testing purposes, replace the deadline for reviewing an accommodation
     //    (7 days = 1000 * 60 * 60 * 24 * 7) with 7 minutes:
     //    1000 * 60 * 7
-    boolean hasStayed(Long guestId, Long accommodationId) {
+    public boolean hasStayed(Long guestId, Long accommodationId) {
         Timestamp deadline = new Timestamp(System.currentTimeMillis() -
                 1000 * 60 * 60 * 24 * 7
         );
         List<ReservationRequest> stays = repo.getPastForGuestAndAccommodationConfirmed(guestId, accommodationId, deadline);
         return (!stays.isEmpty());
+    }
+
+    public List<Long> getReportableUserIds(Long userId, List<Long> evidencedReservationIds, boolean isGuestComplainant) {
+        if (isGuestComplainant) return repo.getHostsByGuestId(userId, evidencedReservationIds);
+        return repo.getGuestsByHostId(userId, evidencedReservationIds);
     }
 }

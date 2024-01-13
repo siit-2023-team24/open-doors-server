@@ -23,8 +23,6 @@ public class UserReportDTO {
 
     public UserReportDTO(UserReport userReport) {
         this.id = userReport.getId();
-        this.reportedUsername = userReport.getReportedUser().getUsername();
-        this.complainantUsername = userReport.getComplainant().getUsername();
         this.timestamp = userReport.getTimestamp();
         this.reason = userReport.getReason();
         this.status = userReport.getStatus().name();

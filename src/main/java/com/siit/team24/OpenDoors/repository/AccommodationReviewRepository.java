@@ -9,14 +9,14 @@ import java.util.Optional;
 
 public interface AccommodationReviewRepository extends JpaRepository<AccommodationReview, Long> {
     @Query("select ar from AccommodationReview ar where ar.accommodation.id = ?1 and ar.approved = true")
-    public List<AccommodationReview> findAllByAccommodationIdApproved(Long accommodationId);
+    List<AccommodationReview> findAllByAccommodationIdApproved(Long accommodationId);
 
     @Query("select ar from AccommodationReview ar where ar.accommodation.id = ?1 and ar.author.id = ?2")
-    public List<AccommodationReview> findByAccommodationAndAuthor(Long accommodationId, Long guestId);
+    List<AccommodationReview> findByAccommodationAndAuthor(Long accommodationId, Long guestId);
 
     @Query("select avg(ar.rating) from AccommodationReview ar where ar.accommodation.id = ?1 and ar.approved = true")
-    public Double getAverageRating(Long accommodationId);
+    Double getAverageRating(Long accommodationId);
 
     @Query("select ar from AccommodationReview ar where ar.author.id=?1 and ar.approved=false")
-    public List<AccommodationReview> findByGuestId(Long guestId);
+    List<AccommodationReview> findByGuestId(Long guestId);
 }
