@@ -8,7 +8,6 @@ import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 
-@SQLDelete(sql = "UPDATE accommodation_review SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

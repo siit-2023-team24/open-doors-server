@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.review.ReportedHostReviewDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.HostReview;
 import com.siit.team24.OpenDoors.repository.HostReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,10 @@ public class HostReviewService {
     public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
 
     public void changeReportedStatus(Long id) {
-        HostReview review = hostReviewRepository.findById(id).get();
+        Optional<HostReview> foundReview = hostReviewRepository.findById(id);
+        if (foundReview.isEmpty())
+            throw new EntityNotFoundException();
+        HostReview review = foundReview.get();
         review.setReported(!review.isReported());
         hostReviewRepository.save(review);
     }
