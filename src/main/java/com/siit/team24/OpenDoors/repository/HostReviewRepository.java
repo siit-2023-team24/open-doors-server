@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface HostReviewRepository extends JpaRepository<HostReview, Long> {
     @Query("select hr from HostReview hr where hr.host.id = ?1")
-    public List<HostReview> findAllByHostId(Long hostId);
+    List<HostReview> findAllByHostId(Long hostId);
 
     @Query("select hr from HostReview hr where hr.host.id = ?1 and hr.author.id = ?2")
-    public List<HostReview> findByHostAndAuthor(Long hostId, Long guestId);
+    List<HostReview> findByHostAndAuthor(Long hostId, Long guestId);
 
     @Query("select new com.siit.team24.OpenDoors.dto.review.ReportedHostReviewDTO(r) from HostReview  r " +
             "where r.reported = true")
