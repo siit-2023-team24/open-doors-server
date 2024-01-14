@@ -70,14 +70,6 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
-            Pageable pageable) {
-        //todo
-        List<UserSummaryDTO> users = new ArrayList<>();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")

@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.service.user;
 
 import com.siit.team24.OpenDoors.dto.userManagement.NewUserReportDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.UserReportDTO;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import com.siit.team24.OpenDoors.model.UserReport;
 import com.siit.team24.OpenDoors.repository.user.UserReportRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -50,5 +52,11 @@ public class UserReportService {
         report.setEvidence(new HashSet<>(evidence));
         report = userReportRepository.save(report);
         return report;
+    }
+
+    public List<UserReportDTO> findAllDTOs() {
+        List<UserReportDTO> reports = userReportRepository.findAllDTOs();
+        reports.sort(Comparator.comparing(UserReportDTO::getTimestamp));
+        return reports;
     }
 }

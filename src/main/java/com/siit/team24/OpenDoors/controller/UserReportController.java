@@ -23,10 +23,9 @@ public class UserReportController {
     private UserReportService userReportService;
 
 
-
     @GetMapping
     public ResponseEntity<List<UserReportDTO>> getAllUserReports() {
-        List<UserReportDTO> reports = new ArrayList<>();
+        List<UserReportDTO> reports = userReportService.findAllDTOs();
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 
@@ -41,9 +40,7 @@ public class UserReportController {
     public ResponseEntity<UserReportDTO> createUserReport(@RequestBody NewUserReportDTO dto) {
         UserReport report = userReportService.createReport(dto);
         UserReportDTO returnDto = new UserReportDTO(report);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-        System.out.println(returnDto.toString());
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+        System.out.println(returnDto);
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
