@@ -58,7 +58,7 @@ public class AccommodationService {
         //do not delete this println.
         System.out.println(accommodation);  //because of lazy fetch
         Set<Image> images = accommodation.getImages();
-        accommodationReviewService.denyAllForAccommodation(id);
+        accommodationReviewService.deleteAllForAccommodation(id);
         accommodationRepository.deleteById(id);
         imageService.deleteAll(images);
 
@@ -78,7 +78,7 @@ public class AccommodationService {
 
     public void softDelete(Long id) {
         Accommodation accommodation = findById(id);
-        accommodationReviewService.denyAllForAccommodation(id);
+        accommodationReviewService.deleteAllForAccommodation(id);
         accommodation.setDeleted(true);
         accommodationRepository.save(accommodation);
     }

@@ -1,6 +1,5 @@
 package com.siit.team24.OpenDoors.service;
 
-import com.siit.team24.OpenDoors.dto.review.AccommodationReviewWholeDTO;
 import com.siit.team24.OpenDoors.dto.review.PendingAccommodationReviewDetailsDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.AccommodationReview;
@@ -73,10 +72,9 @@ public class AccommodationReviewService {
         accommodationReviewRepository.deleteById(id);
     }
 
-    public void denyAllForAccommodation(Long accommodationId) {
+    public void deleteAllForAccommodation(Long accommodationId) {
         List<AccommodationReview> reviews = accommodationReviewRepository.findAll();
         for (AccommodationReview review: reviews) {
-            if (review.isApproved()) continue;
             if (review.getAccommodation().getId() == accommodationId)
                 delete(review.getId());
         }

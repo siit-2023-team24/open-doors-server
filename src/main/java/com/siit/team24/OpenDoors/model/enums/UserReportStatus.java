@@ -8,7 +8,8 @@ import java.util.Map;
 public enum UserReportStatus {
     ACTIVE("active"),
     DISMISSED("dismissed"),
-    RESOLVED("resolved");
+    RESOLVED("resolved"),
+     DELETED("deleted");
 
     private final String value;
     UserReportStatus(String value) {

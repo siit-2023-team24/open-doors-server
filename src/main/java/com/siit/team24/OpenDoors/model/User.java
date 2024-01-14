@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
-@Where(clause = "deleted=false")
+//@Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "users")

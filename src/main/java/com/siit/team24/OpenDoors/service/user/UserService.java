@@ -13,6 +13,7 @@ import com.siit.team24.OpenDoors.model.enums.ImageType;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.HostReviewService;
 import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import jakarta.persistence.EntityNotFoundException;
@@ -53,6 +54,9 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private HostReviewService hostReviewService;
 
     public User findById(Long id) {
         Optional<User> user = repo.findById(id);
@@ -188,6 +192,7 @@ public class UserService {
                 removeFromAnyFavorites(accommodation);
                 accommodationService.delete(accommodation.getId());
             }
+            hostReviewService.deleteAllForHost(id);
         }
         else return;
 

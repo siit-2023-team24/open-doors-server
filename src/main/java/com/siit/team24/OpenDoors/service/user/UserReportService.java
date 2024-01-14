@@ -88,12 +88,17 @@ public class UserReportService {
     }
 
     private void resolveAllFor(Long recipientId) {
-        List<UserReport> reports = userReportRepository.findAll();
+        List<UserReport> reports = userReportRepository.findAllByRecipientId(recipientId);
         for (UserReport report: reports) {
-            if (report.getRecipient().getId() == recipientId && report.getStatus() == UserReportStatus.ACTIVE) {
+            if (report.getStatus() == UserReportStatus.ACTIVE) {
                 report.setStatus(UserReportStatus.RESOLVED);
                 userReportRepository.save(report);
             }
         }
+    }
+
+    public void deleteAllFor(Long recipientId) {
+        List<UserReport> reports = userReportRepository.findAllByRecipientId(recipientId);
+        userReportRepository.deleteAll(reports);
     }
 }

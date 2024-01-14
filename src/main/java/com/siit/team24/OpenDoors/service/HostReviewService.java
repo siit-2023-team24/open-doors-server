@@ -46,6 +46,11 @@ public class HostReviewService {
 
     public void delete(Long id) { this.hostReviewRepository.deleteById(id); }
 
+    public void deleteAllForHost(Long hostId) {
+        List<HostReview> reviews = hostReviewRepository.findAllByHostId(hostId);
+        hostReviewRepository.deleteAll(reviews);
+    }
+
     public void changeReportedStatus(Long id) {
         Optional<HostReview> foundReview = hostReviewRepository.findById(id);
         if (foundReview.isEmpty())

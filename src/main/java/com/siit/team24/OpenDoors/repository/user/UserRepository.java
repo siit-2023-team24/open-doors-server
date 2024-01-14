@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u.username from User u where u.id in ?1")
     List<String> findUsernamesByIds(List<Long> ids);
 
-    @Query("select new com.siit.team24.OpenDoors.dto.userManagement.UserSummaryDTO(u) from User u where u.blocked = true")
+    @Query("select new com.siit.team24.OpenDoors.dto.userManagement.UserSummaryDTO(u) from User u where u.blocked = true and u.deleted=false")
     List<UserSummaryDTO> getBlockedDTOs();
 }

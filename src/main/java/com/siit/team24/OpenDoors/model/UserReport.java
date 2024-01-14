@@ -3,10 +3,14 @@ package com.siit.team24.OpenDoors.model;
 import com.siit.team24.OpenDoors.dto.userManagement.NewUserReportDTO;
 import com.siit.team24.OpenDoors.model.enums.UserReportStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
+@SQLDelete(sql = "UPDATE user_report SET deleted=true WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class UserReport {
     @Id
@@ -27,6 +31,8 @@ public class UserReport {
     private User recipient;
 
     private boolean isComplainantGuest;
+
+    private boolean deleted;
 
     public UserReport(Long id, String reason, Timestamp timestamp, UserReportStatus status, Set<ReservationRequest> evidence, User complainant, User recipient, boolean isComplainantGuest) {
         this.id = id;

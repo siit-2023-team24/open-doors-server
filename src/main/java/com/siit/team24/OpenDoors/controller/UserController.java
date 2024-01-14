@@ -3,9 +3,11 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.model.UserReport;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.AccountService;
+import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class UserController {
     private PendingAccommodationService pendingAccommodationService;
 
     @Autowired
-    private AccommodationReviewService accommodationReviewService;
+    private UserReportService userReportService;
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
@@ -64,6 +66,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.delete(id);
         pendingAccommodationService.deleteAllForHost(id);
+        userReportService.deleteAllFor(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
