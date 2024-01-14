@@ -32,15 +32,16 @@ public class AccommodationWithTotalPriceDTO {
     private int number;
     private boolean isFavoriteForGuest;
     private Long hostId;
+    private boolean blocked;
 
     public AccommodationWithTotalPriceDTO() {}
 
     public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, null, accommodation.getHost().getFirstName() + " " + accommodation.getHost().getLastName(), accommodation.getHost().getId());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, null, accommodation.getHost().getFirstName() + " " + accommodation.getHost().getLastName(), accommodation.getHost().getId(), accommodation.isBlocked());
     }
 
-    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, String host, Long hostId) {
+    public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, String host, Long hostId, boolean blocked) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -66,6 +67,7 @@ public class AccommodationWithTotalPriceDTO {
         this.number = number;
         this.isFavoriteForGuest = false;
         this.hostId = hostId;
+        this.blocked = blocked;
     }
 
     public Long getHostId() {
@@ -242,6 +244,14 @@ public class AccommodationWithTotalPriceDTO {
 
     public void setIsFavoriteForGuest(boolean isFavoriteForGuest) {
         this.isFavoriteForGuest = isFavoriteForGuest;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 }
 

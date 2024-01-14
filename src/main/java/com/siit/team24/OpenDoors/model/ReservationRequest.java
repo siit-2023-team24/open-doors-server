@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class ReservationRequest {
     private Long id;
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private Guest guest;
+    @Nullable
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private Accommodation accommodation;
     @Embedded
@@ -63,6 +65,8 @@ public class ReservationRequest {
     }
 
     public Accommodation getAccommodation() {
+        if (accommodation == null)
+            return new Accommodation();
         return accommodation;
     }
 

@@ -45,6 +45,8 @@ public class User implements UserDetails {
 //    private Account account;
     private boolean enabled;
 
+    private boolean blocked;
+
     private boolean deleted;
 
 
@@ -166,6 +168,14 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -196,7 +206,7 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", lastPasswordResetDate=" + lastPasswordResetDate +
                 ", role=" + role +
@@ -206,6 +216,8 @@ public class User implements UserDetails {
                 ", image=" + image +
                 ", address=" + address +
                 ", enabled=" + enabled +
+                ", blocked=" + blocked +
+                ", deleted=" + deleted +
                 '}';
     }
 

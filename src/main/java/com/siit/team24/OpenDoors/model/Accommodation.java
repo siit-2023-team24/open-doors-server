@@ -50,6 +50,8 @@ public class Accommodation {
   
     private boolean deleted;
 
+    private boolean blocked;
+
   
     public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests,
                          List<DateRange> availability, AccommodationType accommodationType, double price, boolean isPricePerGuest, double averageRating, Host host, List<SeasonalRate> seasonalRates, Address address, int deadline, boolean isAutomatic) {
@@ -261,6 +263,14 @@ public class Accommodation {
         this.deleted = deleted;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
@@ -272,15 +282,17 @@ public class Accommodation {
                 ", images=" + images +
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
-                ", accommodationType=" + type +
+                ", type=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerGuest +
+                ", isPricePerGuest=" + isPricePerGuest +
                 ", host=" + host +
-                ", seasonRates=" + seasonalRates +
-                ", address=" + address +
+                ", seasonalRates=" + seasonalRates +
                 ", deadline=" + deadline +
                 ", isAutomatic=" + isAutomatic +
+                ", address=" + address +
+                ", deleted=" + deleted +
+                ", blocked=" + blocked +
                 '}';
     }
 

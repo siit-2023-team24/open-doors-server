@@ -3,16 +3,17 @@ package com.siit.team24.OpenDoors.service.user;
 import com.siit.team24.OpenDoors.dto.userManagement.NewUserReportDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserReportDTO;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
+import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.model.UserReport;
+import com.siit.team24.OpenDoors.model.enums.UserReportStatus;
 import com.siit.team24.OpenDoors.repository.user.UserReportRepository;
+import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserReportService {
@@ -25,6 +26,16 @@ public class UserReportService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PendingAccommodationService pendingAccommodationService;
+
+    public UserReport findById(Long id) {
+        Optional<UserReport> report = userReportRepository.findById(id);
+        if (report.isEmpty())
+            throw new EntityNotFoundException();
+        return report.get();
+    }
 
     public List<String> getReportableUsers(Long userId, boolean isGuestComplainant){
 
@@ -58,5 +69,31 @@ public class UserReportService {
         List<UserReportDTO> reports = userReportRepository.findAllDTOs();
         reports.sort(Comparator.comparing(UserReportDTO::getTimestamp));
         return reports;
+    }
+
+    public UserReportDTO dismiss(Long id) {
+        UserReport report = findById(id);
+        if (report.getStatus() != UserReportStatus.ACTIVE)
+            throw new IllegalArgumentException("Cannot dismiss a report that is not active");
+        report.setStatus(UserReportStatus.DISMISSED);
+        report = userReportRepository.save(report);
+        return new UserReportDTO(report);
+    }
+
+    public void resolve(Long id) {
+        UserReport report = findById(id);
+        userService.block(report.getRecipient().getId(), report.getRecipient().getRole());
+        pendingAccommodationService.deleteAllForHost(report.getId());
+        resolveAllFor(report.getRecipient().getId());
+    }
+
+    private void resolveAllFor(Long recipientId) {
+        List<UserReport> reports = userReportRepository.findAll();
+        for (UserReport report: reports) {
+            if (report.getRecipient().getId() == recipientId && report.getStatus() == UserReportStatus.ACTIVE) {
+                report.setStatus(UserReportStatus.RESOLVED);
+                userReportRepository.save(report);
+            }
+        }
     }
 }

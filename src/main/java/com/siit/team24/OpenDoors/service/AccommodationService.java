@@ -38,6 +38,9 @@ public class AccommodationService {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private AccommodationReviewService accommodationReviewService;
+
     public Accommodation findById(Long id) {
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
         if (accommodation.isEmpty()) throw new EntityNotFoundException();
@@ -55,19 +58,39 @@ public class AccommodationService {
         //do not delete this println.
         System.out.println(accommodation);  //because of lazy fetch
         Set<Image> images = accommodation.getImages();
+        accommodationReviewService.denyAllForAccommodation(id);
         accommodationRepository.deleteById(id);
         imageService.deleteAll(images);
 
     }
 
-    public void deleteForEdit(Long id) {
+    public void block(Long id) {
         Accommodation accommodation = findById(id);
+        accommodation.setBlocked(true);
+        accommodationRepository.save(accommodation);
+    }
+
+    public void unblock(Long id) {
+        Accommodation accommodation = findById(id);
+        accommodation.setBlocked(false);
+        accommodationRepository.save(accommodation);
+    }
+
+    public void softDelete(Long id) {
+        Accommodation accommodation = findById(id);
+        accommodationReviewService.denyAllForAccommodation(id);
         accommodation.setDeleted(true);
         accommodationRepository.save(accommodation);
     }
 
     public void revive(Long id) {
         accommodationRepository.revive(id);
+    }
+
+    public void reviveByHostId(Long hostId) {
+        List<Accommodation> accommodations = accommodationRepository.findDeletedForHost(hostId);
+        for (Accommodation accommodation: accommodations)
+            revive(accommodation.getId());
     }
 
     public Collection<AccommodationHostDTO> getDTOsForHost(Long hostId) {
@@ -77,6 +100,7 @@ public class AccommodationService {
     public List<Accommodation> findAllByHostId(Long hostId) {
         return accommodationRepository.findAllByHostId(hostId);
     }
+
 
     public Optional<Accommodation> findOne(Long id) {
         return accommodationRepository.findById(id);
@@ -284,6 +308,8 @@ public class AccommodationService {
 
         return hostAccommodations;
     }
+
+
 }
 
 

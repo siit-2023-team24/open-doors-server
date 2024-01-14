@@ -1,11 +1,9 @@
 package com.siit.team24.OpenDoors.service;
 
-import com.siit.team24.OpenDoors.dto.image.ImageBytesDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
-import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
 import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Host;
@@ -57,7 +55,7 @@ public class PendingAccommodationService {
         if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
             if (reservationRequestService.foundActiveFor(dto.getAccommodationId()))
                 throw new ActiveReservationRequestsFoundException();
-            accommodationService.deleteForEdit(dto.getAccommodationId());
+            accommodationService.block(dto.getAccommodationId());
         }
         PendingAccommodation pendingAccommodation = new PendingAccommodation();
         pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
@@ -111,7 +109,7 @@ public class PendingAccommodationService {
     public void delete(Long id) {
         PendingAccommodation pending = findById(id);
         if (pending.getAccommodationId() != null) {
-            accommodationService.revive(pending.getAccommodationId());
+            accommodationService.unblock(pending.getAccommodationId());
         }
         imageService.deleteAll(pending.getImages());
         repo.deleteById(id);
@@ -150,7 +148,7 @@ public class PendingAccommodationService {
 //        accommodation.setImages(pendingAccommodation.getImages());
 
         if (pendingAccommodation.getAccommodationId() != null) {
-            accommodationService.revive(pendingAccommodation.getAccommodationId());
+            accommodationService.unblock(pendingAccommodation.getAccommodationId());
             Accommodation oldData = accommodationService.findById(pendingAccommodation.getAccommodationId());
             //delete all old images
 //            imageService.deleteAll(accommodation.getImages());

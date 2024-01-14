@@ -113,6 +113,7 @@ public class AccommodationController {
             throw new ExistingReservationsException();
 
         reservationRequestService.denyAllFor(id);
+        userService.removeFromAnyFavorites(accommodationService.findById(id));
         accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

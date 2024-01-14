@@ -44,8 +44,15 @@ public class UserReportController {
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes = "application/json")
-    public ResponseEntity<UserReportDTO> updateReport(@RequestBody UserReportDTO userReportDTO){
-        return new ResponseEntity<>(userReportDTO, HttpStatus.OK);
+    @GetMapping(value = "/dismiss/{id}")
+    public ResponseEntity<UserReportDTO> dismiss(@PathVariable Long id) {
+        UserReportDTO dto = userReportService.dismiss(id);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/resolve/{id}")
+    public ResponseEntity<Void> resolve(@PathVariable Long id) {
+        userReportService.resolve(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

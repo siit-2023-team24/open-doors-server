@@ -19,9 +19,6 @@ public class AccommodationReviewService {
     @Autowired
     private AccommodationReviewRepository accommodationReviewRepository;
 
-    @Autowired
-    private ReservationRequestService reservationRequestService;
-
     public AccommodationReview findById(Long id) {
         Optional<AccommodationReview> review = accommodationReviewRepository.findById(id);
         if (review.isEmpty())
@@ -42,8 +39,7 @@ public class AccommodationReviewService {
 
     public boolean isReviewable(Long accommodationId, Long guestId) {
         boolean hasNotYetReviewed = accommodationReviewRepository.findByAccommodationAndAuthor(accommodationId, guestId).isEmpty();
-        boolean hasStayed = reservationRequestService.hasStayed(guestId, accommodationId);
-        return (hasNotYetReviewed && hasStayed);
+        return hasNotYetReviewed;
     }
 
     public void save(AccommodationReview review) { accommodationReviewRepository.save(review); }
@@ -75,5 +71,14 @@ public class AccommodationReviewService {
         if (review.isApproved())
             throw new IllegalArgumentException("Accommodation review is already approved.");
         accommodationReviewRepository.deleteById(id);
+    }
+
+    public void denyAllForAccommodation(Long accommodationId) {
+        List<AccommodationReview> reviews = accommodationReviewRepository.findAll();
+        for (AccommodationReview review: reviews) {
+            if (review.isApproved()) continue;
+            if (review.getAccommodation().getId() == accommodationId)
+                delete(review.getId());
+        }
     }
 }

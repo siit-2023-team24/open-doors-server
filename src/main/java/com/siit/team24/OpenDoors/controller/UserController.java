@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.AccountService;
 import com.siit.team24.OpenDoors.service.user.UserService;
@@ -29,6 +30,9 @@ public class UserController {
 
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
+
+    @Autowired
+    private AccommodationReviewService accommodationReviewService;
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
@@ -64,10 +68,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = "/all")
-    public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
-        //todo
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    @GetMapping(value = "/blocked")
+    public ResponseEntity<List<UserSummaryDTO>> getBlockedUsers() {
+        List<UserSummaryDTO> users = service.getBlockedDTOs();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 
@@ -103,10 +107,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = "/{userId}/status")
-    public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
-                                                  @RequestParam boolean isBlocked){
-        //todo
+    @GetMapping(value = "/unblock/{id}")
+    public ResponseEntity<Void> unblock(@PathVariable Long id){
+        service.unblock(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

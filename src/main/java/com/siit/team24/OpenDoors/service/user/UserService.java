@@ -1,10 +1,7 @@
 package com.siit.team24.OpenDoors.service.user;
 
-import com.siit.team24.OpenDoors.dto.userManagement.HostPublicDataDTO;
+import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.NewPasswordDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
-import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
 import com.siit.team24.OpenDoors.exception.ConfirmedReservationRequestsFound;
 import com.siit.team24.OpenDoors.exception.CredentialsNotValidException;
 import com.siit.team24.OpenDoors.exception.PasswordNotConfirmedException;
@@ -29,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -188,16 +184,30 @@ public class UserService {
                 if (!reservationRequestService.isAccommodationReadyForDelete(accommodation.getId()))
                     throw new ConfirmedReservationRequestsFound();
             }
-            for (Accommodation accommodation: accommodations)
+            for (Accommodation accommodation: accommodations) {
+                removeFromAnyFavorites(accommodation);
                 accommodationService.delete(accommodation.getId());
+            }
         }
-
         else return;
 
-        if (user.getImage() != null) {
+        if (user.getImage() != null)
             imageService.delete(user.getImage().getId());
-        }
+
         repo.deleteById(id);
+    }
+
+    public void removeFromAnyFavorites(Accommodation accommodation) {
+        List<User> users = repo.findAll();
+        for (User user: users) {
+            if (!user.getRole().equals(UserRole.ROLE_GUEST))
+                continue;
+            Guest guest = (Guest) user;
+            if (guest.getFavorites().contains(accommodation)) {
+                guest.removeFavoriteAccommodation(accommodation);
+                repo.save(guest);
+            }
+        }
     }
 
     public void activateUser(Long id){
@@ -218,4 +228,43 @@ public class UserService {
     }
 
     public List<String> getUsernames(List<Long> ids) { return this.repo.findUsernamesByIds(ids); }
+
+    public List<UserSummaryDTO> getBlockedDTOs() {
+        return repo.getBlockedDTOs();
+    }
+
+    public void block(Long id, UserRole role) {
+        User user = findById(id);
+        if (role.equals(UserRole.ROLE_GUEST))
+            handlePendingRequests(user.getUsername());
+        else if (role.equals(UserRole.ROLE_HOST))
+            disableHostsAccommodations(id);
+        else return;
+        user.setBlocked(true);
+        repo.save(user);
+    }
+
+    private void disableHostsAccommodations(Long id) {
+        List<Accommodation> accommodations = accommodationService.findAllByHostId(id);
+        for (Accommodation accommodation: accommodations) {
+            reservationRequestService.denyActiveForAccommodation(accommodation.getId());
+            removeFromAnyFavorites(accommodation);
+            accommodationService.softDelete(accommodation.getId());
+        }
+
+    }
+
+    private void handlePendingRequests(String username) {
+        reservationRequestService.deletePendingForGuest(username);
+        reservationRequestService.cancelFutureForGuest(username);
+    }
+
+    public void unblock(Long id) {
+        User user = findById(id);
+        if (user.getRole() == UserRole.ROLE_HOST)
+            accommodationService.reviveByHostId(id);
+        user.setBlocked(false);
+        repo.save(user);
+    }
+
 }

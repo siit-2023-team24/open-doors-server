@@ -7,6 +7,7 @@ import com.siit.team24.OpenDoors.model.AccommodationReview;
 import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class AccommodationReviewController {
     private AccommodationService accommodationService;
 
     @Autowired
+    private ReservationRequestService reservationRequestService;
+
+    @Autowired
     private UserService userService;
 
     AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
@@ -39,7 +43,8 @@ public class AccommodationReviewController {
                 false,
                 null);
         if (guestId != 0) {
-            dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId));
+            dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId)
+            && reservationRequestService.hasStayed(guestId, accommodationId));
             dto.setUnapprovedReview(accommodationReviewService.findUnapprovedForGuest(guestId));
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
