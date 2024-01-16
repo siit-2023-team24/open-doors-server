@@ -101,14 +101,6 @@ public class UserController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('GUEST')")
-    @GetMapping(value="/{userId}/favorites")
-    public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
-        //todo
-        List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        return new ResponseEntity<>(favorites, HttpStatus.OK);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/unblock/{id}")
     public ResponseEntity<Void> unblock(@PathVariable Long id){

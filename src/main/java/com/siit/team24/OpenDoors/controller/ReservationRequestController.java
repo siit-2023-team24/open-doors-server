@@ -95,14 +95,6 @@ public class ReservationRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('GUEST')")
-//    @GetMapping(value = "/confirmed/guest/{guestId}")
-//    public ResponseEntity<List<ReservationRequestForGuestDTO>> getConfirmedForGuest(@PathVariable Long guestId) {
-//        List<ReservationRequestForGuestDTO> requests = new ArrayList<>();
-//        //requests.add(testReservationRequestForGuestDTO);
-//        return new ResponseEntity<>(requests, HttpStatus.OK);
-//    }
-
     @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "confirm/{id}")
     public ResponseEntity<Void> confirm(@PathVariable Long id) {
@@ -134,8 +126,6 @@ public class ReservationRequestController {
         if(accommodation.getIsAutomatic()) {
             request.setStatus(ReservationRequestStatus.CONFIRMED);
             accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
-
-            //implement denyOtherRequestsForThisDateRange()
             reservationRequestService.denyAllOverlappingRequests(request.getAccommodation().getId(), request.getDateRange());
         } else {
             request.setStatus(ReservationRequestStatus.PENDING);

@@ -136,8 +136,6 @@ public class PendingAccommodationService {
 
         System.out.println(accommodationWholeDTO);
 
-//        this.delete(dto.getId());
-
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
 
@@ -145,13 +143,9 @@ public class PendingAccommodationService {
 
         accommodation.setHost(host);
 
-//        accommodation.setImages(pendingAccommodation.getImages());
-
         if (pendingAccommodation.getAccommodationId() != null) {
             accommodationService.unblock(pendingAccommodation.getAccommodationId());
             Accommodation oldData = accommodationService.findById(pendingAccommodation.getAccommodationId());
-            //delete all old images
-//            imageService.deleteAll(accommodation.getImages());
         }
 
         Accommodation withoutImages = accommodationService.save(accommodation);
@@ -165,7 +159,6 @@ public class PendingAccommodationService {
         System.out.println("Saved to accommodations: " + saved);
 
         this.delete(dto.getId());
-//        imageService.deleteAll(pendingAccommodation.getImages());
     }
 
 }
