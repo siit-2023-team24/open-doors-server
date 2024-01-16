@@ -59,8 +59,8 @@ public class AccommodationController {
         return new ResponseEntity<>(AccommodationSearchDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/all/{guestId}")
-
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsWhenGuest(@PathVariable Long guestId) {
         Guest guest = (Guest) userService.findById(guestId);
         List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.findAllWithFavorites(guest);
@@ -70,6 +70,7 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "editable/{id}")
     public ResponseEntity<AccommodationWholeDTO> getAccommodationForEdit(@PathVariable Long id) {
         try {
@@ -95,6 +96,7 @@ public class AccommodationController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/{accommodationId}/{guestId}")
     public ResponseEntity<AccommodationWithTotalPriceDTO> getAccommodationWhenGuest(@PathVariable Long accommodationId, @PathVariable Long guestId) {
         Guest guest = (Guest) userService.findById(guestId);
@@ -106,13 +108,14 @@ public class AccommodationController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodation(@PathVariable Long id) {
         if (!reservationRequestService.isAccommodationReadyForDelete(id))
             throw new ExistingReservationsException();
 
         reservationRequestService.denyAllFor(id);
+        userService.removeFromAnyFavorites(accommodationService.findById(id));
         accommodationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -142,7 +145,7 @@ public class AccommodationController {
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<AccommodationHostDTO>> getForHost(@PathVariable Long hostId) {
         Collection<AccommodationHostDTO> accommodations = accommodationService.getDTOsForHost(hostId);
@@ -171,6 +174,7 @@ public class AccommodationController {
         return ResponseEntity.ok(dtos);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/addToFavorites")
     public ResponseEntity<Void> addToFavorites(@RequestBody AccommodationFavoritesDTO dto) {
         Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
@@ -180,6 +184,7 @@ public class AccommodationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/removeFromFavorites")
     public ResponseEntity<Void> removeFromFavorites(@RequestBody AccommodationFavoritesDTO dto) {
         Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
@@ -189,6 +194,7 @@ public class AccommodationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping(value = "/favorites/{guestId}")
     public ResponseEntity<List<AccommodationSearchDTO>> getAccommodationsFavoritesPage(@PathVariable Long guestId) {
         Guest guest = (Guest) userService.findById(guestId);

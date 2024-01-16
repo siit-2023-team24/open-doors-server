@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
-@Where(clause = "deleted=false")
+//@Where(clause = "deleted=false")
 @Entity
 public class Guest extends User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)

@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.userManagement.AccountDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserAccountDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserTokenState;
+import com.siit.team24.OpenDoors.exception.BlockedUserException;
 import com.siit.team24.OpenDoors.exception.ResourceConflictException;
 import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.service.user.AccountService;
@@ -42,20 +43,22 @@ public class AuthenticationController {
 
     @PostMapping(consumes="application/json", value = "/login")
     public ResponseEntity<UserTokenState> login(@RequestBody AccountDTO accountDTO, HttpServletResponse response) {
-        // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
-        // AuthenticationException
+        // AuthenticationException will occur on invalid credentials
         try {
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     accountDTO.getUsername(), accountDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Kreiraj token za tog korisnika
+            // Create token for user
             User user = (User) authentication.getPrincipal();
+
+            if (user.isBlocked()) throw new BlockedUserException();
+
             String jwt = tokenUtils.generateToken(user);
             int expiresIn = tokenUtils.getExpiredIn();
 
-            // Vrati token kao odgovor na uspesnu autentifikaciju
+            // Return token for a successful response
             return ResponseEntity.ok(new UserTokenState(jwt, expiresIn, "Success"));
 
         } catch (BadCredentialsException e) {
@@ -67,6 +70,10 @@ public class AuthenticationController {
             UserTokenState errorToken = new UserTokenState();
             errorToken.setMessage("Your account is not enabled.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorToken);
+        } catch (BlockedUserException e) {
+            UserTokenState errorToken = new UserTokenState();
+            errorToken.setMessage("Your account is blocked.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorToken);
         } catch (Exception e) {
             UserTokenState errorToken = new UserTokenState();
             errorToken.setMessage("Unexpected server error");

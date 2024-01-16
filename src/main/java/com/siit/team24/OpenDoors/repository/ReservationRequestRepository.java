@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReservationRequestRepository extends JpaRepository<ReservationRequest, Long> {
 
     @Query("select r from ReservationRequest r where r.accommodation.id = :accommodationId" +
-            " and (r.status = 0 or r.status = 1) and r.dateRange.endDate > current_timestamp")
+            " and (r.status = 0 or r.status = 1) and r.dateRange.startDate > current_timestamp")
     List<ReservationRequest> getActiveFor(Long accommodationId);
 
     @Query("select r from ReservationRequest r where r.accommodation.id = :accommodationId" +
@@ -22,7 +22,7 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     List<ReservationRequest> getPendingFor(Long accommodationId);
 
     @Query("select r from ReservationRequest r where r.guest.username = :guestUsername and r.status = :status " +
-            "and r.dateRange.endDate > current_timestamp ")
+            "and r.dateRange.startDate > current_timestamp ")
     List<ReservationRequest> getFutureForGuestWithStatus(String guestUsername, ReservationRequestStatus status);
 
 

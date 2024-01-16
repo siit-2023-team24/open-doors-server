@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForGuestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForHostDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestSearchAndFilterDTO;
 import com.siit.team24.OpenDoors.exception.CancelRequestException;
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,6 +44,15 @@ public class ReservationRequestService {
         return !repo.getActiveFor(accommodationId).isEmpty();
     }
 
+    public void denyActiveForAccommodation(Long accommodationId) {
+        List<ReservationRequest> requests = repo.getActiveFor(accommodationId);
+        for (ReservationRequest request: requests) {
+            request.setStatus(ReservationRequestStatus.DENIED);
+            repo.save(request);
+            //todo notify guest
+        }
+    }
+
     public boolean isAccommodationReadyForDelete(Long accommodationId) {
         List<ReservationRequest> confirmed = repo.getConfirmedFutureFor(accommodationId);
         return confirmed.isEmpty();
@@ -63,6 +73,15 @@ public class ReservationRequestService {
     public void deletePendingForGuest(String username) {
         List<ReservationRequest> requests = findByUsernameAndStatus(username, ReservationRequestStatus.PENDING);
         repo.deleteAll(requests);
+    }
+
+    public void cancelFutureForGuest(String username) {
+        List<ReservationRequest> requests = repo.getFutureForGuestWithStatus(username, ReservationRequestStatus.CONFIRMED);
+        for (ReservationRequest request: requests) {
+            accommodationService.addToAvailability(request.getAccommodation().getId(), request.getDateRange());
+            request.setStatus(ReservationRequestStatus.CANCELLED);
+            repo.save(request);
+        }
     }
 
     public List<ReservationRequestForGuestDTO> findByGuestId(Long guestId) {

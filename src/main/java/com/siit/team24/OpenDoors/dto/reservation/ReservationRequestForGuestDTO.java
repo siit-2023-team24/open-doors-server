@@ -1,9 +1,11 @@
 package com.siit.team24.OpenDoors.dto.reservation;
 
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -37,12 +39,17 @@ public class ReservationRequestForGuestDTO {
     public ReservationRequestForGuestDTO(ReservationRequest request) {
         this(   request.getId(),
                 null,
-                request.getAccommodation().getName(),
+                null,
                 request.getDateRange(),
                 request.getGuestNumber(),
                 request.getTotalPrice(),
                 request.getStatus(),
                 request.getTimestamp());
+        try {
+            accommodationName = request.getAccommodation().getName();
+        } catch (EntityNotFoundException e) {
+            request.setAccommodation(new Accommodation());
+        }
         if (!request.getAccommodation().getImages().isEmpty())
             imageId = ((Image)request.getAccommodation().getImages().toArray()[0]).getId();
     }

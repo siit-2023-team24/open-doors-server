@@ -1,7 +1,9 @@
 package com.siit.team24.OpenDoors.dto.reservation;
 
+import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.sql.Timestamp;
 
@@ -37,6 +39,11 @@ public class ReservationRequestForHostDTO{
     }
 
     public ReservationRequestForHostDTO(ReservationRequest request) {
+        try {
+            accommodationName = request.getAccommodation().getUniqueName();
+        } catch (EntityNotFoundException e) {
+            request.setAccommodation(new Accommodation());
+        }
         this.id = request.getId();
         this.guestUsername = request.getGuest().getUsername();
         this.accommodationName = request.getAccommodation().getUniqueName();

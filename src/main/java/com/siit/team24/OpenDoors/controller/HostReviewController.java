@@ -10,6 +10,7 @@ import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -38,12 +39,14 @@ public class HostReviewController {
         return new ResponseEntity<>(host, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/reported")
     public ResponseEntity<List<ReportedHostReviewDTO>> getAllReported() {
         List<ReportedHostReviewDTO> reviews = hostReviewService.findAllReported();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json")
     public ResponseEntity<HostReviewWholeDTO> createHostReview(@RequestBody NewReviewDTO reviewDTO) {
         HostReview review = new HostReview(reviewDTO);
@@ -54,12 +57,14 @@ public class HostReviewController {
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GUEST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteHostReview(@PathVariable Long id) {
         this.hostReviewService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @PostMapping(value = "/{reviewId}/status")
     public ResponseEntity<Void> changeReportedStatus(@PathVariable Long reviewId){
         hostReviewService.changeReportedStatus(reviewId);

@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
-@Where(clause = "deleted=false")
+//@Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "users")
@@ -44,6 +44,8 @@ public class User implements UserDetails {
 //    @OneToOne(cascade = {CascadeType.ALL})
 //    private Account account;
     private boolean enabled;
+
+    private boolean blocked;
 
     private boolean deleted;
 
@@ -166,6 +168,14 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -196,7 +206,7 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", lastPasswordResetDate=" + lastPasswordResetDate +
                 ", role=" + role +
@@ -206,6 +216,8 @@ public class User implements UserDetails {
                 ", image=" + image +
                 ", address=" + address +
                 ", enabled=" + enabled +
+                ", blocked=" + blocked +
+                ", deleted=" + deleted +
                 '}';
     }
 

@@ -3,8 +3,11 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.model.UserReport;
+import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.AccountService;
+import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class UserController {
 
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
+
+    @Autowired
+    private UserReportService userReportService;
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
@@ -60,24 +66,17 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.delete(id);
         pendingAccommodationService.deleteAllForHost(id);
+        userReportService.deleteAllFor(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = "/all")
-    public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
-        //todo
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
-            Pageable pageable) {
-        //todo
-        List<UserSummaryDTO> users = new ArrayList<>();
+    @GetMapping(value = "/blocked")
+    public ResponseEntity<List<UserSummaryDTO>> getBlockedUsers() {
+        List<UserSummaryDTO> users = service.getBlockedDTOs();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
@@ -102,19 +101,10 @@ public class UserController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('GUEST')")
-    @GetMapping(value="/{userId}/favorites")
-    public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
-        //todo
-        List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        return new ResponseEntity<>(favorites, HttpStatus.OK);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = "/{userId}/status")
-    public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
-                                                  @RequestParam boolean isBlocked){
-        //todo
+    @GetMapping(value = "/unblock/{id}")
+    public ResponseEntity<Void> unblock(@PathVariable Long id){
+        service.unblock(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

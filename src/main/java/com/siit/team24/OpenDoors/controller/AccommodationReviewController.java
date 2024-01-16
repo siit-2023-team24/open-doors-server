@@ -7,10 +7,12 @@ import com.siit.team24.OpenDoors.model.AccommodationReview;
 import com.siit.team24.OpenDoors.model.Guest;
 import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.AccommodationService;
+import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +28,11 @@ public class AccommodationReviewController {
     private AccommodationService accommodationService;
 
     @Autowired
+    private ReservationRequestService reservationRequestService;
+
+    @Autowired
     private UserService userService;
 
-    AccommodationReviewDTO testAccommodationReviewDTO = new AccommodationReviewDTO(
-            //(long)384743732, 5, "Very good", new Timestamp(23735834), "test@testmail.com", (long)2342534, false, "Hotel Park"
-    );
 
     @GetMapping(value = "/{accommodationId}")
     public ResponseEntity<AccommodationReviewsDTO> getAccommodationReviewsForDetails(@PathVariable Long accommodationId, @RequestParam Long guestId) {
@@ -39,13 +41,14 @@ public class AccommodationReviewController {
                 false,
                 null);
         if (guestId != 0) {
-            dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId));
+            dto.setIsReviewable(accommodationReviewService.isReviewable(accommodationId, guestId)
+            && reservationRequestService.hasStayed(guestId, accommodationId));
             dto.setUnapprovedReview(accommodationReviewService.findUnapprovedForGuest(guestId));
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AccommodationReviewWholeDTO> createAccommodationReview(@RequestBody NewReviewDTO reviewDTO) {
         AccommodationReview review = new AccommodationReview(reviewDTO);
@@ -56,30 +59,28 @@ public class AccommodationReviewController {
         return new ResponseEntity<>(returnDto, HttpStatus.CREATED);
     }
 
-
-//    @PutMapping(consumes = "application/json")
-//    public ResponseEntity<AccommodationReviewDTO> updateAccommodationReview(@RequestBody HostReviewForHostDTO reviewDTO) {
-//        return new ResponseEntity<>(testAccommodationReviewDTO, HttpStatus.OK);
-//    }
-
+    @PreAuthorize("hasRole('GUEST')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccommodationReview(@PathVariable Long id) {
         accommodationReviewService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/pending")
     public ResponseEntity<List<PendingAccommodationReviewDetailsDTO>> getAllPending() {
         List<PendingAccommodationReviewDetailsDTO> result = accommodationReviewService.findAllPending();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/approve/{id}")
     public ResponseEntity<Void> approve(@PathVariable("id") Long id) {
         accommodationReviewService.approve(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/deny/{id}")
     public ResponseEntity<Void> deny(@PathVariable("id") Long id) {
         accommodationReviewService.deny(id);
