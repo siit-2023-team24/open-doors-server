@@ -86,8 +86,9 @@ public class WebSecurityConfig {
         http.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint));
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(new AntPathRequestMatcher("/open-doors/auth/*")).permitAll()
-
-//                    .requestMatchers(new AntPathRequestMatcher("/api/foo")).permitAll()
+//
+//                    .requestMatchers(new AntPathRequestMatcher("ws/**")).permitAll()
+//                    .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**")).permitAll()
 //                    //Da nam lepsu poruku vrati
 //                    .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
                     //.requestMatchers(new AntPathRequestMatcher("/api/whoami")).hasRole("USER")
@@ -102,7 +103,10 @@ public class WebSecurityConfig {
         // Autentifikacija ce biti ignorisana ispod navedenih putanja (kako bismo ubrzali pristup resursima)
         // Zahtevi koji se mecuju za web.ignoring().antMatchers() nemaju pristup SecurityContext-u
         // Dozvoljena POST metoda na ruti /auth/login, za svaki drugi tip HTTP metode greska je 401 Unauthorized
-        return (web) -> web.ignoring();//.requestMatchers(HttpMethod.POST, "/auth/login")
+        return (web) -> web.ignoring()
+                .requestMatchers(new AntPathRequestMatcher("/ws/**"))
+                .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**"));
+                //.requestMatchers(HttpMethod.POST, "/auth/login")
 //
 //
 //                // Ovim smo dozvolili pristup statickim resursima aplikacije

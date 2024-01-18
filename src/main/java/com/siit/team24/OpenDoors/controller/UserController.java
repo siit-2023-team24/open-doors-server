@@ -1,24 +1,19 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
+import com.siit.team24.OpenDoors.dto.notification.NotificationShowDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
-import com.siit.team24.OpenDoors.model.UserReport;
-import com.siit.team24.OpenDoors.service.AccommodationReviewService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
-import com.siit.team24.OpenDoors.service.user.AccountService;
 import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,9 +90,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
-    public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<NotificationShowDTO>> getNotificationsByUserId(@PathVariable Long userId) {
         //todo
-        List<NotificationDTO> notifications = new ArrayList<>();
+        List<NotificationShowDTO> notifications = new ArrayList<>();
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
