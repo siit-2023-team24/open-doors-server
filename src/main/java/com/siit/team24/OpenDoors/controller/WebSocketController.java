@@ -27,8 +27,8 @@ public class WebSocketController {
         System.err.println("REST: " + message);
 
         if (message.containsKey("message")) {
-            if (message.containsKey("userId") && message.get("userId") != null && !message.get("userId").isEmpty()) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("userId"), message);
+            if (message.containsKey("username") && message.get("username") != null && !message.get("username").isEmpty()) {
+                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("username"), message);
             } else {
                 this.simpMessagingTemplate.convertAndSend("/socket-publisher", message);
             }
@@ -48,9 +48,9 @@ public class WebSocketController {
 
 
         if (messageConverted != null) {
-            if (messageConverted.containsKey("userId") && messageConverted.get("userId") != null
-                    && !messageConverted.get("userId").isEmpty()) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("userId"),
+            if (messageConverted.containsKey("username") && messageConverted.get("username") != null
+                    && !messageConverted.get("username").isEmpty()) {
+                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("username"),
                         messageConverted);
             } else {
                 this.simpMessagingTemplate.convertAndSend("/socket-publisher", messageConverted);

@@ -20,11 +20,12 @@ public class ReservationRequestForGuestDTO {
     protected double totalPrice;
     protected ReservationRequestStatus status;
     protected Timestamp timestamp;
+    protected String hostUsername;
 
     public ReservationRequestForGuestDTO() {
     }
 
-    public ReservationRequestForGuestDTO(Long id, Long imageId, String accommodationName, DateRange dateRange, int guestNumber, double totalPrice, ReservationRequestStatus status, Timestamp timestamp) {
+    public ReservationRequestForGuestDTO(Long id, Long imageId, String accommodationName, DateRange dateRange, int guestNumber, double totalPrice, ReservationRequestStatus status, Timestamp timestamp, String hostUsername) {
         this.id = id;
         this.imageId = imageId;
         this.accommodationName = accommodationName;
@@ -34,6 +35,7 @@ public class ReservationRequestForGuestDTO {
         this.totalPrice = totalPrice;
         this.status = status;
         this.timestamp = timestamp;
+        this.hostUsername = hostUsername;
     }
 
     public ReservationRequestForGuestDTO(ReservationRequest request) {
@@ -44,9 +46,11 @@ public class ReservationRequestForGuestDTO {
                 request.getGuestNumber(),
                 request.getTotalPrice(),
                 request.getStatus(),
-                request.getTimestamp());
+                request.getTimestamp(),
+                null);
         try {
             accommodationName = request.getAccommodation().getName();
+            hostUsername = request.getAccommodation().getHost().getUsername();
         } catch (EntityNotFoundException e) {
             request.setAccommodation(new Accommodation());
         }
@@ -120,5 +124,13 @@ public class ReservationRequestForGuestDTO {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getHostUsername() {
+        return hostUsername;
+    }
+
+    public void setHostUsername(String hostUsername) {
+        this.hostUsername = hostUsername;
     }
 }
