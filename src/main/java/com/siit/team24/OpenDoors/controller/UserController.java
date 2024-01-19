@@ -38,19 +38,19 @@ public class UserController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
-        UserEditedDTO dto = null;
+    public ResponseEntity<UserDTO> updateUser(UserFormDataDTO data) {
+        UserDTO dto = null;
         UserEditedDTO userDTO = data.toEditedDTO();
 
         System.out.println(userDTO);
         try {
             dto = service.update(userDTO);
             System.out.println("Edited user: " + userDTO.getId());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (IOException e) {
             System.err.println("Error updating user: " + userDTO.getId());
             e.printStackTrace();
-            return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
