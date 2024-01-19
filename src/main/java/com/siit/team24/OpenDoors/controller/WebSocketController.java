@@ -1,6 +1,8 @@
 package com.siit.team24.OpenDoors.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.siit.team24.OpenDoors.dto.notification.NotificationDTO;
+import com.siit.team24.OpenDoors.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,9 @@ public class WebSocketController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-//    @CrossOrigin(origins = "http://localhost:4200")
+    @Autowired
+    private NotificationService notificationService;
+
     @RequestMapping(value="/sendMessageRest", method = RequestMethod.POST)
     public ResponseEntity<?> sendMessage(@RequestBody Map<String, String> message) {
         System.err.println("REST: " + message);
@@ -38,26 +42,42 @@ public class WebSocketController {
         return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+//    @MessageMapping("/send/message")
+//    public Map<String, String> broadcastNotification(String message) {
+//        System.err.println("WS1: " + message);
+//
+//        Map<String, String> messageConverted = parseMessage(message);
+//
+//        System.err.println("WS2: " + message);
+//
+//
+//        if (messageConverted != null) {
+//            if (messageConverted.containsKey("username") && messageConverted.get("username") != null
+//                    && !messageConverted.get("username").isEmpty()) {
+//                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("username"),
+//                        messageConverted);
+//            } else {
+//                this.simpMessagingTemplate.convertAndSend("/socket-publisher", messageConverted);
+//            }
+//        }
+//        return messageConverted;
+//    }
+
     @MessageMapping("/send/message")
-    public Map<String, String> broadcastNotification(String message) {
-        System.err.println("WS1: " + message);
+    public NotificationDTO broadcastNotification(NotificationDTO notificationDTO) {
+        System.err.println("WS1: " + notificationDTO);
+        notificationService.add(notificationDTO);
 
-        Map<String, String> messageConverted = parseMessage(message);
-
-        System.err.println("WS2: " + message);
-
-
-        if (messageConverted != null) {
-            if (messageConverted.containsKey("username") && messageConverted.get("username") != null
-                    && !messageConverted.get("username").isEmpty()) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("username"),
-                        messageConverted);
-            } else {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher", messageConverted);
-            }
+        if (notificationDTO.getUsername() != null && !notificationDTO.getUsername().isEmpty()) {
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + notificationDTO.getUsername(),
+                    notificationDTO);
+        } else {
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher", notificationDTO);
         }
-        return messageConverted;
+
+        return notificationDTO;
     }
+
 
     @SuppressWarnings("unchecked")
     private Map<String, String> parseMessage(String message) {

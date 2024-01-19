@@ -7,17 +7,17 @@ import java.sql.Timestamp;
 public class NotificationDTO {
     private Long id;
     private Timestamp timestamp;
-    private Long userId;
+    private String username;
     private String message;
     private String type;
 
     public NotificationDTO() {
     }
 
-    public NotificationDTO(Long id, Timestamp timestamp, Long userId, String message, String type) {
+    public NotificationDTO(Long id, Timestamp timestamp, String username, String message, String type) {
         this.id = id;
         this.timestamp = timestamp;
-        this.userId = userId;
+        this.username = username;
         this.message = message;
         this.type = type;
     }
@@ -38,12 +38,12 @@ public class NotificationDTO {
         this.timestamp = timestamp;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMessage() {
@@ -67,7 +67,7 @@ public class NotificationDTO {
         return "NotificationDTO{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
-                ", userId=" + userId +
+                ", username=" + username +
                 ", message='" + message + '\'' +
                 ", type='" + type + '\'' +
                 '}';
