@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.notification.NotificationShowDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import com.siit.team24.OpenDoors.service.NotificationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserReportService;
@@ -15,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -103,6 +103,21 @@ public class UserController {
     @GetMapping(value = "/unblock/{id}")
     public ResponseEntity<Void> unblock(@PathVariable Long id){
         service.unblock(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @GetMapping(value = "/{id}/disabled-notifications")
+    public ResponseEntity<List<NotificationType>> getDisabledNotificationTypes(@PathVariable Long id) {
+        List<NotificationType> types = service.getDisabledNotificationTypesFor(id);
+        return new ResponseEntity<>(types, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PutMapping(value = "/{id}/disabled-notifications")
+    public ResponseEntity<Void> setDisabledNotificationTypes(@PathVariable Long id,
+                                                             @RequestBody List<NotificationType> types) {
+        service.setDisabledNotificationTypesFor(id, types);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
