@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,13 @@ public class HostReviewService {
         for (HostReview hr : reviews) {
             dtos.add(new ReviewDetailsDTO(hr));
         }
+        dtos.sort(Comparator.comparing(ReviewDetailsDTO::getTimestamp).reversed());
         return dtos;
     }
 
     public List<ReportedHostReviewDTO> findAllReported() {
+        List<ReportedHostReviewDTO> reported = hostReviewRepository.findAllReported();
+        reported.sort(Comparator.comparing(ReportedHostReviewDTO::getTimestamp).reversed());
         return hostReviewRepository.findAllReported();
     }
 

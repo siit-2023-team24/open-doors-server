@@ -3,7 +3,6 @@ package com.siit.team24.OpenDoors.service.user;
 import com.siit.team24.OpenDoors.dto.userManagement.NewUserReportDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserReportDTO;
 import com.siit.team24.OpenDoors.model.ReservationRequest;
-import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.model.UserReport;
 import com.siit.team24.OpenDoors.model.enums.UserReportStatus;
 import com.siit.team24.OpenDoors.repository.user.UserReportRepository;
@@ -67,7 +66,7 @@ public class UserReportService {
 
     public List<UserReportDTO> findAllDTOs() {
         List<UserReportDTO> reports = userReportRepository.findAllDTOs();
-        reports.sort(Comparator.comparing(UserReportDTO::getTimestamp));
+        reports.sort(Comparator.comparing(UserReportDTO::getTimestamp).reversed());
         return reports;
     }
 

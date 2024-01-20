@@ -7,13 +7,11 @@ import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import com.siit.team24.OpenDoors.repository.NotificationRepository;
 import com.siit.team24.OpenDoors.service.user.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificationService {
