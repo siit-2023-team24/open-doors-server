@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,15 +24,11 @@ public class NotificationService {
     @Autowired
     private UserService userService;
 
-    public Notification findById(Long id) {
-        Optional<Notification> notification = repo.findById(id);
-        if (notification.isEmpty())
-            throw new EntityNotFoundException();
-        return notification.get();
-    }
 
     public List<NotificationShowDTO> findAllByUserId(Long userId) {
-        return repo.findAllByUserId(userId);
+        List<NotificationShowDTO> notifications = repo.findAllByUserId(userId);
+        notifications.sort(Comparator.comparing(NotificationShowDTO::getTimestamp).reversed());
+        return notifications;
     }
 
     public void add(NotificationDTO dto) {
