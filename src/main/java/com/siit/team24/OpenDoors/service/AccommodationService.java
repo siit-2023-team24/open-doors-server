@@ -310,6 +310,24 @@ public class AccommodationService {
     }
 
 
+    public List<AccommodationSearchDTO> searchWithFavorites(Guest guest, SearchAndFilterDTO searchAndFilterDTO) {
+        List<AccommodationSearchDTO> searchDTOs = searchAndFilter(searchAndFilterDTO);
+        for(AccommodationSearchDTO dto : searchDTOs) {
+            if (containsAccommodationWithId(guest.getFavorites(), dto.getId())) {
+                dto.setIsFavoriteForGuest(true);
+            }
+        }
+        return searchDTOs;
+    }
+
+    private boolean containsAccommodationWithId(Set<Accommodation> favorites, Long accommodationId) {
+        for (Accommodation accommodation : favorites) {
+            if (accommodation.getId().equals(accommodationId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 
