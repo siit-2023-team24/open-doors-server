@@ -7,10 +7,7 @@ import com.siit.team24.OpenDoors.exception.CredentialsNotValidException;
 import com.siit.team24.OpenDoors.exception.PasswordNotConfirmedException;
 import com.siit.team24.OpenDoors.exception.PasswordValidationException;
 import com.siit.team24.OpenDoors.model.*;
-import com.siit.team24.OpenDoors.model.enums.Country;
-import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
-import com.siit.team24.OpenDoors.model.enums.ImageType;
-import com.siit.team24.OpenDoors.model.enums.UserRole;
+import com.siit.team24.OpenDoors.model.enums.*;
 import com.siit.team24.OpenDoors.repository.user.UserRepository;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.HostReviewService;
@@ -75,7 +72,6 @@ public class UserService {
 
     public void changePassword(NewPasswordDTO dto) {
 
-        System.err.println(dto);
         //TODO: change validation to annotation
         if (!dto.getNewPassword().equals(dto.getRepeatPassword()))
             throw new PasswordNotConfirmedException();
@@ -271,5 +267,17 @@ public class UserService {
         user.setBlocked(false);
         repo.save(user);
     }
+
+    public List<NotificationType> getDisabledNotificationTypesFor(Long id) {
+        User user = findById(id);
+        return user.getDisabledTypes();
+    }
+
+    public void setDisabledNotificationTypesFor(Long id, List<NotificationType> types) {
+        User user = findById(id);
+        user.setDisabledTypes(types);
+        repo.save(user);
+    }
+
 
 }

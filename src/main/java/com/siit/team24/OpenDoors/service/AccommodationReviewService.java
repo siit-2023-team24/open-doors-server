@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.notification.NotificationShowDTO;
 import com.siit.team24.OpenDoors.dto.review.PendingAccommodationReviewDetailsDTO;
 import com.siit.team24.OpenDoors.dto.review.ReviewDetailsDTO;
 import com.siit.team24.OpenDoors.model.AccommodationReview;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class AccommodationReviewService {
         for(AccommodationReview ar : reviews) {
                 dtos.add(new ReviewDetailsDTO(ar));
         }
-
+        dtos.sort(Comparator.comparing(ReviewDetailsDTO::getTimestamp).reversed());
         return dtos;
     }
 
@@ -54,7 +56,9 @@ public class AccommodationReviewService {
     public void delete(Long id) { accommodationReviewRepository.deleteById(id); }
 
     public List<PendingAccommodationReviewDetailsDTO> findAllPending() {
-        return accommodationReviewRepository.findAllPending();
+        List<PendingAccommodationReviewDetailsDTO> pending = accommodationReviewRepository.findAllPending();
+        pending.sort(Comparator.comparing(PendingAccommodationReviewDetailsDTO::getTimestamp).reversed());
+        return pending;
     }
 
     public void approve(Long id) {
