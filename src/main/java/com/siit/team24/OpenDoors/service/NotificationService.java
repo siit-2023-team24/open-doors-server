@@ -37,7 +37,7 @@ public class NotificationService {
     public void add(NotificationDTO dto) {
         Notification notification = new Notification(dto.getId(), dto.getTimestamp(),
                 userService.findByUsername(dto.getUsername()), dto.getMessage(),
-                NotificationType.fromString(dto.getType()));
+                dto.getType());
         repo.save(notification);
     }
 

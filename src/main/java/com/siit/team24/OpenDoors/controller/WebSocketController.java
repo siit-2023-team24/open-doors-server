@@ -46,7 +46,7 @@ public class WebSocketController {
         System.out.println("WS: " + notificationDTO);
 
         if (notificationDTO.getUsername() != null && !notificationDTO.getUsername().isEmpty()) {
-            if (notificationService.isEnabled(notificationDTO.getUsername(), NotificationType.fromString(notificationDTO.getType()))) {
+            if (notificationService.isEnabled(notificationDTO.getUsername(), notificationDTO.getType())) {
                 notificationService.add(notificationDTO);
                 this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + notificationDTO.getUsername(),
                         notificationDTO);

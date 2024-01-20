@@ -1,6 +1,7 @@
 package com.siit.team24.OpenDoors.dto.notification;
 
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 
 import java.sql.Timestamp;
 
@@ -9,12 +10,12 @@ public class NotificationDTO {
     private Timestamp timestamp;
     private String username;
     private String message;
-    private String type;
+    private NotificationType type;
 
     public NotificationDTO() {
     }
 
-    public NotificationDTO(Long id, Timestamp timestamp, String username, String message, String type) {
+    public NotificationDTO(Long id, Timestamp timestamp, String username, String message, NotificationType type) {
         this.id = id;
         this.timestamp = timestamp;
         this.username = username;
@@ -54,11 +55,11 @@ public class NotificationDTO {
         this.message = message;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 
