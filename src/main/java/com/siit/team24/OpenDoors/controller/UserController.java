@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.controller;
 import com.siit.team24.OpenDoors.dto.notification.NotificationShowDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.service.NotificationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserReportService userReportService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
@@ -91,8 +95,7 @@ public class UserController {
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
     public ResponseEntity<List<NotificationShowDTO>> getNotificationsByUserId(@PathVariable Long userId) {
-        //todo
-        List<NotificationShowDTO> notifications = new ArrayList<>();
+        List<NotificationShowDTO> notifications = notificationService.findAllByUserId(userId);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 

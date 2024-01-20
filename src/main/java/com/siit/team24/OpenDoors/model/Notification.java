@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.dto.notification.NotificationDTO;
 import com.siit.team24.OpenDoors.model.enums.NotificationType;
 
 import jakarta.persistence.Entity;
