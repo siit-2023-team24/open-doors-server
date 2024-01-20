@@ -1,21 +1,21 @@
-package com.siit.team24.OpenDoors.dto.userManagement;
+package com.siit.team24.OpenDoors.dto.notification;
 
 import com.siit.team24.OpenDoors.model.Notification;
 
 import java.sql.Timestamp;
 
-public class NotificationDTO {
+public class NotificationShowDTO {
     private String type;
     private String message;
     private Timestamp timestamp;
 
-    public NotificationDTO(String type, String message, Timestamp timestamp) {
+    public NotificationShowDTO(String type, String message, Timestamp timestamp) {
         this.type = type;
         this.message = message;
         this.timestamp = timestamp;
     }
 
-    public NotificationDTO(Notification notification){
+    public NotificationShowDTO(Notification notification){
         this.type = notification.getType().getTypeMessage();
         this.message = notification.getMessage();
         this.timestamp = notification.getTimestamp();
