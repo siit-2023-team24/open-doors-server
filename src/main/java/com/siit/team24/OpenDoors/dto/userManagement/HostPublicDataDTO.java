@@ -6,14 +6,14 @@ import com.siit.team24.OpenDoors.model.Host;
 import java.util.List;
 
 public class HostPublicDataDTO {
-    public String username;
-    public String firstName;
-    public String lastName;
+    private String username;
+    private String firstName;
+    private String lastName;
 
-    public Long imageId;
+    private Long imageId;
 
-    public List<ReviewDetailsDTO> reviews;
-    public boolean isReviewable;
+    private List<ReviewDetailsDTO> reviews;
+    private boolean isReviewable;
     public Long getImageId() {
         return imageId;
     }

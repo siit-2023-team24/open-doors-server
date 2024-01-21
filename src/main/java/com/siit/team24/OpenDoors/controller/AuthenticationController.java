@@ -82,7 +82,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(consumes="application/json", value = "/register")
-    public ResponseEntity<User> register(@RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
+    public ResponseEntity<UserAccountDTO> register(@RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
 
         User existUser = this.userService.findByUsername(userAccountDTO.getUsername());
 
@@ -96,7 +96,7 @@ public class AuthenticationController {
         userService.sendActivationEmail(userAccountDTO.getUsername(), "http://" +
                 InetAddress.getLocalHost().getHostAddress() + ":4200/activate-account?id=" + user.getId() +"&timestamp=" + timestamp.getTime());
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(new UserAccountDTO(user), HttpStatus.CREATED);
     }
     @PostMapping("/activate-user/{id}")
     public ResponseEntity<String> activateUser(@PathVariable("id") Long id) {
