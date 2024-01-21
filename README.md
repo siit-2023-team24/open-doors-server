@@ -5,13 +5,17 @@ This repository contains a Booking service project for a Spring Boot application
 ## Technologies used
 
 Java (version 8 or higher)
+
 Maven
+
 Tomcat
+
 PostgreSQL database
 
 ## Instructions
 
 To run the project on your device, simply clone the repository and run OpenDoorsApplication.java in your environment of choice.
+
 The application runs at http://localhost:9090.
 
 ## Project Structure
@@ -26,4 +30,5 @@ All the dependencies the application uses are defined in the pom.xml file.
 ## Testing
 
 Unit and integrated tests are implemented in the h2 in-memory database.
+
 E2E tests are done using the Selenium framework.
