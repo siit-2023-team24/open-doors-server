@@ -247,7 +247,8 @@ public class ReservationRequestService {
     //    1000 * 60 * 7
     public boolean hasStayed(Long guestId, Long accommodationId) {
         Timestamp deadline = new Timestamp(System.currentTimeMillis() -
-                1000 * 60 * 60 * 24 * 7
+                1000 * 60 * 60 * 24 * 20 -
+                1000 * 60 * 60 * 24 * 20
         );
         List<ReservationRequest> stays = repo.getPastForGuestAndAccommodationConfirmed(guestId, accommodationId, deadline);
         return (!stays.isEmpty());

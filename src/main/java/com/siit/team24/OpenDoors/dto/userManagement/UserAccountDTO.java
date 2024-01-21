@@ -19,6 +19,14 @@ public class UserAccountDTO extends UserDTO {
         this.role = role;
     }
 
+    public UserAccountDTO(User user) {
+        this(user.getId(), user.getFirstName(), user.getLastName(), user.getPhone(),
+                user.getAddress().getStreet(), user.getAddress().getNumber(),
+                user.getAddress().getCity(), user.getAddress().getCountry().getCountryName(),
+                null, user.getUsername(), user.getPassword(), user.getRole().name());
+        if(user.getImage() != null) this.imageId = user.getImage().getId();
+    }
+
     public UserAccountDTO(User user, String email, String password, String role) {
         super(user);
         this.username = email;
