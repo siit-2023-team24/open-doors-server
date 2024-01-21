@@ -1,11 +1,10 @@
 package com.siit.team24.OpenDoors.service;
 
-import com.siit.team24.OpenDoors.dto.image.ImageBytesDTO;
 import com.siit.team24.OpenDoors.dto.image.ImageFileDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
-import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
 import com.siit.team24.OpenDoors.model.Accommodation;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.Image;
@@ -37,6 +36,13 @@ public class PendingAccommodationService {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private AccommodationReviewService accommodationReviewService;
+
+    @Autowired
+    private ReservationRequestService reservationRequestService;
+  
+
     public PendingAccommodation findById(Long id) {
         Optional<PendingAccommodation> accommodation = repo.findById(id);
         if (accommodation.isEmpty())
@@ -47,7 +53,9 @@ public class PendingAccommodationService {
 
     public PendingAccommodation save(PendingAccommodationWholeEditedDTO dto) throws IOException {
         if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
-            accommodationService.deleteForEdit(dto.getAccommodationId());
+            if (reservationRequestService.foundActiveFor(dto.getAccommodationId()))
+                throw new ActiveReservationRequestsFoundException();
+            accommodationService.block(dto.getAccommodationId());
         }
         PendingAccommodation pendingAccommodation = new PendingAccommodation();
         pendingAccommodation.setSimpleValues(dto);  //everything except for images, host
@@ -101,7 +109,7 @@ public class PendingAccommodationService {
     public void delete(Long id) {
         PendingAccommodation pending = findById(id);
         if (pending.getAccommodationId() != null) {
-            accommodationService.revive(pending.getAccommodationId());
+            accommodationService.unblock(pending.getAccommodationId());
         }
         imageService.deleteAll(pending.getImages());
         repo.deleteById(id);
@@ -128,8 +136,6 @@ public class PendingAccommodationService {
 
         System.out.println(accommodationWholeDTO);
 
-//        this.delete(dto.getId());
-
         Accommodation accommodation = new Accommodation();
         accommodation.setSimpleValues(accommodationWholeDTO);
 
@@ -137,14 +143,9 @@ public class PendingAccommodationService {
 
         accommodation.setHost(host);
 
-//        accommodation.setImages(pendingAccommodation.getImages());
-
-        if (dto.getAccommodationId() != null) {
-            accommodationService.revive(dto.getAccommodationId());
-            Accommodation oldData = accommodationService.findById(dto.getAccommodationId());
-            accommodation.setAverageRating(oldData.getAverageRating());
-            //delete all old images
-//            imageService.deleteAll(accommodation.getImages());
+        if (pendingAccommodation.getAccommodationId() != null) {
+            accommodationService.unblock(pendingAccommodation.getAccommodationId());
+            Accommodation oldData = accommodationService.findById(pendingAccommodation.getAccommodationId());
         }
 
         Accommodation withoutImages = accommodationService.save(accommodation);
@@ -158,7 +159,6 @@ public class PendingAccommodationService {
         System.out.println("Saved to accommodations: " + saved);
 
         this.delete(dto.getId());
-//        imageService.deleteAll(pendingAccommodation.getImages());
     }
 
 }

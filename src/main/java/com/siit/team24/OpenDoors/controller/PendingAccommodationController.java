@@ -9,6 +9,7 @@ import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +29,6 @@ public class PendingAccommodationController {
     @Autowired
     private PendingAccommodationService pendingService;
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ImageService imageService;
-
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @GetMapping(value = "/{id}")
@@ -46,14 +42,14 @@ public class PendingAccommodationController {
         }
     }
 
-     @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getAllPending() {
         Collection<PendingAccommodationHostDTO> accommodations = pendingService.getAll();
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
-     @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "/host/{hostId}")
     public ResponseEntity<Collection<PendingAccommodationHostDTO>> getPendingForHost(@PathVariable Long hostId) {
         Collection<PendingAccommodationHostDTO> accommodations = pendingService.getForHost(hostId);
@@ -78,7 +74,7 @@ public class PendingAccommodationController {
 
     @PreAuthorize("hasRole('HOST')")
     @PostMapping
-    public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeEditedDTO dto) {
+    public ResponseEntity<PendingAccommodationWholeDTO> save(@Valid @RequestBody PendingAccommodationWholeEditedDTO dto) {
         System.out.println("Received: " + dto);
         try {
             PendingAccommodation pendingAccommodation = pendingService.save(dto);
@@ -92,7 +88,7 @@ public class PendingAccommodationController {
 
     @PreAuthorize("hasRole('HOST')")
     @PostMapping(value = "/{id}/images", consumes = "multipart/form-data")
-    public ResponseEntity<PendingAccommodationWholeDTO> save(@PathVariable Long id,
+    public ResponseEntity<PendingAccommodationWholeDTO> saveImages(@PathVariable Long id,
                                                              @RequestBody List<MultipartFile> images) {
         try {
             if (images == null) {

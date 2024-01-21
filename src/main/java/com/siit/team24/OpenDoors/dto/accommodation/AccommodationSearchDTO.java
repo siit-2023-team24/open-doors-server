@@ -14,31 +14,33 @@ public class AccommodationSearchDTO {
     private Double totalPrice;
     private String city;
     private String country;
+    private boolean isFavoriteForGuest;
 
     public AccommodationSearchDTO() {}
 
     public AccommodationSearchDTO(Accommodation accommodation, Double totalPrice) {
-        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), accommodation.getAverageRating(), accommodation.getPrice(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
+        this(accommodation.getId(), ((Image)accommodation.getImages().toArray()[0]).getId(), accommodation.getName(), null, accommodation.getPrice(), accommodation.getIsPricePerGuest(), totalPrice, accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName());
 
     }
 
-    public AccommodationSearchDTO(Long id, Long image, String name, Double averageRating, double price, boolean isPricePerNight, Double totalPrice, String city, String country) {
+    public AccommodationSearchDTO(Long id, Long image, String name, Double averageRating, double price, boolean isPricePerGuest, Double totalPrice, String city, String country) {
         this.id = id;
         this.image = image;
         this.name = name;
         this.averageRating = averageRating;
         this.price = price;
-        this.isPricePerGuest = isPricePerNight;
+        this.isPricePerGuest = isPricePerGuest;
         this.totalPrice = totalPrice;
         this.city = city;
         this.country = country;
+        this.isFavoriteForGuest = false;
     }
 
     public AccommodationSearchDTO(Accommodation accommodation) {
         this.id = accommodation.getId();
         this.image = getFirstImageId(accommodation);
         this.name = accommodation.getName();
-        this.averageRating = accommodation.getAverageRating();
+        this.averageRating = null;
         this.price = accommodation.getPrice();
         this.isPricePerGuest = accommodation.getIsPricePerGuest();
         this.totalPrice = 0.0;
@@ -121,6 +123,13 @@ public class AccommodationSearchDTO {
         this.country = country;
     }
 
+    public boolean getIsFavoriteForGuest() {
+        return isFavoriteForGuest;
+    }
+
+    public void setIsFavoriteForGuest(boolean isFavorite) {
+        this.isFavoriteForGuest = isFavorite;
+    }
     @Override
     public String toString() {
         return "AccommodationSearchDTO{" +
@@ -129,10 +138,11 @@ public class AccommodationSearchDTO {
                 ", name='" + name + '\'' +
                 ", averageRating=" + averageRating +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerGuest +
+                ", isPricePerGuest=" + isPricePerGuest +
                 ", totalPrice=" + totalPrice +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
+                ", isFavorite=" + isFavoriteForGuest + '\'' +
                 '}';
     }
 }

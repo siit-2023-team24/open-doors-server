@@ -27,6 +27,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 
 @Configuration
@@ -84,8 +86,9 @@ public class WebSecurityConfig {
         http.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint));
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(new AntPathRequestMatcher("/open-doors/auth/*")).permitAll()
-
-//                    .requestMatchers(new AntPathRequestMatcher("/api/foo")).permitAll()
+//
+//                    .requestMatchers(new AntPathRequestMatcher("ws/**")).permitAll()
+//                    .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**")).permitAll()
 //                    //Da nam lepsu poruku vrati
 //                    .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
                     //.requestMatchers(new AntPathRequestMatcher("/api/whoami")).hasRole("USER")
@@ -100,7 +103,11 @@ public class WebSecurityConfig {
         // Autentifikacija ce biti ignorisana ispod navedenih putanja (kako bismo ubrzali pristup resursima)
         // Zahtevi koji se mecuju za web.ignoring().antMatchers() nemaju pristup SecurityContext-u
         // Dozvoljena POST metoda na ruti /auth/login, za svaki drugi tip HTTP metode greska je 401 Unauthorized
-        return (web) -> web.ignoring();//.requestMatchers(HttpMethod.POST, "/auth/login")
+        return (web) -> web.ignoring()
+                .requestMatchers(new AntPathRequestMatcher("/ws/**"))
+                .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**"))
+                .requestMatchers(new AntPathRequestMatcher("/open-doors/sendMessageRest/"));
+                //.requestMatchers(HttpMethod.POST, "/auth/login")
 //
 //
 //                // Ovim smo dozvolili pristup statickim resursima aplikacije
@@ -111,9 +118,9 @@ public class WebSecurityConfig {
     //Podesavanja CORS-a
     //https://docs.spring.io/spring-security/reference/servlet/integrations/cors.html
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() throws UnknownHostException {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://" + InetAddress.getLocalHost().getHostAddress() + ":4200"));
         configuration.setAllowedMethods(Arrays.asList("POST", "PUT", "GET", "OPTIONS", "DELETE", "PATCH")); // or simply "*"
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

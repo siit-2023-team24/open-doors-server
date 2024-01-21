@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
-    @Query("select new com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO(a) from Accommodation a where a.host.id =:hostId")
+    @Query("select new com.siit.team24.OpenDoors.dto.accommodation.AccommodationHostDTO(a) from Accommodation a where a.host.id =:hostId and a.blocked=false")
     Collection<AccommodationHostDTO> findAllDtoByHostId(Long hostId);
 
     @Query("select a from Accommodation a where a.host.id =:hostId")
@@ -23,4 +23,7 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
     @Modifying
     @Transactional
     void revive(Long id);
+
+    @Query(value = "select * from accommodation where host_id=?1", nativeQuery = true)
+    List<Accommodation> findDeletedForHost(Long hostId);
 }

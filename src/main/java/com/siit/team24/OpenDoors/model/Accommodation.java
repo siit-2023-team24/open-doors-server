@@ -36,10 +36,9 @@ public class Accommodation {
     @Column(name = "accommodationType", nullable = false)
     private AccommodationType type;
     @ElementCollection
-    private List<DateRange> availability; // contains the date ranges when accommodation is NOT available
+    private List<DateRange> availability;
     private double price;
     private boolean isPricePerGuest;
-    private Double averageRating;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Host host;
     @ElementCollection
@@ -50,6 +49,8 @@ public class Accommodation {
     private Address address;
   
     private boolean deleted;
+
+    private boolean blocked;
 
   
     public Accommodation(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests,
@@ -66,7 +67,6 @@ public class Accommodation {
         this.type = accommodationType;
         this.price = price;
         this.isPricePerGuest = isPricePerGuest;
-        this.averageRating = averageRating;
         this.host = host;
         this.seasonalRates = seasonalRates;
         this.address = address;
@@ -188,14 +188,6 @@ public class Accommodation {
         isPricePerGuest = pricePerGuest;
     }
 
-    public Double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(Double averageRating) {
-        this.averageRating = averageRating;
-    }
-
     public Host getHost() {
         return host;
     }
@@ -271,6 +263,14 @@ public class Accommodation {
         this.deleted = deleted;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +
@@ -282,16 +282,17 @@ public class Accommodation {
                 ", images=" + images +
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
-                ", accommodationType=" + type +
+                ", type=" + type +
                 ", availability=" + availability +
                 ", price=" + price +
-                ", isPricePerNight=" + isPricePerGuest +
-                ", averageRating=" + averageRating +
+                ", isPricePerGuest=" + isPricePerGuest +
                 ", host=" + host +
-                ", seasonRates=" + seasonalRates +
-                ", address=" + address +
+                ", seasonalRates=" + seasonalRates +
                 ", deadline=" + deadline +
                 ", isAutomatic=" + isAutomatic +
+                ", address=" + address +
+                ", deleted=" + deleted +
+                ", blocked=" + blocked +
                 '}';
     }
 

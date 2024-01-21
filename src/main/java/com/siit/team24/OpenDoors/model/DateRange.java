@@ -5,8 +5,11 @@ import jakarta.persistence.Embeddable;
 
 import java.sql.Timestamp;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Embeddable
@@ -44,7 +47,45 @@ public class DateRange {
         long startMillis = startDate.getTime();
         long endMillis = endDate.getTime();
 
-        return (int) ((endMillis - startMillis) / millisPerDay);
+        return (int) ((endMillis - startMillis) / millisPerDay + 1);
+    }
+
+    public List<Timestamp> getTimestampRange() {
+        long millisPerDay = 24 * 60 * 60 * 1000; // 1 day
+        List<Timestamp> range = new ArrayList<>();
+
+        // Set the initial timestamp to the start timestamp
+        Instant currentInstant = startDate.toInstant();
+
+        // Iterate while the current timestamp is before or equal to the end timestamp
+        while (!currentInstant.isAfter(endDate.toInstant())) {
+            // Add the current timestamp to the list
+            range.add(Timestamp.from(currentInstant));
+
+            // Increment the current timestamp by the specified interval
+            currentInstant = currentInstant.plusMillis(millisPerDay);
+        }
+
+        return range;
+    }
+
+    public boolean contains(DateRange other) {
+        boolean isStartDateBeforeOrEqual = this.startDate.equals(other.startDate) || this.startDate.before(other.startDate);
+        boolean isEndDateAfterOrEqual = this.endDate.equals(other.endDate) || this.endDate.after(other.endDate);
+
+        return isStartDateBeforeOrEqual && isEndDateAfterOrEqual;
+    }
+
+    public boolean contains(Timestamp date) {
+        return !date.before(this.startDate) && !date.after(this.endDate);
+    }
+
+    public boolean overlapsWith(DateRange other) {
+        if (other.startDate.compareTo(this.startDate) >= 0 && other.startDate.compareTo(this.endDate) <= 0)
+            return true;
+        if (startDate.compareTo(other.startDate) >= 0 && startDate.compareTo(other.endDate) <= 0)
+            return true;
+        return false;
     }
 
     @Override

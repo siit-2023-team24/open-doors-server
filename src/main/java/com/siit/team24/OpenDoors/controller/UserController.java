@@ -1,22 +1,22 @@
 package com.siit.team24.OpenDoors.controller;
 
-import com.siit.team24.OpenDoors.dto.accommodation.AccommodationSearchDTO;
+import com.siit.team24.OpenDoors.dto.notification.NotificationShowDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.*;
 import com.siit.team24.OpenDoors.model.User;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
+import com.siit.team24.OpenDoors.service.NotificationService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
-import com.siit.team24.OpenDoors.service.user.AccountService;
+import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -30,44 +30,15 @@ public class UserController {
     @Autowired
     private PendingAccommodationService pendingAccommodationService;
 
-    UserDTO testUserDTO = new UserDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1
-    );
+    @Autowired
+    private UserReportService userReportService;
 
-    AccountDTO testAccountDTO = new AccountDTO(
-            "steve@testnmail.me", "St3v3St3v3ns"
-    );
-
-    UserAccountDTO testUserAccountDTO = new UserAccountDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "St3v3St3v3ns", "guest"
-    );
-
-    UserSummaryDTO testUserSummaryDTO = new UserSummaryDTO(
-            "bob@testmail.me", "Bob", "Roberts", "host"
-    );
-
-    UserAccountViewDTO testUserAccountViewDTO = new UserAccountViewDTO(
-            (long)1, "Steve", "Stevens", "2142365516", "Pennsylvania Avenue", 1,
-            "Washington", "United States", (long)1, "steve@testnmail.me", "guest"
-    );
-
-    NotificationDTO testNotificationDTO = new NotificationDTO(
-            "You have a new review.", "Excellent", new Timestamp(98423)
-    );
-
-//    AccommodationSearchDTO testAccommodationSearchDTO = new AccommodationSearchDTO(
-//            (long)463453243, (long)363543252, "Hotel Park", 4.5, 340, true,
-//            "Novi Sad", "Serbia"
-//    );
-
-
-
+    @Autowired
+    private NotificationService notificationService;
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
+    public ResponseEntity<Void> updateUser(@Valid UserFormDataDTO data) {
         UserEditedDTO dto = null;
         UserEditedDTO userDTO = data.toEditedDTO();
 
@@ -86,13 +57,7 @@ public class UserController {
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "application/json", value = "/new-password")
     public ResponseEntity<Void> updateAccount(@RequestBody NewPasswordDTO newPasswordDTO){
-        try {
-            this.service.changePassword(newPasswordDTO);
-        } catch (Exception e) {
-            System.err.println("Error changing password for: " + newPasswordDTO.getUsername());
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        this.service.changePassword(newPasswordDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -101,27 +66,17 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.delete(id);
         pendingAccommodationService.deleteAllForHost(id);
+        userReportService.deleteAllFor(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = "/all")
-    public ResponseEntity<List<UserSummaryDTO>> getAllUsers() {
-        //todo
-        List<UserSummaryDTO> users = new ArrayList<>();
-        users.add(testUserSummaryDTO);
+    @GetMapping(value = "/blocked")
+    public ResponseEntity<List<UserSummaryDTO>> getBlockedUsers() {
+        List<UserSummaryDTO> users = service.getBlockedDTOs();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<UserSummaryDTO>> getUsersPage(
-            Pageable pageable) {
-        //todo
-        List<UserSummaryDTO> users = new ArrayList<>();
-        users.add(testUserSummaryDTO);
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{id}")
@@ -140,27 +95,30 @@ public class UserController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @GetMapping(value = "/{userId}/notifications")
-    public ResponseEntity<List<NotificationDTO>> getNotificationsByUserId(@PathVariable Long userId) {
-        //todo
-        List<NotificationDTO> notifications = new ArrayList<>();
-        notifications.add(testNotificationDTO);
+    public ResponseEntity<List<NotificationShowDTO>> getNotificationsByUserId(@PathVariable Long userId) {
+        List<NotificationShowDTO> notifications = notificationService.findAllByUserId(userId);
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('GUEST')")
-    @GetMapping(value="/{userId}/favorites")
-    public ResponseEntity<List<AccommodationSearchDTO>> getFavoritesByUserId(@PathVariable Long userId) {
-        //todo
-        List<AccommodationSearchDTO> favorites = new ArrayList<>();
-        // favorites.add(testAccommodationSearchDTO);
-        return new ResponseEntity<>(favorites, HttpStatus.OK);
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = "/unblock/{id}")
+    public ResponseEntity<Void> unblock(@PathVariable Long id){
+        service.unblock(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = "/{userId}/status")
-    public ResponseEntity<Void> changeBlockStatus(@PathVariable Long userId,
-                                                  @RequestParam boolean isBlocked){
-        //todo
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @GetMapping(value = "/{id}/disabled-notifications")
+    public ResponseEntity<List<NotificationType>> getDisabledNotificationTypes(@PathVariable Long id) {
+        List<NotificationType> types = service.getDisabledNotificationTypesFor(id);
+        return new ResponseEntity<>(types, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PutMapping(value = "/{id}/disabled-notifications")
+    public ResponseEntity<Void> setDisabledNotificationTypes(@PathVariable Long id,
+                                                             @RequestBody List<NotificationType> types) {
+        service.setDisabledNotificationTypesFor(id, types);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

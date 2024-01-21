@@ -1,14 +1,14 @@
 package com.siit.team24.OpenDoors.model;
 
-import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestDTO;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @SQLDelete(sql = "UPDATE reservation_request SET status = 4 WHERE id = ?")
 @Where(clause = "status != 4")
@@ -20,6 +20,7 @@ public class ReservationRequest {
     private Long id;
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private Guest guest;
+    @Nullable
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private Accommodation accommodation;
     @Embedded
@@ -64,6 +65,8 @@ public class ReservationRequest {
     }
 
     public Accommodation getAccommodation() {
+        if (accommodation == null)
+            return new Accommodation();
         return accommodation;
     }
 
@@ -134,8 +137,10 @@ public class ReservationRequest {
 
     }
 
-    public ReservationRequestDTO toDTO() {
-        return new ReservationRequestDTO(id, guest.getUsername(), accommodation.getUniqueName(),
-                dateRange, guestNumber, totalPrice, status, timestamp);
+    public boolean isCancellable() {
+        LocalDate today = LocalDate.now();
+        LocalDate limit = today.plusDays(this.accommodation.getDeadline());
+        Timestamp timestampLimit = Timestamp.valueOf(limit.atStartOfDay());
+        return timestampLimit.before(this.dateRange.getStartDate());
     }
 }

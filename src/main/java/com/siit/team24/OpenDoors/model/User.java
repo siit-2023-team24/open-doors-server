@@ -3,6 +3,7 @@ package com.siit.team24.OpenDoors.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.siit.team24.OpenDoors.dto.userManagement.UserAccountViewDTO;
 import com.siit.team24.OpenDoors.dto.userManagement.UserEditedDTO;
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
@@ -15,10 +16,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
-@Where(clause = "deleted=false")
+//@Where(clause = "deleted=false")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "users")
@@ -41,11 +43,10 @@ public class User implements UserDetails {
     private Image image;
     @Embedded
     private Address address;
-//    @OneToOne(cascade = {CascadeType.ALL})
-//    private Account account;
     private boolean enabled;
-
+    private boolean blocked;
     private boolean deleted;
+    private List<NotificationType> disabledTypes;
 
 
     public Long getId() {
@@ -87,14 +88,6 @@ public class User implements UserDetails {
     public void setAddress(Address address) {
         this.address = address;
     }
-//
-//    public Account getAccount() {
-//        return account;
-//    }
-//
-//    public void setAccount(Account account) {
-//        this.account = account;
-//    }
 
     public Image getImage() {
         return image;
@@ -166,6 +159,14 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -174,11 +175,19 @@ public class User implements UserDetails {
         this.deleted = deleted;
     }
 
+    public List<NotificationType> getDisabledTypes() {
+        return disabledTypes;
+    }
+
+    public void setDisabledTypes(List<NotificationType> disabledTypes) {
+        this.disabledTypes = disabledTypes;
+    }
+
     public User(){
 
     }
 
-    public User(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, @Nullable Image image, Address address, boolean enabled) {
+    public User(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, @Nullable Image image, Address address, boolean enabled, List<NotificationType> disabledTypes) {
         this.id = id;
         this.username = email;
         this.password = password;
@@ -190,13 +199,14 @@ public class User implements UserDetails {
         this.image = image;
         this.address = address;
         this.enabled = enabled;
+        this.disabledTypes = disabledTypes;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", lastPasswordResetDate=" + lastPasswordResetDate +
                 ", role=" + role +
@@ -206,6 +216,9 @@ public class User implements UserDetails {
                 ", image=" + image +
                 ", address=" + address +
                 ", enabled=" + enabled +
+                ", blocked=" + blocked +
+                ", deleted=" + deleted +
+                ", disabledTypes=" + disabledTypes +
                 '}';
     }
 
