@@ -1,9 +1,11 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
+import jakarta.validation.constraints.Email;
+
 public class NewUserReportDTO {
-
+    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     protected String recipientUsername;
-
+    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     protected String complainantUsername;
 
     protected boolean isComplainantGuest;

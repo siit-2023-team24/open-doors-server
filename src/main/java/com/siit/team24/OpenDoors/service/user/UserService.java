@@ -72,11 +72,10 @@ public class UserService {
 
     public void changePassword(NewPasswordDTO dto) {
 
-        //TODO: change validation to annotation
         if (!dto.getNewPassword().equals(dto.getRepeatPassword()))
             throw new PasswordNotConfirmedException();
 //        if (!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,20}$"))
-        if (dto.getNewPassword().length() < 3)
+        if (dto.getNewPassword().length() < 5)
             throw new PasswordValidationException();
 
         User user = repo.findByUsername(dto.getUsername());

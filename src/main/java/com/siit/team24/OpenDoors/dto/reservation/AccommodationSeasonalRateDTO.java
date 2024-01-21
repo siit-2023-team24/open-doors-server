@@ -1,13 +1,17 @@
 package com.siit.team24.OpenDoors.dto.reservation;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
 import org.mockito.internal.verification.Times;
 
 import java.sql.Timestamp;
 
 public class AccommodationSeasonalRateDTO {
-
+    @Min(1)
     private Long accommodationId;
+    @FutureOrPresent
     private Timestamp startDate;
+    @FutureOrPresent
     private Timestamp endDate;
 
     public AccommodationSeasonalRateDTO(Long accommodationId, Timestamp startDate, Timestamp endDate) {

@@ -5,6 +5,7 @@ import com.siit.team24.OpenDoors.model.enums.Amenity;
 
 import com.siit.team24.OpenDoors.model.enums.AccommodationType;
 import com.siit.team24.OpenDoors.model.enums.Country;
+import jakarta.validation.constraints.Min;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,13 @@ public class AccommodationWholeDTO {
     protected String location;
     protected List<String> amenities;
     protected List<Long> images;
+    @Min(1)
     protected int minGuests;
+    @Min(1)
     protected int maxGuests;
     protected String type;
     protected List<DateRange> availability;
+    @Min(0)
     protected double price;
 
     protected boolean isPricePerGuest;
@@ -31,7 +35,9 @@ public class AccommodationWholeDTO {
     protected String city;
     protected String country;
     protected String street;
+    @Min(1)
     protected int number;
+    @Min(0)
     protected int deadline;
 
     protected boolean isAutomatic;

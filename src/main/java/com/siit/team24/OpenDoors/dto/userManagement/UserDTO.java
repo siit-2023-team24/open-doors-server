@@ -1,13 +1,18 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
 import com.siit.team24.OpenDoors.model.User;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 
 public class UserDTO {
     protected Long id;
     protected String firstName;
     protected String lastName;
+    @Pattern(regexp = "\\d{10}")
     protected String phone;
     protected String street;
+    @Min(1)
     protected int number;
     protected String city;
     protected String country;

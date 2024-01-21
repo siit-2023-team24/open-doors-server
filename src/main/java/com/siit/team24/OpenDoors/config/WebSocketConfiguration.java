@@ -13,7 +13,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/open-doors/socket")
-                .setAllowedOriginPatterns("http://localhost:4200", "*")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 

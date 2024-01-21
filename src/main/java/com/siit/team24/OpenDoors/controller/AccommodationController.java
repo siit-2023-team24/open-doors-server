@@ -17,6 +17,7 @@ import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,7 +122,7 @@ public class AccommodationController {
     }
 
     @PostMapping(consumes = "application/json", value = "/search")
-    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@RequestBody SearchAndFilterDTO searchAndFilterDTO) {
+    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodations(@Valid @RequestBody SearchAndFilterDTO searchAndFilterDTO) {
 
         List<AccommodationSearchDTO> accommodations = accommodationService.searchAndFilter(searchAndFilterDTO);
         for (AccommodationSearchDTO as : accommodations) {
@@ -181,14 +182,14 @@ public class AccommodationController {
     }
 
     @PostMapping("/seasonalRate")
-    public ResponseEntity<List<SeasonalRatesPricingDTO>> getSeasonalRatesForAccommodation(@RequestBody AccommodationSeasonalRateDTO accommodationSeasonalRateDTO) {
+    public ResponseEntity<List<SeasonalRatesPricingDTO>> getSeasonalRatesForAccommodation(@Valid @RequestBody AccommodationSeasonalRateDTO accommodationSeasonalRateDTO) {
         List<SeasonalRatesPricingDTO> dtos = accommodationService.getSeasonalRatePricingsForAccommodation(accommodationSeasonalRateDTO);
         return ResponseEntity.ok(dtos);
     }
 
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/addToFavorites")
-    public ResponseEntity<Void> addToFavorites(@RequestBody AccommodationFavoritesDTO dto) {
+    public ResponseEntity<Void> addToFavorites(@Valid @RequestBody AccommodationFavoritesDTO dto) {
         Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
         Guest guest = (Guest) userService.findById(dto.getGuestId());
         guest.addFavoriteAccommodation(accommodation);
@@ -198,7 +199,7 @@ public class AccommodationController {
 
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/removeFromFavorites")
-    public ResponseEntity<Void> removeFromFavorites(@RequestBody AccommodationFavoritesDTO dto) {
+    public ResponseEntity<Void> removeFromFavorites(@Valid @RequestBody AccommodationFavoritesDTO dto) {
         Accommodation accommodation = accommodationService.findById(dto.getAccommodationId());
         Guest guest = (Guest) userService.findById(dto.getGuestId());
         guest.removeFavoriteAccommodation(accommodation);

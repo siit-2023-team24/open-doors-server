@@ -105,7 +105,8 @@ public class WebSecurityConfig {
         // Dozvoljena POST metoda na ruti /auth/login, za svaki drugi tip HTTP metode greska je 401 Unauthorized
         return (web) -> web.ignoring()
                 .requestMatchers(new AntPathRequestMatcher("/ws/**"))
-                .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**"));
+                .requestMatchers(new AntPathRequestMatcher("/open-doors/socket/**"))
+                .requestMatchers(new AntPathRequestMatcher("/open-doors/sendMessageRest/"));
                 //.requestMatchers(HttpMethod.POST, "/auth/login")
 //
 //

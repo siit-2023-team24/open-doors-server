@@ -10,6 +10,7 @@ import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import com.siit.team24.OpenDoors.service.AccommodationService;
 import com.siit.team24.OpenDoors.service.ReservationRequestService;
 import com.siit.team24.OpenDoors.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -112,7 +113,7 @@ public class ReservationRequestController {
 
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json", value = "/createRequest")
-    public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@RequestBody MakeReservationRequestDTO requestDTO) {
+    public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@Valid @RequestBody MakeReservationRequestDTO requestDTO) {
 
         System.out.println(requestDTO);
 
