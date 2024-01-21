@@ -6,6 +6,7 @@ import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.model.UserReport;
 import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class UserReportController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('GUEST')")
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<UserReportDTO> createUserReport(@RequestBody NewUserReportDTO dto) {
+    public ResponseEntity<UserReportDTO> createUserReport(@Valid @RequestBody NewUserReportDTO dto) {
         UserReport report = userReportService.createReport(dto);
         UserReportDTO returnDto = new UserReportDTO(report);
         System.out.println(returnDto);

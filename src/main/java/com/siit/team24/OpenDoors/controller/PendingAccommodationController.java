@@ -9,6 +9,7 @@ import com.siit.team24.OpenDoors.service.ImageService;
 import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +74,7 @@ public class PendingAccommodationController {
 
     @PreAuthorize("hasRole('HOST')")
     @PostMapping
-    public ResponseEntity<PendingAccommodationWholeDTO> save(@RequestBody PendingAccommodationWholeEditedDTO dto) {
+    public ResponseEntity<PendingAccommodationWholeDTO> save(@Valid @RequestBody PendingAccommodationWholeEditedDTO dto) {
         System.out.println("Received: " + dto);
         try {
             PendingAccommodation pendingAccommodation = pendingService.save(dto);

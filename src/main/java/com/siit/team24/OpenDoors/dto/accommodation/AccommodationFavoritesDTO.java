@@ -1,7 +1,11 @@
 package com.siit.team24.OpenDoors.dto.accommodation;
 
+import jakarta.validation.constraints.Min;
+
 public class AccommodationFavoritesDTO {
+    @Min(1)
     private Long accommodationId;
+    @Min(1)
     private Long guestId;
 
     public AccommodationFavoritesDTO(Long accommodationId, Long guestId) {

@@ -12,6 +12,7 @@ import com.siit.team24.OpenDoors.util.TokenUtils;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class AuthenticationController {
     private UserService userService;
 
     @PostMapping(consumes="application/json", value = "/login")
-    public ResponseEntity<UserTokenState> login(@RequestBody AccountDTO accountDTO, HttpServletResponse response) {
+    public ResponseEntity<UserTokenState> login(@Valid @RequestBody AccountDTO accountDTO, HttpServletResponse response) {
         // AuthenticationException will occur on invalid credentials
         try {
 
@@ -82,7 +83,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(consumes="application/json", value = "/register")
-    public ResponseEntity<UserAccountDTO> register(@RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
+    public ResponseEntity<UserAccountDTO> register(@Valid @RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
 
         User existUser = this.userService.findByUsername(userAccountDTO.getUsername());
 

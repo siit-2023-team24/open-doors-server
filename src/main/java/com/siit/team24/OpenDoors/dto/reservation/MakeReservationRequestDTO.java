@@ -1,14 +1,21 @@
 package com.siit.team24.OpenDoors.dto.reservation;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+
 import java.sql.Timestamp;
 
 public class MakeReservationRequestDTO {
-        Long accommodationId;
-        Long guestId;
-        Timestamp startDate;
-        Timestamp endDate;
-        int numberOfGuests;
-        Double totalPrice;
+    Long accommodationId;
+    Long guestId;
+    @FutureOrPresent
+    Timestamp startDate;
+    @FutureOrPresent
+    Timestamp endDate;
+    @Min(1)
+    int numberOfGuests;
+    @Min(0)
+    Double totalPrice;
 
     public MakeReservationRequestDTO() {}
 

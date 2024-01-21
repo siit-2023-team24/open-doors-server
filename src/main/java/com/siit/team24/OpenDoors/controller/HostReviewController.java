@@ -7,6 +7,7 @@ import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.model.HostReview;
 import com.siit.team24.OpenDoors.service.HostReviewService;
 import com.siit.team24.OpenDoors.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class HostReviewController {
 
     @PreAuthorize("hasRole('GUEST')")
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<HostReviewWholeDTO> createHostReview(@RequestBody NewReviewDTO reviewDTO) {
+    public ResponseEntity<HostReviewWholeDTO> createHostReview(@Valid @RequestBody NewReviewDTO reviewDTO) {
         HostReview review = new HostReview(reviewDTO);
         review.setHost((Host) userService.findById(reviewDTO.getRecipientId()));
         review.setAuthor((Guest) userService.findById(reviewDTO.getAuthorId()));

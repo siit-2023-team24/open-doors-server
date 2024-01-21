@@ -1,10 +1,15 @@
 package com.siit.team24.OpenDoors.dto.financialReport;
 
+import jakarta.validation.constraints.PastOrPresent;
+
 import java.sql.Timestamp;
 
 public class DateRangeReportParamsDTO {
     private Long hostId;
+
+    @PastOrPresent
     private Timestamp startDate;
+    @PastOrPresent
     private Timestamp endDate;
 
     public DateRangeReportParamsDTO(Long hostId, Timestamp startDate, Timestamp endDate) {

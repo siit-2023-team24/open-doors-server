@@ -1,9 +1,13 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
 import com.siit.team24.OpenDoors.model.User;
+import jakarta.validation.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 public class UserAccountDTO extends UserDTO {
+    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String username;
+    @Length(min = 5)
     private String password;
     private String role;
 

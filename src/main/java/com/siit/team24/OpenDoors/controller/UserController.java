@@ -9,6 +9,7 @@ import com.siit.team24.OpenDoors.service.PendingAccommodationService;
 import com.siit.team24.OpenDoors.service.user.UserReportService;
 import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN') or hasRole('GUEST')")
     @PutMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Void> updateUser(UserFormDataDTO data) {
+    public ResponseEntity<Void> updateUser(@Valid UserFormDataDTO data) {
         UserEditedDTO dto = null;
         UserEditedDTO userDTO = data.toEditedDTO();
 

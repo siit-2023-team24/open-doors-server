@@ -4,6 +4,7 @@ import com.siit.team24.OpenDoors.dto.financialReport.AccommodationIdReportDTO;
 import com.siit.team24.OpenDoors.dto.financialReport.DateRangeReportDTO;
 import com.siit.team24.OpenDoors.dto.financialReport.DateRangeReportParamsDTO;
 import com.siit.team24.OpenDoors.service.FinancialReportService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class FinancialReportController {
 
     @PreAuthorize("hasRole('HOST')")
     @PostMapping(value = "/dateRangeReport")
-    public ResponseEntity<List<DateRangeReportDTO>> getDateRangeReport(@RequestBody DateRangeReportParamsDTO reportParams) {
+    public ResponseEntity<List<DateRangeReportDTO>> getDateRangeReport(@Valid @RequestBody DateRangeReportParamsDTO reportParams) {
         List<DateRangeReportDTO> report = financialReportService.getDateRangeReports(reportParams.getHostId(), reportParams.getStartDate(), reportParams.getEndDate());
 
         return new ResponseEntity<>(report, HttpStatus.OK);
@@ -36,7 +37,7 @@ public class FinancialReportController {
 
     @PreAuthorize("hasRole('HOST')")
     @PostMapping(value = "/dateRangeReport/export")
-    public ResponseEntity<Void> getDateRangeReportExport(@RequestBody DateRangeReportParamsDTO reportParams) {
+    public ResponseEntity<Void> getDateRangeReportExport(@Valid @RequestBody DateRangeReportParamsDTO reportParams) {
         financialReportService.exportDateRangeReport(reportParams.getHostId(), reportParams.getStartDate(), reportParams.getEndDate());
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.dto.userManagement;
 
+import jakarta.validation.constraints.Min;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +11,7 @@ public class UserFormDataDTO {
     private String lastName;
     private String phone;
     private String street;
+    @Min(1)
     private String number;
     private String city;
     private String country;

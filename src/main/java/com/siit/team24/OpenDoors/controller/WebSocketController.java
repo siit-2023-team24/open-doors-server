@@ -28,16 +28,20 @@ public class WebSocketController {
     private NotificationService notificationService;
 
     @RequestMapping(value="/sendMessageRest", method = RequestMethod.POST)
-    public ResponseEntity<?> sendMessage(@RequestBody Map<String, String> message) {
-        if (message.containsKey("message")) {
-            if (message.containsKey("username") && message.get("username") != null && !message.get("username").isEmpty()) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + message.get("username"), message);
-            } else {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher", message);
+    public ResponseEntity<?> sendMessage(@RequestBody NotificationDTO notificationDTO) {
+
+        System.out.println("WS: " + notificationDTO);
+
+        if (notificationDTO.getUsername() != null && !notificationDTO.getUsername().isEmpty()) {
+            if (notificationService.isEnabled(notificationDTO.getUsername(), notificationDTO.getType())) {
+                notificationService.add(notificationDTO);
+                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + notificationDTO.getUsername(),
+                        notificationDTO);
             }
-            return new ResponseEntity<>(message, new HttpHeaders(), HttpStatus.OK);
+        } else {
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher", notificationDTO);
         }
-        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.OK);
     }
 
 
