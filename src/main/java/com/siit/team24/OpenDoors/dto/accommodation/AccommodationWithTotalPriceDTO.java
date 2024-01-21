@@ -38,7 +38,7 @@ public class AccommodationWithTotalPriceDTO {
 
     public AccommodationWithTotalPriceDTO(Accommodation accommodation, Double totalPrice) {
         this(accommodation.getId(), accommodation.getName(), accommodation.getDescription(), accommodation.getLocation(), accommodation.getAmenities(), accommodation.getImages(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getAvailability(), accommodation.getPrice(), accommodation.getSeasonalRates(),
-                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, null, accommodation.getHost().getFirstName() + " " + accommodation.getHost().getLastName(), accommodation.getHost().getId(), accommodation.isBlocked());
+                accommodation.getAddress().getCity(), accommodation.getAddress().getCountry().getCountryName(), accommodation.getAddress().getStreet(), accommodation.getAddress().getNumber(), accommodation.getIsPricePerGuest(), totalPrice, null, accommodation.getHost().getUsername(), accommodation.getHost().getId(), accommodation.isBlocked());
     }
 
     public AccommodationWithTotalPriceDTO(Long id, String name, String description, String location, List<Amenity> amenities, Set<Image> images, int minGuests, int maxGuests, AccommodationType accommodationType, List<DateRange> availability, double price, List<SeasonalRate> seasonalRates, String city, String country, String street, int number, boolean isPricePerNight, Double totalPrice, Double averageRating, String host, Long hostId, boolean blocked) {

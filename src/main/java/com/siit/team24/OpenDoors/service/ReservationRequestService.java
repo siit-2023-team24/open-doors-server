@@ -49,7 +49,6 @@ public class ReservationRequestService {
         for (ReservationRequest request: requests) {
             request.setStatus(ReservationRequestStatus.DENIED);
             repo.save(request);
-            //todo notify guest
         }
     }
 
@@ -138,6 +137,7 @@ public class ReservationRequestService {
             if (passedFilter(request, searchAndFilterDTO))
                 filteredRequests.add(convertToHostDTO(request));
         }
+        filteredRequests.sort(Comparator.comparing(ReservationRequestForHostDTO::getTimestamp).reversed());
         return filteredRequests;
     }
 
@@ -147,7 +147,7 @@ public class ReservationRequestService {
         for (ReservationRequest request: requests) {
             dtos.add(convertToHostDTO(request));
         }
-        dtos.sort(Comparator.comparing(ReservationRequestForHostDTO::getTimestamp));
+        dtos.sort(Comparator.comparing(ReservationRequestForHostDTO::getTimestamp).reversed());
         return dtos;
     }
 

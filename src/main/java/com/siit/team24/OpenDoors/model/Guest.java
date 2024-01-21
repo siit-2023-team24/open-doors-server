@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.model;
 
+import com.siit.team24.OpenDoors.model.enums.NotificationType;
 import com.siit.team24.OpenDoors.model.enums.UserRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
@@ -25,8 +27,8 @@ public class Guest extends User {
         this.favorites = favorites;
     }
 
-    public Guest(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, Image image, Address address, boolean enabled, Set<Accommodation> favorites) {
-        super(id, email, password, lastPasswordResetDate, role, firstName, lastName, phone, image, address, enabled);
+    public Guest(Long id, String email, String password, Timestamp lastPasswordResetDate, UserRole role, String firstName, String lastName, String phone, Image image, Address address, boolean enabled, Set<Accommodation> favorites, List<NotificationType> disabledTypes) {
+        super(id, email, password, lastPasswordResetDate, role, firstName, lastName, phone, image, address, enabled, disabledTypes);
         this.favorites = favorites;
     }
 

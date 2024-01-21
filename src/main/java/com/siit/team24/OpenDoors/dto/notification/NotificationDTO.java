@@ -1,36 +1,24 @@
-package com.siit.team24.OpenDoors.model;
+package com.siit.team24.OpenDoors.dto.notification;
 
-import com.siit.team24.OpenDoors.dto.notification.NotificationDTO;
+import com.siit.team24.OpenDoors.model.User;
 import com.siit.team24.OpenDoors.model.enums.NotificationType;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Entity
-public class Notification {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class NotificationDTO {
     private Long id;
     private Timestamp timestamp;
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    private User user;
+    private String username;
     private String message;
-    @Enumerated
     private NotificationType type;
 
-    public Notification() {
+    public NotificationDTO() {
     }
 
-    public Notification(Long id, Timestamp timestamp, User user, String message, NotificationType type) {
+    public NotificationDTO(Long id, Timestamp timestamp, String username, String message, NotificationType type) {
         this.id = id;
         this.timestamp = timestamp;
-        this.user = user;
+        this.username = username;
         this.message = message;
         this.type = type;
     }
@@ -51,12 +39,12 @@ public class Notification {
         this.timestamp = timestamp;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMessage() {
@@ -77,12 +65,12 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notification{" +
+        return "NotificationDTO{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
-                ", user='" + user + '\'' +
+                ", username=" + username +
                 ", message='" + message + '\'' +
-                ", type=" + type +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
