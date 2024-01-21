@@ -84,7 +84,6 @@ public class AuthenticationController {
 
     @PostMapping(consumes="application/json", value = "/register")
     public ResponseEntity<UserAccountDTO> register(@Valid @RequestBody UserAccountDTO userAccountDTO) throws UnknownHostException {
-
         User existUser = this.userService.findByUsername(userAccountDTO.getUsername());
 
         if (existUser != null) {

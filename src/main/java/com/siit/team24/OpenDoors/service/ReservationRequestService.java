@@ -93,6 +93,8 @@ public class ReservationRequestService {
             }
         }
 
+        dtos.sort(Comparator.comparing(ReservationRequestForGuestDTO::getTimestamp).reversed());
+
         return dtos;
     }
 

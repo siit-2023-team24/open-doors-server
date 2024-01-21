@@ -132,6 +132,18 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodations, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
+    @PostMapping(consumes = "application/json", value = "/search/{guestId}")
+    public ResponseEntity<List<AccommodationSearchDTO>> searchAccommodationsWhenGuest(@PathVariable Long guestId, @RequestBody SearchAndFilterDTO searchAndFilterDTO) {
+
+        Guest guest = (Guest) userService.findById(guestId);
+        List<AccommodationSearchDTO> accommodationSearchDTOS = accommodationService.searchWithFavorites(guest, searchAndFilterDTO);
+        for (AccommodationSearchDTO as : accommodationSearchDTOS) {
+            as.setAverageRating(accommodationReviewService.getAverageRating(as.getId()));
+        }
+        return new ResponseEntity<>(accommodationSearchDTOS, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{accommodationId}/images")
     public ResponseEntity<List<byte[]>> getAccommodationImages(@PathVariable Long accommodationId) {
         Optional<Accommodation> accommodation = accommodationService.findOne(accommodationId);
