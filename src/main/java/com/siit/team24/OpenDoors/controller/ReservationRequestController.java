@@ -141,7 +141,7 @@ public class ReservationRequestController {
             request.setStatus(ReservationRequestStatus.PENDING);
         }
 
-        request.setGuestNumber(request.getGuestNumber());
+        request.setGuestNumber(requestDTO.getNumberOfGuests());
         request.setTimestamp(new Timestamp(System.currentTimeMillis()));
         request.setTotalPrice(requestDTO.getTotalPrice());
 
