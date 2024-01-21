@@ -12,6 +12,7 @@ public class PendingAccommodationReviewDetailsDTO {
     protected Timestamp timestamp;
     protected String authorUsername;
     protected String accommodationName;
+    protected String hostUsername;
 
     public PendingAccommodationReviewDetailsDTO() {
     }
@@ -32,6 +33,7 @@ public class PendingAccommodationReviewDetailsDTO {
         this.timestamp = review.getTimestamp();
         this.authorUsername = review.getAuthor().getUsername();
         this.accommodationName = review.getAccommodation().getName();
+        this.hostUsername = review.getAccommodation().getHost().getUsername();
     }
 
     public Long getId() {
