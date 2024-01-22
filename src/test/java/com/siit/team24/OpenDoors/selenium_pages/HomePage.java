@@ -27,13 +27,13 @@ public class HomePage {
     }
 
     public void clickOnLogin() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(loginBtn));
         loginBtn.click();
     }
 
     public void clickAccommodations() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(accommodationsBtn));
         accommodationsBtn.click();
     }

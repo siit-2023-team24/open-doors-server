@@ -27,7 +27,7 @@ public class LoginPage {
     }
 
     public void login(String username, String password){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(usernameInput));
         usernameInput.sendKeys(username);
         passwordInput.sendKeys(password);

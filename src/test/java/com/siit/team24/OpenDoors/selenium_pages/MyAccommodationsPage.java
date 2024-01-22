@@ -21,7 +21,7 @@ public class MyAccommodationsPage {
     }
 
     public void clickCreateAccommodation() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(createAccommodationBtn));
         createAccommodationBtn.click();
     }

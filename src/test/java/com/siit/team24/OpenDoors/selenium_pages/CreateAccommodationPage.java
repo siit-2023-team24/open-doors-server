@@ -17,8 +17,6 @@ import java.util.List;
 public class CreateAccommodationPage {
     private WebDriver driver;
 
-    @FindBy(id="log-out")
-    private WebElement logoutBtn;
     @FindBy(id="acc-name")
     private WebElement accommodationNameInput;
 
@@ -38,7 +36,10 @@ public class CreateAccommodationPage {
     private WebElement deadlineInput;
 
     @FindBy(id="second-page")
-    private WebElement secondPage;
+    private List<WebElement> secondPage;
+
+    @FindBy(id="third-page")
+    private WebElement thirdPage;
 
     @FindBy(id="availability-calendar")
     private WebElement availabilityCalendar;
@@ -55,17 +56,17 @@ public class CreateAccommodationPage {
     }
 
     public void fillFirstPage(String name, String country, String city, String street, String type) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(accommodationNameInput));
         accommodationNameInput.sendKeys(name);
 
         accommodationTypeSelect.click();
-        WebElement typeToSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement typeToSelect = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//*[contains(text(), '" + type + "')]")));
         typeToSelect.click();
 
         accommodationCountrySelect.click();
-        WebElement countryToSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        WebElement countryToSelect = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//*[contains(text(), '" + country + "')]")));
         countryToSelect.click();
 
@@ -100,8 +101,8 @@ public class CreateAccommodationPage {
         dates.get(0).click();
     }
 
-    public List<String> getDateRanges(List<String> dates) {
-        secondPage.click();
+    public List<String> getAvailability(List<String> dates) {
+        secondPage.get(0).click();
         for (String date : dates) {
             try {
                 pickAvailableDate(date);
@@ -117,8 +118,24 @@ public class CreateAccommodationPage {
         return dateRanges;
     }
 
-    public void logOut() {
-        logoutBtn.click();
+    public List<String> getSeasonalRates(List<String> dates, String value) {
+        if(!secondPage.isEmpty()) secondPage.get(0).click();
+        thirdPage.click();
+        priceInput.clear();
+        priceInput.sendKeys(value);
+        for (String date : dates) {
+            try {
+                pickAvailableDate(date);
+            } catch (ParseException e) {
+                System.out.println("Nope");
+            }
+        }
+        List<WebElement> dateRangeContainers = driver.findElements(By.tagName("li"));
+        List<String> seasonalRates = new ArrayList<>();
+        for (WebElement liElement : dateRangeContainers) {
+            seasonalRates.add(liElement.getText());
+        }
+        return seasonalRates;
     }
 
 }
