@@ -34,9 +34,11 @@ public class CancelReservationTest extends TestBase {
 
         assertTrue(reservationsPage.isPageOpened());
 
-        reservationsPage.clickCancel(1L, "Status: CANCELLED");
+        reservationsPage.clickCancel(1L);
+        reservationsPage.check(1L, "Status: CANCELLED");
 
-        reservationsPage.clickCancel(3L, "Status: CONFIRMED");
+        reservationsPage.clickCancel(3L);
+        reservationsPage.check(3L, "Status: CONFIRMED");
 
     }
 

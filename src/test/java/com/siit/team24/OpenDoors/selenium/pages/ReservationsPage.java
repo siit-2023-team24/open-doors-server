@@ -38,20 +38,41 @@ public class ReservationsPage {
         return isOpened;
     }
 
-    public void clickCancel(Long id, String status) {
+    public void clickCancel(Long id) {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".details-and-buttons")));
         List<WebElement> elements = driver.findElements(By.cssSelector(".details-and-buttons"));
         for (WebElement element: elements) {
             Actions actions = new Actions(driver);
-            actions.moveToElement(element).perform();
-            wait.until(ExpectedConditions.visibilityOf(element));
+            actions.moveToElement(element.findElement(By.cssSelector(".cancel-button"))).perform();
             if (element.findElement(By.id("req-id")).getText().equals(id.toString())) {
                 element.findElement(By.cssSelector(".cancel-button")).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(element.findElement(By.id("status")), status));
+                return;
             }
         }
+    }
+
+    public void check(Long id, String status) {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".details-and-buttons")));
+        List<WebElement> elements = driver.findElements(By.cssSelector(".details-and-buttons"));
+        for (WebElement element: elements) {
+            if (checkElement(element, id, status)) return;
+        }
+    }
+
+    private boolean checkElement(WebElement element, Long id, String status) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).perform();
+        wait.until(ExpectedConditions.visibilityOf(element));
+        if (element.findElement(By.id("req-id")).getText().equals(id.toString())) {
+            wait.until(ExpectedConditions.textToBePresentInElement(element.findElement(By.id("status")), status));
+            return true;
+        }
+        return false;
     }
 
 }
