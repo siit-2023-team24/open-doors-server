@@ -6,7 +6,6 @@ import com.siit.team24.OpenDoors.model.Image;
 import com.siit.team24.OpenDoors.model.enums.ImageType;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.mock.web.MockMultipartFile;
 
 
 import java.io.*;
@@ -86,14 +85,6 @@ public class FileRepository {
         return bytes;
     }
 
-    public MultipartFile getMultipartFile(Optional<Image> image) throws IOException {
-        if (image.isEmpty())
-            throw new EntityNotFoundException();
-
-        String filepath = String.join(File.separator, image.get().getPath(), image.get().getName());
-        File file = new File(filepath);
-        return new MockMultipartFile(file.getName(), new FileInputStream(file));
-    }
 
     public void delete(Image image) {
         String filepath = String.join(File.separator, image.getPath(), image.getName());
