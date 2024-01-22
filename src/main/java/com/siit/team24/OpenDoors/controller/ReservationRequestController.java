@@ -96,7 +96,7 @@ public class ReservationRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @GetMapping(value = "confirm/{id}")
     public ResponseEntity<Void> confirm(@PathVariable Long id) {
         reservationRequestService.confirm(id);
