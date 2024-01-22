@@ -242,7 +242,7 @@ public class AccommodationService {
         Timestamp endDate = null;
         for(DateRange range : availability) {
             if(range.contains(desiredDates)) {
-                availability.remove(range); // we remove the whole range
+                availability.remove(range);
                 startDate = range.getStartDate();
                 endDate = range.getEndDate();
                 break;

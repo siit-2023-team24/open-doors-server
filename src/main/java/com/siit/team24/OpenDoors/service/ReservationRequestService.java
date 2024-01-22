@@ -31,9 +31,10 @@ public class ReservationRequestService {
 
 
     public ReservationRequest findById(Long requestId) {
-        if(repo.findById(requestId).isPresent())
-            return repo.findById(requestId).get();
-        return null;
+        Optional<ReservationRequest> request = repo.findById(requestId);
+        if(request.isEmpty())
+            throw new EntityNotFoundException();
+        return request.get();
     }
 
     public ReservationRequest save(ReservationRequest reservationRequest) {
@@ -227,8 +228,8 @@ public class ReservationRequestService {
     public void confirm(Long id) {
         Optional<ReservationRequest> foundRequest = repo.findById(id);
         if (foundRequest.isEmpty()) throw new EntityNotFoundException();
-
         ReservationRequest request = foundRequest.get();
+
         if (request.getStatus() != ReservationRequestStatus.PENDING)
             throw new IllegalArgumentException("Tried to confirm a reservation request that was not pending.");
 
