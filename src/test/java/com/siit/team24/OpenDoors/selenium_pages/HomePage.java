@@ -16,8 +16,6 @@ public class HomePage {
 
     @FindBy(id="log-in")
     private WebElement loginBtn;
-    @FindBy(id="log-out")
-    private WebElement logoutBtn;
 
     @FindBy(id="accommodations")
     private WebElement accommodationsBtn;
