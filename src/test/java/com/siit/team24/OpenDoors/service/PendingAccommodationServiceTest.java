@@ -293,12 +293,13 @@ public class PendingAccommodationServiceTest {
         when(repo.save(any(PendingAccommodation.class))).thenReturn(accommodation);
         when(userService.findByUsername(HOST_USERNAME)).thenReturn(host);
 
-        pendingAccommodationService.save(dto);
+        PendingAccommodation pendingAccommodation = pendingAccommodationService.save(dto);
         verify(repo, times(2)).save(pendingAccommodationArgumentCaptor.capture());
         verify(userService, times(1)).findByUsername(usernameArgumentCaptor.capture());
         verifyNoInteractions(reservationRequestService);
         verifyNoInteractions(accommodationService);
         verifyNoInteractions(imageService);
+        assertNotNull(pendingAccommodation);
     }
 
     // Helper methods

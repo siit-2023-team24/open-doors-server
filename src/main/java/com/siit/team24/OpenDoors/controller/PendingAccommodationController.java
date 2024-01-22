@@ -2,6 +2,9 @@ package com.siit.team24.OpenDoors.controller;
 
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHostDTO;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeDTO;
+import com.siit.team24.OpenDoors.exception.InvalidAvailabilityException;
+import com.siit.team24.OpenDoors.exception.InvalidDeadlineException;
+import com.siit.team24.OpenDoors.exception.InvalidSeasonalRatesException;
 import com.siit.team24.OpenDoors.model.Host;
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.model.PendingAccommodation;
@@ -72,7 +75,7 @@ public class PendingAccommodationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+//    @PreAuthorize("hasRole('HOST')")
     @PostMapping
     public ResponseEntity<PendingAccommodationWholeDTO> save(@Valid @RequestBody PendingAccommodationWholeEditedDTO dto) {
         System.out.println("Received: " + dto);
@@ -83,6 +86,12 @@ public class PendingAccommodationController {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        } catch (InvalidDeadlineException e) {
+            throw new InvalidDeadlineException();
+        } catch (InvalidAvailabilityException e) {
+            throw new InvalidAvailabilityException();
+        } catch (InvalidSeasonalRatesException e) {
+            throw new InvalidSeasonalRatesException();
         }
     }
 
