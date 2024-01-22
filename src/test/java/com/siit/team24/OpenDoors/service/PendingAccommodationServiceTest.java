@@ -81,6 +81,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidDeadlineException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     // Availability tests
@@ -99,6 +102,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -113,6 +119,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @ParameterizedTest
@@ -128,6 +137,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -143,6 +155,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     // Seasonal rate tests
@@ -161,6 +176,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -175,6 +193,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @ParameterizedTest
@@ -190,6 +211,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -205,6 +229,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -219,6 +246,9 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     @Test
@@ -233,13 +263,16 @@ public class PendingAccommodationServiceTest {
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
         verifyNoInteractions(userService);
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     // Successful save test
 
     @Test
     @DisplayName("Test should save a new pending accommodation.")
-    public void shouldSavePendingAccommodation() throws IOException {   // TODO: Okej da baca IOException?
+    public void shouldSavePendingAccommodation() throws IOException {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
@@ -260,10 +293,12 @@ public class PendingAccommodationServiceTest {
         when(repo.save(any(PendingAccommodation.class))).thenReturn(accommodation);
         when(userService.findByUsername(HOST_USERNAME)).thenReturn(host);
 
-//        PendingAccommodation result = // TODO: treba li?
         pendingAccommodationService.save(dto);
         verify(repo, times(2)).save(pendingAccommodationArgumentCaptor.capture());
         verify(userService, times(1)).findByUsername(usernameArgumentCaptor.capture());
+        verifyNoInteractions(reservationRequestService);
+        verifyNoInteractions(accommodationService);
+        verifyNoInteractions(imageService);
     }
 
     // Helper methods
