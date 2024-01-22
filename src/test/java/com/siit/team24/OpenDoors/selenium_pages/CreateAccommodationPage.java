@@ -50,6 +50,9 @@ public class CreateAccommodationPage {
     @FindBy(id="price-input")
     private WebElement priceInput;
 
+    @FindBy(id="create-btn")
+    private WebElement createBtn;
+
     public CreateAccommodationPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -136,6 +139,10 @@ public class CreateAccommodationPage {
             seasonalRates.add(liElement.getText());
         }
         return seasonalRates;
+    }
+
+    public void create() {
+        createBtn.click();
     }
 
 }

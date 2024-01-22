@@ -6,11 +6,16 @@ import com.siit.team24.OpenDoors.model.DateRange;
 import com.siit.team24.OpenDoors.model.SeasonalRate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,6 +23,9 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@ActiveProfiles("test")
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
 public class PendingAccommodationControllerIntegrationTest {
 
     private static final int VALID_DEADLINE = 1;
@@ -37,7 +45,7 @@ public class PendingAccommodationControllerIntegrationTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "Test accommodation", "This is just a test", "45.45 19.19", new ArrayList<>(), null, 1, 1, "Hotel",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "Novi Sad", "Serbia", "Zlatne grede", 4,
-                VALID_DEADLINE, false, "vasilije.markovic.privatni+s@gmail.com", null, null
+                VALID_DEADLINE, false, "vaske@test.test", null, null
         );
 
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(1), generateMidnightDate(3))));
@@ -46,7 +54,7 @@ public class PendingAccommodationControllerIntegrationTest {
         dto.getAvailability().add(new DateRange(generateMidnightDate(5), generateMidnightDate(7)));
 
         ResponseEntity<PendingAccommodationWholeDTO> responseEntity = restTemplate.postForEntity(
-                "http://localhost:9090/open-doors/pending-accommodations",
+                "/open-doors/pending-accommodations",
                 dto, PendingAccommodationWholeDTO.class);
 
         PendingAccommodationWholeDTO savedPendingAccommodation = responseEntity.getBody();

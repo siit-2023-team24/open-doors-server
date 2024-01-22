@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 public class PendingAccommodationServiceTest {
 
