@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -35,8 +36,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 public class PendingAccommodationServiceTest {
 
-    private static final int VALID_DEADLINE = 1;
-    private static final int INVALID_DEADLINE = -1;
+    private static final int DEADLINE = 1;
     private static final double DEFAULT_PRICE = 10.0;
     private static final double VALID_SEASONAL_RATE_PRICE_1 = 20.0;
     private static final double VALID_SEASONAL_RATE_PRICE_2 = 30.0;
@@ -70,13 +70,14 @@ public class PendingAccommodationServiceTest {
 
     // Deadline test
 
-    @Test
-    @DisplayName("Should throw Exception when deadline is negative.")
-    public void shouldNotHaveNegativeDeadline() {
+    @ParameterizedTest
+    @CsvSource({"-1", "366"})
+    @DisplayName("Should throw Exception when deadline is negative or over 365 days.")
+    public void shouldNotHaveNegativeDeadlineOrOverAYear(int deadline) {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
             null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                INVALID_DEADLINE, false, HOST_USERNAME, null, null
+                deadline, false, HOST_USERNAME, null, null
         );
         assertThrows(InvalidDeadlineException.class, () -> pendingAccommodationService.save(dto));
         verifyNoInteractions(repo);
@@ -95,7 +96,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getAvailability().add(new DateRange(generateMidnightDate(startDate1), generateMidnightDate(endDate1)));
         dto.getAvailability().add(new DateRange(generateMidnightDate(startDate2), generateMidnightDate(endDate2)));
@@ -113,7 +114,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getAvailability().add(new DateRange(generateMidnightDate(2), generateMidnightDate(1)));
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
@@ -131,7 +132,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getAvailability().add(new DateRange(startDate, endDate));
         assertThrows(InvalidAvailabilityException.class, () -> pendingAccommodationService.save(dto));
@@ -148,7 +149,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getAvailability().add(new DateRange(generateMidnightDate(1), generateMidnightDate(3)));
         dto.getAvailability().add(new DateRange(generateMidnightDate(4), generateMidnightDate(6)));
@@ -169,7 +170,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(startDate1), generateMidnightDate(endDate1))));
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_2, new DateRange(generateMidnightDate(startDate2), generateMidnightDate(endDate2))));
@@ -187,7 +188,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(2), generateMidnightDate(1))));
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
@@ -205,7 +206,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(startDate, endDate)));
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
@@ -222,7 +223,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(1), generateMidnightDate(3))));
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(4), generateMidnightDate(6))));
@@ -240,7 +241,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(INVALID_SEASONAL_RATE_PRICE, new DateRange(generateMidnightDate(1), generateMidnightDate(3))));
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
@@ -257,7 +258,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
         dto.getSeasonalRates().add(new SeasonalRate(DEFAULT_PRICE, new DateRange(generateMidnightDate(1), generateMidnightDate(3))));
         assertThrows(InvalidSeasonalRatesException.class, () -> pendingAccommodationService.save(dto));
@@ -276,7 +277,7 @@ public class PendingAccommodationServiceTest {
         PendingAccommodationWholeEditedDTO dto = new PendingAccommodationWholeEditedDTO(
                 null, "", "", "", new ArrayList<>(), null, 1, 1, "",
                 new ArrayList<>(), DEFAULT_PRICE, false, new ArrayList<>(), "", "", "", 1,
-                VALID_DEADLINE, false, HOST_USERNAME, null, null
+                DEADLINE, false, HOST_USERNAME, null, null
         );
 
         dto.getSeasonalRates().add(new SeasonalRate(VALID_SEASONAL_RATE_PRICE_1, new DateRange(generateMidnightDate(1), generateMidnightDate(3))));

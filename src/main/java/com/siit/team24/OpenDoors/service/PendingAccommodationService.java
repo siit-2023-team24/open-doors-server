@@ -54,7 +54,7 @@ public class PendingAccommodationService {
     //////////////////
 
     public PendingAccommodation save(PendingAccommodationWholeEditedDTO dto) throws IOException {
-        if (dto.getDeadline() < 0) throw new InvalidDeadlineException();
+        if (dto.getDeadline() < 0 || dto.getDeadline() > 365) throw new InvalidDeadlineException();
         dto.setAvailability(sortAvailability(dto.getAvailability()));
         dto.setSeasonalRates(sortSeasonalRates(dto.getSeasonalRates()));
         if (!isAvailabilityValid(dto.getAvailability())) throw new InvalidAvailabilityException();

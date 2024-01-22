@@ -43,7 +43,7 @@ public class AuthenticationController {
     private UserService userService;
 
     @PostMapping(consumes="application/json", value = "/login")
-    public ResponseEntity<UserTokenState> login(@Valid @RequestBody AccountDTO accountDTO, HttpServletResponse response) {
+    public ResponseEntity<UserTokenState> login(@RequestBody AccountDTO accountDTO, HttpServletResponse response) {
         // AuthenticationException will occur on invalid credentials
         try {
 
