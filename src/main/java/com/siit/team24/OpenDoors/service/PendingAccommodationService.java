@@ -5,10 +5,10 @@ import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationHo
 import com.siit.team24.OpenDoors.dto.pendingAccommodation.PendingAccommodationWholeEditedDTO;
 import com.siit.team24.OpenDoors.dto.accommodation.AccommodationWholeDTO;
 import com.siit.team24.OpenDoors.exception.ActiveReservationRequestsFoundException;
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.Host;
-import com.siit.team24.OpenDoors.model.Image;
-import com.siit.team24.OpenDoors.model.PendingAccommodation;
+import com.siit.team24.OpenDoors.exception.InvalidAvailabilityException;
+import com.siit.team24.OpenDoors.exception.InvalidDeadlineException;
+import com.siit.team24.OpenDoors.exception.InvalidSeasonalRatesException;
+import com.siit.team24.OpenDoors.model.*;
 import com.siit.team24.OpenDoors.model.enums.ImageType;
 import com.siit.team24.OpenDoors.repository.PendingAccommodationRepository;
 import com.siit.team24.OpenDoors.service.user.UserService;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -36,8 +37,8 @@ public class PendingAccommodationService {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private AccommodationReviewService accommodationReviewService;
+//    @Autowired
+//    private AccommodationReviewService accommodationReviewService;
 
     @Autowired
     private ReservationRequestService reservationRequestService;
@@ -50,8 +51,16 @@ public class PendingAccommodationService {
         return accommodation.get();
     }
 
+    //////////////////
 
     public PendingAccommodation save(PendingAccommodationWholeEditedDTO dto) throws IOException {
+        if (dto.getDeadline() < 0) throw new InvalidDeadlineException();
+        dto.setAvailability(sortAvailability(dto.getAvailability()));
+        dto.setSeasonalRates(sortSeasonalRates(dto.getSeasonalRates()));
+        if (!isAvailabilityValid(dto.getAvailability())) throw new InvalidAvailabilityException();
+        if (!areSeasonalRatesValid(dto.getSeasonalRates(), dto.getPrice())) throw new InvalidSeasonalRatesException();
+
+
         if (dto.getId() == null && dto.getAccommodationId() != null) { //editing active accommodation
             if (reservationRequestService.foundActiveFor(dto.getAccommodationId()))
                 throw new ActiveReservationRequestsFoundException();
@@ -63,7 +72,7 @@ public class PendingAccommodationService {
         Host host = (Host)userService.findByUsername(dto.getHostUsername());
         pendingAccommodation.setHost(host);
 
-        pendingAccommodation = repo.save(pendingAccommodation); //todo attention: rewrites all previous data!
+        pendingAccommodation = repo.save(pendingAccommodation); // attention: rewrites all previous data!
         Set<Image> images = new HashSet<>();
 
         //if edit, save old images to pending folder
@@ -93,6 +102,73 @@ public class PendingAccommodationService {
 
         return repo.save(pendingAccommodation);
     }
+
+    private List<DateRange> sortAvailability(List<DateRange> availability) {
+        if (availability == null) return new ArrayList<>();
+        Collections.sort(availability, Comparator.comparing(DateRange::getStartDate));
+        return availability;
+    }
+
+    private List<SeasonalRate> sortSeasonalRates(List<SeasonalRate> seasonalRates) {
+        if (seasonalRates == null) return new ArrayList<>();
+        Collections.sort(seasonalRates, Comparator.comparing(s -> s.getPeriod().getStartDate()));
+        return seasonalRates;
+    }
+
+    private boolean isDateRangeValid(DateRange dateRange) {
+        return (dateRange.getStartDate().getTime() <= dateRange.getEndDate().getTime())
+                && isMidnight(dateRange.getStartDate()) && isMidnight(dateRange.getEndDate());
+    }
+
+    private boolean overlap(DateRange dateRange1, DateRange dateRange2) {
+        return (dateRange1.getEndDate().getTime() <= dateRange2.getEndDate().getTime()
+                && dateRange1.getEndDate().getTime() >= dateRange2.getStartDate().getTime())
+                ||
+                (dateRange2.getEndDate().getTime() <= dateRange1.getEndDate().getTime()
+                        && dateRange2.getEndDate().getTime() >= dateRange1.getStartDate().getTime());
+    }
+
+    private boolean isMidnight(Timestamp timestamp) {
+        return timestamp.getHours() +
+                timestamp.getMinutes() +
+                timestamp.getSeconds() +
+                timestamp.getNanos() == 0;
+    }
+
+    private boolean areConsecutive(DateRange dateRange1, DateRange dateRange2) {
+        return dateRange2.getStartDate().getTime() - dateRange1.getEndDate().getTime()
+                == 1000 * 60 * 60 * 24 ||
+                dateRange1.getStartDate().getTime() - dateRange2.getEndDate().getTime()
+                == 1000 * 60 * 60 * 24;
+    }
+
+
+    private boolean isAvailabilityValid(List<DateRange> availability) {
+        if(availability.size() == 0) return true;
+        if (!isDateRangeValid(availability.get(0))) return false;
+        for (int i=1; i<availability.size(); i++) {
+            if(!isDateRangeValid(availability.get(i))) return false;
+            if(overlap(availability.get(i-1), availability.get(i))) return false;
+            if(areConsecutive(availability.get(i-1), availability.get(i))) return false;
+        }
+        return true;
+    }
+
+    private boolean areSeasonalRatesValid(List<SeasonalRate> seasonalRates, double defaultPrice) {
+        if(seasonalRates.size() == 0) return true;
+        if (!isDateRangeValid(seasonalRates.get(0).getPeriod())) return false;
+        if (seasonalRates.get(0).getPrice() < 0 || seasonalRates.get(0).getPrice() == defaultPrice) return false;
+        for (int i=1; i<seasonalRates.size(); i++) {
+            if(!isDateRangeValid(seasonalRates.get(i).getPeriod())) return false;
+            if (seasonalRates.get(i).getPrice() < 0 || seasonalRates.get(0).getPrice() == defaultPrice) return false;
+            if (overlap(seasonalRates.get(i-1).getPeriod(), seasonalRates.get(i).getPeriod())) return false;
+            if (seasonalRates.get(i-1).getPrice() == seasonalRates.get(i).getPrice() &&
+                    areConsecutive(seasonalRates.get(i-1).getPeriod(), seasonalRates.get(i).getPeriod())) return false;
+        }
+        return true;
+    }
+
+    //////////////////
 
     public PendingAccommodation saveImages(List<MultipartFile> newImages, Long pendingAccommodationId) throws IOException {
         PendingAccommodation pendingAccommodation = findById(pendingAccommodationId);

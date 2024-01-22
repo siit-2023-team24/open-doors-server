@@ -16,6 +16,15 @@ public class PendingAccommodationWholeDTO extends AccommodationWholeDTO {
     public PendingAccommodationWholeDTO() {
     }
 
+    public PendingAccommodationWholeDTO(
+            Long id, String name, String description, String location, List<String> amenities, Set< Image > images, int minGuests, int maxGuests, String accommodationType, List< DateRange > availability, double price, boolean isPricePerGuest, List<
+            SeasonalRate > seasonalRates, String city, String country, String street, int number, int deadline, boolean isAutomatic, String hostUsername, Long accommodationId
+    ) {
+        super(id, name, description, location, amenities, images, minGuests, maxGuests, accommodationType, availability, price, isPricePerGuest,
+                seasonalRates, city, country, street, number, deadline, isAutomatic, hostUsername);
+        this.accommodationId = accommodationId;
+    }
+
     public PendingAccommodationWholeDTO(PendingAccommodation accommodation) {
         super(accommodation);
         this.id = accommodation.getId();
