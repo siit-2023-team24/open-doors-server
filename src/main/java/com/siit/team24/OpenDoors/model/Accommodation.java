@@ -25,6 +25,7 @@ public class Accommodation {
     private String name;
     private String description;
     private String location;
+    @ElementCollection
     private List<Amenity> amenities;
     @OneToMany(cascade = CascadeType.REFRESH)
     private Set<Image> images;

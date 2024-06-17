@@ -38,7 +38,7 @@ public class ReservationRequestControllerIntegrationTest {
 
     @Test
     @DisplayName("Should create reservation request when making a POST request to endpoint - http://localhost:9090/open-doors/reservations/createRequest")
-    public void testCreateReservationRequest_Success() throws Exception {
+    public void testCreateReservationRequest_Success() {
         // Priprema test podataka
         MakeReservationRequestDTO requestDTO = new MakeReservationRequestDTO();
         requestDTO.setAccommodationId(VALID_ACCOMMODATION_ID);
@@ -60,7 +60,7 @@ public class ReservationRequestControllerIntegrationTest {
 
     @Test
     @DisplayName("Should return BAD REQUEST when making a POST request with invalid data to endpoint - http://localhost:9090/open-doors/reservations/createRequest")
-    public void testCreateReservationRequest_Failure() throws Exception {
+    public void testCreateReservationRequest_Failure() {
         // Prepare test data with invalid accommodation ID
         MakeReservationRequestDTO requestDTO = new MakeReservationRequestDTO();
         requestDTO.setAccommodationId(INVALID_ACCOMMODATION_ID);

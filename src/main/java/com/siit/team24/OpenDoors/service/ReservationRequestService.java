@@ -47,7 +47,6 @@ public class ReservationRequestService {
 //    }
 
     public ReservationRequest save(MakeReservationRequestDTO requestDTO) {
-        System.out.println("LJUBICAAAAA ");
         Accommodation accommodation = accommodationService.findById(requestDTO.getAccommodationId());
         if(accommodation == null) {
             throw new EntityNotFoundException("Accommodation not found");
@@ -71,11 +70,17 @@ public class ReservationRequestService {
         }
 
         if (requestDTO.getNumberOfGuests() < accommodation.getMinGuests()) {
-            throw new ValidationException("Number of guests must be at least " + accommodation.getMinGuests() + "for this accommodation");
+            throw new ValidationException("Number of guests must be at least " + accommodation.getMinGuests() + " for this accommodation");
         }
 
-        if (requestDTO.getNumberOfGuests() > accommodation.getMinGuests()) {
-            throw new ValidationException("Number of guests must be at most " + accommodation.getMaxGuests() + "for this accommodation");
+        if (requestDTO.getNumberOfGuests() > accommodation.getMaxGuests()) {
+            throw new ValidationException("Number of guests must be at most " + accommodation.getMaxGuests() + " for this accommodation");
+        }
+
+        // Check if the accommodation is available for the given date range
+        boolean isAvailable = accommodationService.isAvailable(accommodation, requestDTO.getStartDate(), requestDTO.getEndDate());
+        if (!isAvailable) {
+            throw new ValidationException("Accommodation is not available for the given date range");
         }
 
         Double totalPrice = accommodationService.calculateTotalPrice(accommodation, requestDTO.getStartDate(), requestDTO.getEndDate(), requestDTO.getNumberOfGuests());
@@ -97,7 +102,6 @@ public class ReservationRequestService {
         request.setTimestamp(new Timestamp(System.currentTimeMillis()));
         request.setTotalPrice(totalPrice);
 
-        System.out.println("LJUBICAAAAA " + request);
         return repo.save(request);
     }
 
