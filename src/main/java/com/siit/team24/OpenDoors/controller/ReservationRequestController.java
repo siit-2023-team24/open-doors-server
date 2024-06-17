@@ -143,10 +143,8 @@ public class ReservationRequestController {
 
     @PostMapping(consumes = "application/json", value = "/createRequest")
     public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@Valid @RequestBody MakeReservationRequestDTO requestDTO) {
-        System.out.println(requestDTO);
         try {
             ReservationRequest request = reservationRequestService.save(requestDTO);
-            System.out.println("MILICAAAAA" + request);
             return new ResponseEntity<>(new MakeReservationRequestDTO(request), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
