@@ -57,4 +57,26 @@ public class ReservationRequestControllerIntegrationTest {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertNotNull(createdRequestDTO);
     }
+
+    @Test
+    @DisplayName("Should return BAD REQUEST when making a POST request with invalid data to endpoint - http://localhost:9090/open-doors/reservations/createRequest")
+    public void testCreateReservationRequest_Failure() throws Exception {
+        // Prepare test data with invalid accommodation ID
+        MakeReservationRequestDTO requestDTO = new MakeReservationRequestDTO();
+        requestDTO.setAccommodationId(INVALID_ACCOMMODATION_ID);
+        requestDTO.setGuestId(VALID_GUEST_ID);
+        requestDTO.setStartDate(VALID_START_DATE);
+        requestDTO.setEndDate(VALID_END_DATE);
+        requestDTO.setNumberOfGuests(VALID_NUMBER_OF_GUESTS);
+        requestDTO.setTotalPrice(VALID_TOTAL_PRICE);
+
+        ResponseEntity<MakeReservationRequestDTO> responseEntity = restTemplate.postForEntity(
+                "/open-doors/reservations/createRequest",
+                requestDTO, MakeReservationRequestDTO.class);
+
+        MakeReservationRequestDTO createdRequestDTO = responseEntity.getBody();
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(createdRequestDTO);
+    }
 }
