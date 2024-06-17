@@ -1,13 +1,16 @@
 package com.siit.team24.OpenDoors.service;
 
+import com.siit.team24.OpenDoors.dto.reservation.MakeReservationRequestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForGuestDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestForHostDTO;
 import com.siit.team24.OpenDoors.dto.reservation.ReservationRequestSearchAndFilterDTO;
 import com.siit.team24.OpenDoors.exception.CancelRequestException;
-import com.siit.team24.OpenDoors.model.Accommodation;
-import com.siit.team24.OpenDoors.model.DateRange;
-import com.siit.team24.OpenDoors.model.ReservationRequest;
+import com.siit.team24.OpenDoors.model.*;
+import com.siit.team24.OpenDoors.model.enums.UserRole;
+import com.siit.team24.OpenDoors.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import com.siit.team24.OpenDoors.model.enums.ReservationRequestStatus;
 import com.siit.team24.OpenDoors.repository.ReservationRequestRepository;
@@ -27,6 +30,9 @@ public class ReservationRequestService {
     @Autowired
     private AccommodationService accommodationService;
 
+    @Autowired
+    private UserService userService;
+
     public List<ReservationRequest> findAll() { return repo.findAll(); }
 
 
@@ -36,8 +42,63 @@ public class ReservationRequestService {
         return null;
     }
 
-    public ReservationRequest save(ReservationRequest reservationRequest) {
-        return repo.save(reservationRequest);
+//    public ReservationRequest save(ReservationRequest reservationRequest) {
+//        return repo.save(reservationRequest);
+//    }
+
+    public ReservationRequest save(MakeReservationRequestDTO requestDTO) {
+        System.out.println("LJUBICAAAAA ");
+        Accommodation accommodation = accommodationService.findById(requestDTO.getAccommodationId());
+        if(accommodation == null) {
+            throw new EntityNotFoundException("Accommodation not found");
+        }
+
+        User user = userService.findById(requestDTO.getGuestId());
+        if(user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+        else if(!user.getRole().equals(UserRole.ROLE_GUEST)) {
+            throw new EntityNotFoundException("User is not guest");
+        }
+        Guest guest = (Guest) user;
+
+        if (requestDTO.getStartDate().before(new Timestamp(System.currentTimeMillis()))) {
+            throw new ValidationException("Start date cannot be before today");
+        }
+
+        if (requestDTO.getStartDate().after(requestDTO.getEndDate())) {
+            throw new ValidationException("Start date cannot be after end date");
+        }
+
+        if (requestDTO.getNumberOfGuests() < accommodation.getMinGuests()) {
+            throw new ValidationException("Number of guests must be at least " + accommodation.getMinGuests() + "for this accommodation");
+        }
+
+        if (requestDTO.getNumberOfGuests() > accommodation.getMinGuests()) {
+            throw new ValidationException("Number of guests must be at most " + accommodation.getMaxGuests() + "for this accommodation");
+        }
+
+        Double totalPrice = accommodationService.calculateTotalPrice(accommodation, requestDTO.getStartDate(), requestDTO.getEndDate(), requestDTO.getNumberOfGuests());
+
+        ReservationRequest request = new ReservationRequest();
+        request.setGuest(guest);
+        request.setAccommodation(accommodation);
+        request.setDateRange(new DateRange(requestDTO.getStartDate(), requestDTO.getEndDate()));
+
+        if(accommodation.getIsAutomatic()) {
+            request.setStatus(ReservationRequestStatus.CONFIRMED);
+            accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
+            denyAllOverlappingRequests(request.getAccommodation().getId(), request.getDateRange());
+        } else {
+            request.setStatus(ReservationRequestStatus.PENDING);
+        }
+
+        request.setGuestNumber(requestDTO.getNumberOfGuests());
+        request.setTimestamp(new Timestamp(System.currentTimeMillis()));
+        request.setTotalPrice(totalPrice);
+
+        System.out.println("LJUBICAAAAA " + request);
+        return repo.save(request);
     }
 
     public boolean foundActiveFor(Long accommodationId) {

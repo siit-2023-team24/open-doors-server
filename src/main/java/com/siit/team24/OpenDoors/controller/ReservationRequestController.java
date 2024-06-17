@@ -111,34 +111,47 @@ public class ReservationRequestController {
     }
 
 
-    @PreAuthorize("hasRole('GUEST')")
+    //@PreAuthorize("hasRole('GUEST')")
+//    @PostMapping(consumes = "application/json", value = "/createRequest")
+//    public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@Valid @RequestBody MakeReservationRequestDTO requestDTO) {
+//
+//        System.out.println(requestDTO);
+//
+//        Accommodation accommodation = accommodationService.findById(requestDTO.getAccommodationId());
+//
+//        ReservationRequest request = new ReservationRequest();
+//        request.setGuest((Guest) userService.findById(requestDTO.getGuestId()));
+//        request.setAccommodation(accommodation);
+//        request.setDateRange(new DateRange(requestDTO.getStartDate(), requestDTO.getEndDate()));
+//
+//        if(accommodation.getIsAutomatic()) {
+//            request.setStatus(ReservationRequestStatus.CONFIRMED);
+//            accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
+//            reservationRequestService.denyAllOverlappingRequests(request.getAccommodation().getId(), request.getDateRange());
+//        } else {
+//            request.setStatus(ReservationRequestStatus.PENDING);
+//        }
+//
+//        request.setGuestNumber(request.getGuestNumber());
+//        request.setTimestamp(new Timestamp(System.currentTimeMillis()));
+//        request.setTotalPrice(requestDTO.getTotalPrice());
+//
+//        reservationRequestService.save(request);
+//
+//        return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
+//    }
+
     @PostMapping(consumes = "application/json", value = "/createRequest")
     public ResponseEntity<MakeReservationRequestDTO> createReservationRequest(@Valid @RequestBody MakeReservationRequestDTO requestDTO) {
-
         System.out.println(requestDTO);
-
-        Accommodation accommodation = accommodationService.findById(requestDTO.getAccommodationId());
-
-        ReservationRequest request = new ReservationRequest();
-        request.setGuest((Guest) userService.findById(requestDTO.getGuestId()));
-        request.setAccommodation(accommodation);
-        request.setDateRange(new DateRange(requestDTO.getStartDate(), requestDTO.getEndDate()));
-
-        if(accommodation.getIsAutomatic()) {
-            request.setStatus(ReservationRequestStatus.CONFIRMED);
-            accommodationService.removeDatesFromAccommodationAvailability(requestDTO.getAccommodationId(), request.getDateRange());
-            reservationRequestService.denyAllOverlappingRequests(request.getAccommodation().getId(), request.getDateRange());
-        } else {
-            request.setStatus(ReservationRequestStatus.PENDING);
+        try {
+            ReservationRequest request = reservationRequestService.save(requestDTO);
+            System.out.println("MILICAAAAA" + request);
+            return new ResponseEntity<>(new MakeReservationRequestDTO(request), HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new MakeReservationRequestDTO(), HttpStatus.BAD_REQUEST);
         }
-
-        request.setGuestNumber(request.getGuestNumber());
-        request.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        request.setTotalPrice(requestDTO.getTotalPrice());
-
-        reservationRequestService.save(request);
-
-        return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
     }
 
 }

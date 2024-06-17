@@ -1,5 +1,6 @@
 package com.siit.team24.OpenDoors.dto.reservation;
 
+import com.siit.team24.OpenDoors.model.ReservationRequest;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 
@@ -26,6 +27,15 @@ public class MakeReservationRequestDTO {
         this.endDate = endDate;
         this.numberOfGuests = numberOfGuests;
         this.totalPrice = totalPrice;
+    }
+
+    public MakeReservationRequestDTO(ReservationRequest request) {
+        this.accommodationId = request.getId();
+        this.guestId = request.getGuest().getId();
+        this.startDate = request.getDateRange().getStartDate();
+        this.endDate = request.getDateRange().getEndDate();
+        this.numberOfGuests = request.getGuestNumber();
+        this.totalPrice = request.getTotalPrice();
     }
 
     public Long getAccommodationId() {

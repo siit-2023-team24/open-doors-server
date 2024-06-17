@@ -328,6 +328,33 @@ public class AccommodationService {
         }
         return false;
     }
+
+    public Double calculateTotalPrice(Accommodation accommodation, Timestamp startDate, Timestamp endDate, int numberOfGuests) {
+        // Dobiti opseg datuma za rezervaciju
+        DateRange reservationRange = new DateRange(startDate, endDate);
+        List<Timestamp> datesInRange = reservationRange.getTimestampRange();
+
+        double totalPrice = 0.0;
+
+        // Iterirati kroz svaki datum u opsegu i računati cenu
+        for (Timestamp date : datesInRange) {
+            Optional<SeasonalRate> applicableRate = accommodation.getSeasonalRates().stream()
+                    .filter(rate -> rate.getPeriod().contains(date))
+                    .findFirst();
+
+            if (applicableRate.isPresent()) {
+                totalPrice += applicableRate.get().getPrice();
+            } else {
+                // Ako nema sezonske cene za određeni datum, može se baciti izuzetak ili koristiti podrazumevanu cenu
+                totalPrice += accommodation.getPrice();
+            }
+        }
+
+        // Pomnožiti ukupnu cenu sa brojem gostiju
+        totalPrice *= numberOfGuests;
+
+        return totalPrice;
+    }
 }
 
 

@@ -19,8 +19,8 @@ public class HostReviewService {
     @Autowired
     private HostReviewRepository hostReviewRepository;
 
-    @Autowired
-    private ReservationRequestService reservationRequestService;
+//    @Autowired
+//    private ReservationRequestService reservationRequestService;
 
     public List<ReviewDetailsDTO> findAllForHost(Long hostId) {
         List<HostReview> reviews = hostReviewRepository.findAllByHostId(hostId);
@@ -39,9 +39,10 @@ public class HostReviewService {
     }
 
     public boolean isReviewable(Long hostId, Long guestId) {
-        boolean hasNotYetReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isEmpty();
-        boolean wasHosted = reservationRequestService.wasHosted(guestId, hostId);
-        return (hasNotYetReviewed && wasHosted);
+//        boolean hasNotYetReviewed = hostReviewRepository.findByHostAndAuthor(hostId, guestId).isEmpty();
+//        boolean wasHosted = reservationRequestService.wasHosted(guestId, hostId);
+//        return (hasNotYetReviewed && wasHosted);
+        return false;
     }
 
     public void save(HostReview review) {

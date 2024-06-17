@@ -37,8 +37,8 @@ public class UserService {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private ReservationRequestService reservationRequestService;
+//    @Autowired
+//    private ReservationRequestService reservationRequestService;
 
     @Autowired
     private AccommodationService accommodationService;
@@ -46,8 +46,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -63,7 +63,7 @@ public class UserService {
     }
 
     public UserService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
+//        this.javaMailSender = javaMailSender;
     }
 
     public User findByUsername(String username) {
@@ -164,37 +164,37 @@ public class UserService {
         message.setTo(recipient);
         message.setSubject("Activation mail");
         message.setText("Please verify your account here. Otherwise it will expire in the next 24 hours.\n" + link);
-        javaMailSender.send(message);
+//        javaMailSender.send(message);
     }
 
 
     public void delete(Long id) {
-        User user = findById(id);
-
-        if (user.getRole() == UserRole.ROLE_GUEST) {
-            if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
-                throw new ConfirmedReservationRequestsFound();
-            reservationRequestService.deletePendingForGuest(user.getUsername());
-        }
-
-        else if (user.getRole() == UserRole.ROLE_HOST) {
-            List<Accommodation> accommodations = accommodationService.findAllByHostId(user.getId());
-            for (Accommodation accommodation: accommodations) {
-                if (!reservationRequestService.isAccommodationReadyForDelete(accommodation.getId()))
-                    throw new ConfirmedReservationRequestsFound();
-            }
-            for (Accommodation accommodation: accommodations) {
-                removeFromAnyFavorites(accommodation);
-                accommodationService.delete(accommodation.getId());
-            }
-            hostReviewService.deleteAllForHost(id);
-        }
-        else return;
-
-        if (user.getImage() != null)
-            imageService.delete(user.getImage().getId());
-
-        repo.deleteById(id);
+//        User user = findById(id);
+//
+//        if (user.getRole() == UserRole.ROLE_GUEST) {
+//            if (!reservationRequestService.findByUsernameAndStatus(user.getUsername(), ReservationRequestStatus.CONFIRMED).isEmpty())
+//                throw new ConfirmedReservationRequestsFound();
+//            reservationRequestService.deletePendingForGuest(user.getUsername());
+//        }
+//
+//        else if (user.getRole() == UserRole.ROLE_HOST) {
+//            List<Accommodation> accommodations = accommodationService.findAllByHostId(user.getId());
+//            for (Accommodation accommodation: accommodations) {
+//                if (!reservationRequestService.isAccommodationReadyForDelete(accommodation.getId()))
+//                    throw new ConfirmedReservationRequestsFound();
+//            }
+//            for (Accommodation accommodation: accommodations) {
+//                removeFromAnyFavorites(accommodation);
+//                accommodationService.delete(accommodation.getId());
+//            }
+//            hostReviewService.deleteAllForHost(id);
+//        }
+//        else return;
+//
+//        if (user.getImage() != null)
+//            imageService.delete(user.getImage().getId());
+//
+//        repo.deleteById(id);
     }
 
     public void removeFromAnyFavorites(Accommodation accommodation) {
@@ -245,18 +245,18 @@ public class UserService {
     }
 
     private void disableHostsAccommodations(Long id) {
-        List<Accommodation> accommodations = accommodationService.findAllByHostId(id);
-        for (Accommodation accommodation: accommodations) {
-            reservationRequestService.denyActiveForAccommodation(accommodation.getId());
-            removeFromAnyFavorites(accommodation);
-            accommodationService.softDelete(accommodation.getId());
-        }
+//        List<Accommodation> accommodations = accommodationService.findAllByHostId(id);
+//        for (Accommodation accommodation: accommodations) {
+//            reservationRequestService.denyActiveForAccommodation(accommodation.getId());
+//            removeFromAnyFavorites(accommodation);
+//            accommodationService.softDelete(accommodation.getId());
+//        }
 
     }
 
     private void handlePendingRequests(String username) {
-        reservationRequestService.deletePendingForGuest(username);
-        reservationRequestService.cancelFutureForGuest(username);
+//        reservationRequestService.deletePendingForGuest(username);
+//        reservationRequestService.cancelFutureForGuest(username);
     }
 
     public void unblock(Long id) {
