@@ -38,5 +38,8 @@ VALUES (3, '2024-06-01', '2024-06-15'),
        (3, '2024-08-01', '2024-08-31'),
        (3, '2024-10-01', '2024-10-15');
 
+INSERT INTO accommodation_availability (accommodation_id, start_date, end_date)
+VALUES (4, '2024-06-01', '2024-06-15');
+
 insert into accommodation_amenities (accommodation_id, amenities)
 values(1,1),(2,1),(2,2),(3,1),(3,2),(3,3),(4,1),(4,2);

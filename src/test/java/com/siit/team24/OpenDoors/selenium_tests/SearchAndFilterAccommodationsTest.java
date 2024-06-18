@@ -131,7 +131,7 @@ public class SearchAndFilterAccommodationsTest extends TestBase{
                 // Test case with 2 results (accommodation 2 and 3 are available in this range)
                 Arguments.of("2024-07-01", "2024-07-07", 2),
                 // Test case with 3 results (all accommodations are available within this date range)
-                Arguments.of("2024-06-06", "2024-06-12", 3)
+                Arguments.of("2024-06-06", "2024-06-12", 4)
         );
     }
 
